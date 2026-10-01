@@ -1,0 +1,142 @@
+--- pearl_office_mainrepo_drag_v3/runtime/app.js
++++ pearl_office_mainrepo_runtime_optimized_v4/runtime/app.js
+@@ -57,7 +57,8 @@
+   yaw -= dx*LOOK_SENSITIVITY;
+   pitch -= dy*LOOK_SENSITIVITY;
+   applyLook();
+-  renderNow();
++  // Do not render from pointer events. The RAF loop owns presentation.
++  // This prevents hundreds of redundant WebGL renders per second during drag-look.
+ });
+ function endDrag(e){
+   dragging=false;
+@@ -395,6 +396,11 @@
+ const sun=new THREE.DirectionalLight(0xfff0d5,2.6);sun.position.set(-5,10,-7);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);
+ addPoint(-8,2.6,-1.5,0xffd99a,42,9);addPoint(8,2.8,-4.0,0xb8dcff,32,8);addPoint(11,2.5,3.5,0xffa34f,38,8);addPoint(0,3.2,-.2,0x9ee8ff,36,10);addPoint(-12,2.4,4.5,0xffd7a6,28,7);
+ 
++// Static scene: render the shadow atlas once, then reuse it while the player moves.
++// Visual quality is unchanged; this removes a large per-frame GPU cost.
++renderer.shadowMap.autoUpdate = false;
++renderer.shadowMap.needsUpdate = true;
++
+ // ---------- Interactions / gameplay ------------------------------------------
+ const keys={}; let mapVisible=true; let stage=0; let nearestInteractive=null; let cinematic=false;
+ function showToast(text,ms=2100){toastEl.textContent=text;toastEl.style.opacity=1;clearTimeout(showToast.t);showToast.t=setTimeout(()=>toastEl.style.opacity=0,ms);}
+@@ -426,12 +432,13 @@
+   if(e.code==='KeyQ') toggleCinematic();
+ });
+ addEventListener('keyup',e=>keys[e.code]=false);
++addEventListener('blur',()=>{ for(const k of Object.keys(keys)) keys[k]=false; dragging=false; });
+ 
+ function toggleCinematic(){
+   cinematic=!cinematic;
+   renderer.setPixelRatio(Math.min(devicePixelRatio, cinematic?1.8:1.35));
+   sun.shadow.mapSize.set(cinematic?2048:1024,cinematic?2048:1024);
+-  sun.shadow.map?.dispose?.(); sun.shadow.map=null;
++  sun.shadow.map?.dispose?.(); sun.shadow.map=null; renderer.shadowMap.needsUpdate=true;
+   showToast(cinematic?'Cinematic quality enabled.':'Balanced detail mode enabled.');
+   renderNow();
+ }
+@@ -444,8 +451,31 @@
+   const cx=-10.92,cz=1.93,a=entryAngle,c=Math.cos(a),s=Math.sin(a),dx=x-cx,dz=z-cz,lx=dx*c-dz*s,lz=dx*s+dz*c;
+   return Math.abs(lx)<1.7 && Math.abs(lz)<1.8;
+ }
++const COLLIDER_CELL = 2.6;
++const colliderGrid = new Map();
++function gridKey(ix,iz){ return ix+','+iz; }
++function buildColliderGrid(){
++  colliderGrid.clear();
++  for(const c of colliders){
++    const co=Math.cos(c.rotY), si=Math.sin(c.rotY);
++    const ex=Math.abs(co)*c.hx + Math.abs(si)*c.hz + PLAYER_RADIUS;
++    const ez=Math.abs(si)*c.hx + Math.abs(co)*c.hz + PLAYER_RADIUS;
++    const minX=Math.floor((c.obj.position.x-ex)/COLLIDER_CELL), maxX=Math.floor((c.obj.position.x+ex)/COLLIDER_CELL);
++    const minZ=Math.floor((c.obj.position.z-ez)/COLLIDER_CELL), maxZ=Math.floor((c.obj.position.z+ez)/COLLIDER_CELL);
++    for(let ix=minX;ix<=maxX;ix++) for(let iz=minZ;iz<=maxZ;iz++){
++      const k=gridKey(ix,iz); let a=colliderGrid.get(k); if(!a) colliderGrid.set(k,a=[]); a.push(c);
++    }
++  }
++}
++buildColliderGrid();
+ function hitsCollider(x,z){
+-  for(const c of colliders){const dx=x-c.obj.position.x,dz=z-c.obj.position.z;const co=Math.cos(c.rotY),si=Math.sin(c.rotY);const lx=dx*co-dz*si,lz=dx*si+dz*co;if(Math.abs(lx)<c.hx+PLAYER_RADIUS && Math.abs(lz)<c.hz+PLAYER_RADIUS)return true;}return false;
++  const list=colliderGrid.get(gridKey(Math.floor(x/COLLIDER_CELL),Math.floor(z/COLLIDER_CELL))) || [];
++  for(const c of list){
++    const dx=x-c.obj.position.x,dz=z-c.obj.position.z,co=Math.cos(c.rotY),si=Math.sin(c.rotY);
++    const lx=dx*co-dz*si,lz=dx*si+dz*co;
++    if(Math.abs(lx)<c.hx+PLAYER_RADIUS && Math.abs(lz)<c.hz+PLAYER_RADIUS) return true;
++  }
++  return false;
+ }
+ function canMove(x,z){
+   if(!pointInPolygon(x,z,outer2) && !inEntryApron(x,z)) return false;
+@@ -464,8 +494,16 @@
+ function updateNearest(){
+   let best=null,bd=2.15;
+   const cp=camera.position;
+-  for(const it of interactables){const wp=it.obj.getWorldPosition(new THREE.Vector3());const d=Math.hypot(cp.x-wp.x,cp.z-wp.z);if(d<bd){bd=d;best=it;}}
+-  nearestInteractive=best; interactionEl.classList.toggle('visible',!!best); if(best)interactionEl.textContent='Press E — '+best.label;
++  for(const it of interactables){
++    // All interactable meshes are static direct children of the scene, so local = world position.
++    const d=Math.hypot(cp.x-it.obj.position.x,cp.z-it.obj.position.z);
++    if(d<bd){bd=d;best=it;}
++  }
++  if(best!==nearestInteractive){
++    nearestInteractive=best;
++    interactionEl.classList.toggle('visible',!!best);
++    if(best) interactionEl.textContent='Press E — '+best.label;
++  }
+ }
+ function updateMap(){
+   // map world [-16,16]x[-10.8,8.5] into cropped reference-image percentages.
+@@ -475,6 +513,7 @@
+ }
+ 
+ const clock=new THREE.Clock();
++let uiAccumulator=0, glowAccumulator=0, lastZone='';
+ function renderNow(){ renderer.render(scene,camera); }
+ function animate(){
+   requestAnimationFrame(animate);
+@@ -492,20 +531,35 @@
+     let f=(keys.KeyW?1:0)-(keys.KeyS?1:0), r=(keys.KeyD?1:0)-(keys.KeyA?1:0);
+     if(f||r){
+       const len=Math.hypot(f,r)||1; f/=len; r/=len;
+-      const old=camera.position.clone();
++      const ox=camera.position.x, oy=camera.position.y, oz=camera.position.z;
+       const fx=-Math.sin(yaw), fz=-Math.cos(yaw);
+       const rx=Math.cos(yaw), rz=-Math.sin(yaw);
+       camera.position.x += (fx*f + rx*r)*speed;
+       camera.position.z += (fz*f + rz*r)*speed;
+       camera.position.y=PLAYER_HEIGHT;
+-      if(!canMove(camera.position.x,camera.position.z))camera.position.copy(old);
++      if(!canMove(camera.position.x,camera.position.z)) camera.position.set(ox,oy,oz);
+     }
+-    zoneEl.textContent='Current zone: '+zoneName(camera.position.x,camera.position.z);
+-    if(stage===0 && pointInPolygon(camera.position.x,camera.position.z,outer2) && !inEntryApron(camera.position.x,camera.position.z)) setObjective('check in at Reception (press E)');
+-    updateNearest();updateMap();
+-  }
+-  dynamicGlow.forEach((o,i)=>o.material.emissiveIntensity=2.2+Math.sin(t*1.5+i)*.5);
++
++    // HUD / minimap / proximity checks do not need 60–120 updates per second.
++    // 12.5 Hz feels instant to a player while avoiding DOM/layout work in the render path.
++    uiAccumulator += dt;
++    if(uiAccumulator >= 0.08){
++      uiAccumulator=0;
++      const zn=zoneName(camera.position.x,camera.position.z);
++      if(zn!==lastZone){ zoneEl.textContent='Current zone: '+zn; lastZone=zn; }
++      if(stage===0 && pointInPolygon(camera.position.x,camera.position.z,outer2) && !inEntryApron(camera.position.x,camera.position.z)) setObjective('check in at Reception (press E)');
++      updateNearest(); updateMap();
++    }
++  }
++
++  // Keep the subtle glow animation, but 30 Hz is visually indistinguishable here.
++  glowAccumulator += dt;
++  if(glowAccumulator >= 1/30){
++    glowAccumulator=0;
++    dynamicGlow.forEach((o,i)=>o.material.emissiveIntensity=2.2+Math.sin(t*1.5+i)*.5);
++  }
+   renderNow();
++  renderer.shadowMap.needsUpdate=false;
+ }
+ animate();
+ 

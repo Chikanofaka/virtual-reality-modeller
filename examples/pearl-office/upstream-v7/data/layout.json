@@ -1,0 +1,43 @@
+{
+  "project": "Pearl Office Autonomous Game",
+  "version": "1.0-first-playable",
+  "basis": "Finalized v1.5 planning image plus approved conversation corrections",
+  "units": "meters",
+  "shell": {
+    "shape": "rounded triangular pearl",
+    "corners": {
+      "A": "between Trading Office and Executive Office",
+      "B": "Back Office",
+      "C": "Wine Room"
+    }
+  },
+  "circulation": {
+    "type": "clockwise loop around the central Pearl Office",
+    "entryExit": "left edge between Awards Section and Charity Gallery",
+    "pearlOfficeEntry": "single opening at Wine Room / Manager Office 1 junction"
+  },
+  "zones": [
+    {"id":1,"name":"Reception","type":"open","role":"guest check-in","furniture":["curved reception desk","visitor chairs","feature wall"]},
+    {"id":2,"name":"Trading Office","type":"enclosed","furniture":["long desk","multi-monitor workstations","task chairs"]},
+    {"id":3,"name":"Executive Office","type":"enclosed","furniture":["executive desk","sofa","coffee table"]},
+    {"id":4,"name":"Meeting Room","type":"enclosed-long","furniture":["boardroom table","10 chairs","display"]},
+    {"id":5,"name":"Director Office","type":"enclosed","furniture":["executive desk","blue sofa set","coffee table"]},
+    {"id":6,"name":"Wine Room","type":"enclosed-corner","furniture":["orange sofa","round table","wood display"]},
+    {"id":7,"name":"Manager Office 1","type":"enclosed","furniture":["desk","monitor","chair","whiteboard"]},
+    {"id":8,"name":"Manager Office 2","type":"enclosed","furniture":["desk","monitor","chair","whiteboard"]},
+    {"id":9,"name":"Manager Office 3","type":"enclosed","furniture":["desk","monitor","chair","whiteboard"]},
+    {"id":10,"name":"Tea Room","type":"enclosed","furniture":["tea table","seats","tea service"]},
+    {"id":11,"name":"Back Office","type":"enclosed-corner","furniture":["two-person workstation","storage"]},
+    {"id":12,"name":"Charity Gallery","type":"open-corridor","furniture":["open display gallery","donation items","art"]},
+    {"id":13,"name":"Awards Section","type":"open-corridor","furniture":["display shelves","awards","art"]},
+    {"id":14,"name":"Pearl Office","type":"central-curved-glass-open-office","furniture":["desk islands","printer","cabinets","shared space"]}
+  ],
+  "runtime": {
+    "controls": {"move":"WASD","look":"mouse","sprint":"Shift","interact":"E","releasePointer":"Esc","map":"M","reset":"R"},
+    "collision": true,
+    "firstPerson": true,
+    "interaction": true,
+    "proceduralGeometry": true,
+    "paidAssetGeneration": false
+  }
+}

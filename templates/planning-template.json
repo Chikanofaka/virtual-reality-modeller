@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "id": "your-space",
+    "name": "Your measured space"
+  },
+  "units": "m",
+  "provenance": {
+    "basis": "",
+    "scaleConfirmed": false,
+    "entranceConfirmed": false,
+    "layoutConfirmed": false
+  },
+  "shell": {
+    "width": null,
+    "depth": null,
+    "height": null
+  },
+  "rooms": [],
+  "doors": [],
+  "entrance": {
+    "position": [
+      null,
+      null,
+      null
+    ],
+    "yaw": null
+  },
+  "navigation": {
+    "polygons": [],
+    "blockers": [],
+    "segments": [],
+    "spawn": [
+      null,
+      null,
+      null
+    ],
+    "routes": [],
+    "collisionPolicy": "explicit-blockers"
+  },
+  "furniture": [],
+  "materials": {
+    "floor": "#d8c7a6",
+    "wall": "#eceae3"
+  },
+  "assets": [],
+  "runtime": {
+    "browsers": [
+      "safari",
+      "chrome"
+    ],
+    "playerRadius": 0.22,
+    "eyeHeight": 1.65,
+    "speed": 2.5
+  },
+  "scene": {
+    "mode": "procedural"
+  }
+}

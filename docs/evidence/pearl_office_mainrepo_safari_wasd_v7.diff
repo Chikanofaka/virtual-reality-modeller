@@ -1,0 +1,195 @@
+--- pearl_office_mainrepo_safari_walk_v6/runtime/app.js
++++ pearl_office_mainrepo_safari_wasd_v7/runtime/app_v7.js
+@@ -1,7 +1,7 @@
+ import * as THREE from 'three';
+ 
+ // -----------------------------------------------------------------------------
+-// PEARL OFFICE — PROCEDURAL FIRST PLAYABLE
++// PEARL OFFICE — SAFARI WASD HARDENED V7
+ // Topology basis: finalized v1.5 planning image + approved corrections.
+ // Three.js world: X = left/right, Y = up, Z = plan vertical (top is negative Z).
+ // -----------------------------------------------------------------------------
+@@ -32,6 +32,10 @@
+ let pendingLookX = 0, pendingLookY = 0;
+ let yaw = -0.95, pitch = 0;
+ const LOOK_SENSITIVITY = 0.0032;
++let lastInputNote = 'waiting for input';
++let lastKeyEventAt = 0;
++let lastKeyRaw = 'none';
++let simTickCount = 0;
+ camera.rotation.order = 'YXZ';
+ 
+ function applyLook(){
+@@ -41,19 +45,21 @@
+ function startPlayer(){
+   started = true;
+   start.style.display = 'none';
+-  renderer.domElement.focus({preventScroll:true});
+-  document.body.focus({preventScroll:true});
+-  showToast('Player mode active — WASD to move, click-drag to look.');
++  try { renderer.domElement.focus({preventScroll:true}); } catch(_) { renderer.domElement.focus(); }
++  lastInputNote = 'player started / canvas focused';
++  showToast('V7 active — WASD move, click-drag look.');
+ }
+ enterButton.onclick = startPlayer;
+ renderer.domElement.style.cursor = 'grab';
+ renderer.domElement.style.touchAction = 'none';
+ renderer.domElement.addEventListener('pointerdown', e => {
+   if(!started) return;
+-  renderer.domElement.focus({preventScroll:true});
++  try { renderer.domElement.focus({preventScroll:true}); } catch(_) { renderer.domElement.focus(); }
++  try { renderer.domElement.setPointerCapture(e.pointerId); } catch(_) {}
+   dragging = true;
+   lastPointerX = e.clientX; lastPointerY = e.clientY;
+   renderer.domElement.style.cursor = 'grabbing';
++  lastInputNote = 'pointer down / canvas focused';
+ });
+ renderer.domElement.addEventListener('pointermove', e => {
+   if(!started || !dragging) return;
+@@ -407,18 +413,72 @@
+ const keys=Object.create(null); let mapVisible=true; let stage=0; let nearestInteractive=null; let cinematic=false;
+ const statusEl=document.getElementById('status');
+ renderer.domElement.tabIndex=0;
+-document.body.tabIndex=0;
++
++// Safari-hardened keyboard normalization. We accept code, key, and legacy keyCode/which.
++const LEGACY_KEYCODE = {87:'KeyW',65:'KeyA',83:'KeyS',68:'KeyD',16:'ShiftLeft',37:'ArrowLeft',38:'ArrowUp',39:'ArrowRight',40:'ArrowDown',69:'KeyE',77:'KeyM',82:'KeyR',81:'KeyQ'};
+ function normalizedCode(e){
++  const allowed = new Set(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','KeyE','KeyM','KeyR','KeyQ']);
++  if(e.code && allowed.has(e.code)) return e.code;
+   const k=(e.key||'').toLowerCase();
+   if(k==='w') return 'KeyW'; if(k==='a') return 'KeyA'; if(k==='s') return 'KeyS'; if(k==='d') return 'KeyD';
+   if(k==='shift') return e.location===2?'ShiftRight':'ShiftLeft';
+   if(k==='arrowleft') return 'ArrowLeft'; if(k==='arrowright') return 'ArrowRight';
+   if(k==='arrowup') return 'ArrowUp'; if(k==='arrowdown') return 'ArrowDown';
+-  return e.code || '';
+-}
++  if(k==='e') return 'KeyE'; if(k==='m') return 'KeyM'; if(k==='r') return 'KeyR'; if(k==='q') return 'KeyQ';
++  return LEGACY_KEYCODE[e.which||e.keyCode||0] || '';
++}
++function shouldIgnoreKeyboardTarget(t){
++  if(!t) return false;
++  const tag=(t.tagName||'').toLowerCase();
++  return tag==='input'||tag==='textarea'||tag==='select'||t.isContentEditable;
++}
++function movementKey(c){return ['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(c);}
+ function setKeyState(e,down){
+-  const c=normalizedCode(e); if(!c) return; keys[c]=down;
+-  if(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(c)) e.preventDefault();
++  if(shouldIgnoreKeyboardTarget(e.target)) return;
++  const c=normalizedCode(e); if(!c) return;
++  keys[c]=down;
++  lastKeyEventAt=performance.now();
++  lastKeyRaw=`${down?'down':'up'} key=${e.key||'?'} code=${e.code||'?'} legacy=${e.which||e.keyCode||0} -> ${c}`;
++  lastInputNote=lastKeyRaw;
++  if(movementKey(c) || ['KeyE','KeyM','KeyR','KeyQ'].includes(c)) e.preventDefault();
++  if(down && !e.repeat){
++    if(c==='KeyE') interact();
++    if(c==='KeyM'){mapVisible=!mapVisible;mapWrap.classList.toggle('hidden',!mapVisible);}
++    if(c==='KeyR') resetPlayer();
++    if(c==='KeyQ') toggleCinematic();
++  }
++}
++
++// Use a WeakSet because the same physical event traverses window/document/canvas.
++const seenKeyEvents=new WeakSet();
++function onKeyDown(e){ if(seenKeyEvents.has(e)) return; seenKeyEvents.add(e); setKeyState(e,true); }
++function onKeyUp(e){ if(seenKeyEvents.has(e)) return; seenKeyEvents.add(e); setKeyState(e,false); }
++window.addEventListener('keydown',onKeyDown,true);
++window.addEventListener('keyup',onKeyUp,true);
++document.addEventListener('keydown',onKeyDown,true);
++document.addEventListener('keyup',onKeyUp,true);
++renderer.domElement.addEventListener('keydown',onKeyDown,true);
++renderer.domElement.addEventListener('keyup',onKeyUp,true);
++
++// Clicking anywhere on the renderer always returns keyboard focus to the game.
++renderer.domElement.addEventListener('click',()=>{
++  if(started){ try{renderer.domElement.focus({preventScroll:true});}catch(_){renderer.domElement.focus();} }
++});
++window.addEventListener('blur',()=>{ for(const k of Object.keys(keys)) keys[k]=false; dragging=false; lastInputNote='window blur — keys cleared'; });
++document.addEventListener('visibilitychange',()=>{ if(document.hidden){for(const k of Object.keys(keys)) keys[k]=false; lastInputNote='document hidden — keys cleared';} });
++window.addEventListener('pagehide',()=>{for(const k of Object.keys(keys)) keys[k]=false;});
++
++// On-screen D-pad is a diagnostic + emergency fallback. It uses the SAME movement state
++// as physical WASD, so if these buttons move the player but keyboard does not, the only
++// remaining fault is Safari key delivery/focus rather than navmesh or rendering.
++for(const btn of document.querySelectorAll('[data-move]')){
++  const c=btn.dataset.move;
++  const down=(e)=>{e.preventDefault();keys[c]=true;lastInputNote='virtual '+c+' down';try{renderer.domElement.focus({preventScroll:true});}catch(_){}};
++  const up=(e)=>{e.preventDefault();keys[c]=false;lastInputNote='virtual '+c+' up';};
++  btn.addEventListener('pointerdown',down);
++  btn.addEventListener('pointerup',up);
++  btn.addEventListener('pointercancel',up);
++  btn.addEventListener('pointerleave',e=>{if(e.buttons===0)up(e);});
+ }
+ 
+ function showToast(text,ms=2100){toastEl.textContent=text;toastEl.style.opacity=1;clearTimeout(showToast.t);showToast.t=setTimeout(()=>toastEl.style.opacity=0,ms);}
+@@ -441,18 +501,6 @@
+   advance(it.type);
+ }
+ 
+-window.addEventListener('keydown',e=>{
+-  setKeyState(e,true);
+-  const c=normalizedCode(e);
+-  if(c==='KeyE' && !e.repeat) interact();
+-  if(c==='KeyM' && !e.repeat){mapVisible=!mapVisible;mapWrap.classList.toggle('hidden',!mapVisible);}
+-  if(c==='KeyR' && !e.repeat) resetPlayer();
+-  if(c==='KeyQ' && !e.repeat) toggleCinematic();
+-},{capture:true});
+-window.addEventListener('keyup',e=>setKeyState(e,false),{capture:true});
+-window.addEventListener('blur',()=>{ for(const k of Object.keys(keys)) keys[k]=false; dragging=false; });
+-document.addEventListener('visibilitychange',()=>{ if(document.hidden) for(const k of Object.keys(keys)) keys[k]=false; });
+-
+ function toggleCinematic(){
+   cinematic=!cinematic;
+   renderer.setPixelRatio(Math.min(devicePixelRatio, cinematic?1.8:1.35));
+@@ -471,7 +519,7 @@
+   return Math.abs(lx)<1.7 && Math.abs(lz)<1.8;
+ }
+ // -----------------------------------------------------------------------------
+-// V6 CONNECTED WALKABLE NAVMESH
++// V7 FAIL-SAFE CONNECTED NAVIGATION
+ // The visual model remains the main repo. Navigation is now a separate continuous
+ // walkable surface: outer circulation ring + rooms + Pearl interior + entry apron.
+ // This prevents decorative/partition geometry from silently sealing the route.
+@@ -497,25 +545,20 @@
+   return false;
+ }
+ function canMove(x,z){
++  // V7 fail-safe navigation: the entire physical office shell is one connected walkable
++  // surface. We only block the outer envelope and the Pearl glass ring (except portal).
++  // This deliberately removes room-by-room nav islands as a possible source of dead zones.
+   if(inEntryApron(x,z)) return true;
+   if(!pointInPolygon(x,z,outer2)) return false;
+-
+   const q=pearlQ(x,z);
+-  // Pearl interior is walkable. The glass band is solid except at the approved portal.
+-  if(q<0.86) return true;
+-  if(q>=0.86 && q<=1.05) return inPearlPortal(x,z);
+-
+-  // The connected outer circulation ring is the primary walkable spine.
+-  if(inMainCorridor(x,z)) return true;
+-
+-  // Individual rooms / open galleries remain walkable from their corridor interfaces.
+-  if(inAnyRoom(x,z)) return true;
+-  return false;
++  if(q>=0.86 && q<=1.05 && !inPearlPortal(x,z)) return false;
++  return true;
+ }
+ 
+ // Sub-step + axis sliding. This is intentionally independent of the detailed
+ // furniture/room meshes so visual density cannot freeze player locomotion.
+ function movePlayer(dx,dz){
++  simTickCount++;
+   const dist=Math.hypot(dx,dz);
+   const steps=Math.max(1,Math.ceil(dist/0.035));
+   const sx=dx/steps, sz=dz/steps;
+@@ -603,7 +646,7 @@
+       if(zn!==lastZone){ zoneEl.textContent='Current zone: '+zn; lastZone=zn; }
+       if(stage===0 && pointInPolygon(camera.position.x,camera.position.z,outer2) && !inEntryApron(camera.position.x,camera.position.z)) setObjective('check in at Reception (press E)');
+       const active=[keys.KeyW&&'W',keys.KeyA&&'A',keys.KeyS&&'S',keys.KeyD&&'D'].filter(Boolean).join('');
+-      statusEl.textContent=`Safari V6 · connected floor/navmesh · ${active?'WASD '+active:'WASD ready'} · x ${camera.position.x.toFixed(1)} / z ${camera.position.z.toFixed(1)}`;
++      statusEl.textContent=`Safari V7 · ${active?'HELD '+active:'WASD ready'} · x ${camera.position.x.toFixed(2)} / z ${camera.position.z.toFixed(2)} · focus=${document.activeElement===renderer.domElement?'canvas':(document.activeElement?.tagName||'none')} · ${lastInputNote}`;
+       updateNearest(); updateMap();
+     }
+   }

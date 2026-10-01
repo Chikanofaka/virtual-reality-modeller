@@ -1,0 +1,237 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "id": "measured-studio",
+    "name": "Measured studio example"
+  },
+  "units": "m",
+  "provenance": {
+    "basis": "Synthetic measured example, 8 \u00d7 6 m; replace with user-confirmed survey for a real project",
+    "scaleConfirmed": true,
+    "entranceConfirmed": true,
+    "layoutConfirmed": true
+  },
+  "shell": {
+    "width": 8,
+    "depth": 6,
+    "height": 2.8
+  },
+  "rooms": [
+    {
+      "id": "studio",
+      "name": "Studio",
+      "bounds": [
+        -4,
+        -3,
+        4,
+        3
+      ],
+      "floorY": 0,
+      "accessPoint": [
+        0,
+        0
+      ]
+    }
+  ],
+  "doors": [
+    {
+      "id": "entrance",
+      "roomIds": [
+        "studio"
+      ],
+      "center": [
+        0,
+        3
+      ],
+      "width": 1.4,
+      "height": 2.3,
+      "axis": "x"
+    }
+  ],
+  "entrance": {
+    "position": [
+      0,
+      1.65,
+      2.2
+    ],
+    "yaw": 0
+  },
+  "navigation": {
+    "polygons": [
+      {
+        "id": "studio",
+        "vertices": [
+          [
+            -4,
+            -3
+          ],
+          [
+            4,
+            -3
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            -4,
+            3
+          ]
+        ]
+      }
+    ],
+    "blockers": [
+      {
+        "id": "desk",
+        "bounds": [
+          -2.8,
+          -2,
+          -0.6,
+          -1.2
+        ]
+      }
+    ],
+    "segments": [
+      {
+        "id": "0",
+        "a": [
+          -4,
+          -3
+        ],
+        "b": [
+          4,
+          -3
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "1",
+        "a": [
+          -4,
+          -3
+        ],
+        "b": [
+          -4,
+          3
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "2",
+        "a": [
+          4,
+          -3
+        ],
+        "b": [
+          4,
+          3
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "3",
+        "a": [
+          -4,
+          3
+        ],
+        "b": [
+          -0.7,
+          3
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "4",
+        "a": [
+          0.7,
+          3
+        ],
+        "b": [
+          4,
+          3
+        ],
+        "thickness": 0.12
+      }
+    ],
+    "spawn": [
+      0,
+      1.65,
+      2.2
+    ],
+    "routes": [
+      {
+        "id": "walkthrough",
+        "points": [
+          [
+            0,
+            2.2
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            -2
+          ],
+          [
+            0,
+            -2
+          ]
+        ]
+      }
+    ],
+    "collisionPolicy": "explicit-blockers"
+  },
+  "furniture": [
+    {
+      "id": "work-desk",
+      "type": "desk",
+      "position": [
+        -1.7,
+        0,
+        -1.6
+      ],
+      "size": [
+        2.2,
+        0.8,
+        0.8
+      ],
+      "rotation": 0,
+      "color": "#8b5b36"
+    },
+    {
+      "id": "reading-chair",
+      "type": "chair",
+      "position": [
+        2.8,
+        0,
+        1.8
+      ],
+      "size": [
+        0.65,
+        0.9,
+        0.65
+      ],
+      "rotation": 0.6,
+      "color": "#1e5c82"
+    }
+  ],
+  "materials": {
+    "floor": "#d8c7a6",
+    "wall": "#eceae3"
+  },
+  "assets": [],
+  "runtime": {
+    "browsers": [
+      "safari",
+      "chrome"
+    ],
+    "playerRadius": 0.22,
+    "eyeHeight": 1.65,
+    "speed": 2.5
+  },
+  "scene": {
+    "mode": "procedural"
+  }
+}

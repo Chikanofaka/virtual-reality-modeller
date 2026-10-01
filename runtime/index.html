@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Virtual Space MVP · Pearl Office</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body>
+<div id="hud">
+  <section id="panel" aria-label="Tour information">
+    <div id="eyebrow">Virtual Space MVP</div><div id="zone">Current zone: entrance</div>
+    <div id="objective">Objective: explore the approved space</div>
+    <div id="help"><kbd>WASD</kbd> walk · drag look · <kbd>←↑↓→</kbd> look · <kbd>Shift</kbd> sprint · <kbd>E</kbd> interact · <kbd>M</kbd> map · <kbd>R</kbd> reset · <kbd>Q</kbd> quality</div>
+    <div id="status" role="status">Verifying build identity…</div>
+    <div id="actions"><button id="interactButton">Interact (E)</button><button id="resetButton">Reset (R)</button><button id="mapToggle">Map (M)</button></div>
+  </section>
+  <aside id="mapWrap" aria-label="Interactive minimap"><canvas id="mapCanvas" width="480" height="320" aria-label="Click the floor to mark a destination"></canvas><div id="mapLabel">Click to mark a destination</div></aside>
+  <div id="center" aria-hidden="true">+</div><div id="interaction" aria-live="polite"></div>
+  <div id="dpad" aria-label="Movement diagnostic pad"><button class="w" data-move="KeyW" aria-label="Move forward">W</button><button class="a" data-move="KeyA" aria-label="Move left">A</button><button class="s" data-move="KeyS" aria-label="Move backward">S</button><button class="d" data-move="KeyD" aria-label="Move right">D</button></div>
+  <div id="versionBadge">Loading build identity…</div>
+  <section id="start"><div class="sub">Planning to a playable space</div><h1 id="startTitle">Virtual Space MVP</h1><p id="startDescription">Verifying this build and preparing the detailed scene.</p><button id="enter" disabled>PREPARING TOUR…</button></section>
+  <div id="toast" role="status" aria-live="polite"></div>
+</div>
+<script type="module">
+const failure=message=>{document.getElementById('startTitle').textContent='Build needs attention';document.getElementById('startDescription').textContent=message;document.getElementById('versionBadge').textContent='BLOCKED — '+message;};
+try {
+  const query=new URLSearchParams(location.search);
+  await import('./app.js?build='+encodeURIComponent(query.get('build')||'missing'));
+} catch(error) { failure(error.message+' — launch through the harness using the printed build URL.'); }
+</script>
+</body>
+</html>

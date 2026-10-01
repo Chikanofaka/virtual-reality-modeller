@@ -1,0 +1,14 @@
+.DS_Store
+__pycache__/
+*.pyc
+node_modules/
+.venv/
+projects/
+dist/
+test-results/
+.env
+.env.*
+!.env.example
+*.blend1
+
+output/

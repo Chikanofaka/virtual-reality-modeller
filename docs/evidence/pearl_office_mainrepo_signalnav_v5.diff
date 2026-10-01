@@ -1,0 +1,151 @@
+--- pearl_office_mainrepo_runtime_optimized_v4/runtime/app.js
++++ pearl_office_mainrepo_signalnav_v5/runtime/app.js
+@@ -20,12 +20,16 @@
+ renderer.toneMapping = THREE.ACESFilmicToneMapping;
+ renderer.toneMappingExposure = 1.22;
+ document.body.appendChild(renderer.domElement);
++// Keep the WebGL canvas on its own compositor layer. This does not change resolution.
++renderer.domElement.style.willChange = 'transform';
++renderer.domElement.style.transform = 'translateZ(0)';
+ 
+ const start = document.getElementById('start');
+ const enterButton = document.getElementById('enter');
+ let started = false;
+ let dragging = false;
+ let lastPointerX = 0, lastPointerY = 0;
++let pendingLookX = 0, pendingLookY = 0;
+ let yaw = -0.95, pitch = 0;
+ const LOOK_SENSITIVITY = 0.0032;
+ camera.rotation.order = 'YXZ';
+@@ -47,23 +51,19 @@
+   if(!started) return;
+   dragging = true;
+   lastPointerX = e.clientX; lastPointerY = e.clientY;
+-  renderer.domElement.setPointerCapture?.(e.pointerId);
+   renderer.domElement.style.cursor = 'grabbing';
+ });
+ renderer.domElement.addEventListener('pointermove', e => {
+   if(!started || !dragging) return;
+   const dx = e.clientX-lastPointerX, dy = e.clientY-lastPointerY;
+   lastPointerX=e.clientX; lastPointerY=e.clientY;
+-  yaw -= dx*LOOK_SENSITIVITY;
+-  pitch -= dy*LOOK_SENSITIVITY;
+-  applyLook();
+-  // Do not render from pointer events. The RAF loop owns presentation.
+-  // This prevents hundreds of redundant WebGL renders per second during drag-look.
++  // Buffer input only. Camera orientation is consumed in the SAME animation tick
++  // as WASD movement and rendering, so view + movement can never be one frame apart.
++  pendingLookX += dx; pendingLookY += dy;
+ });
+ function endDrag(e){
+   dragging=false;
+   renderer.domElement.style.cursor='grab';
+-  if(e?.pointerId!=null) renderer.domElement.releasePointerCapture?.(e.pointerId);
+ }
+ renderer.domElement.addEventListener('pointerup',endDrag);
+ renderer.domElement.addEventListener('pointercancel',endDrag);
+@@ -77,7 +77,7 @@
+ const playerDot = document.getElementById('playerDot');
+ 
+ const PLAYER_HEIGHT = 1.68;
+-const PLAYER_RADIUS = 0.30;
++const PLAYER_RADIUS = 0.22;
+ const ENTRY_CENTER = new THREE.Vector2(-10.25, 1.15);
+ const SPAWN = new THREE.Vector3(-11.75, PLAYER_HEIGHT, 2.35);
+ const SPAWN_YAW = -0.95;
+@@ -442,7 +442,7 @@
+   showToast(cinematic?'Cinematic quality enabled.':'Balanced detail mode enabled.');
+   renderNow();
+ }
+-function resetPlayer(){camera.position.copy(SPAWN);yaw=SPAWN_YAW;pitch=0;applyLook();stage=0;setObjective('enter between Awards and Charity');showToast('Player reset to entry.');renderNow();}
++function resetPlayer(){camera.position.copy(SPAWN);yaw=SPAWN_YAW;pitch=0;pendingLookX=pendingLookY=0;applyLook();stage=0;setObjective('enter between Awards and Charity');showToast('Player reset to entry.');renderNow();}
+ resetPlayer();
+ 
+ function pointInPolygon(x,z,pts){let inside=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++) {const xi=pts[i].x,zi=pts[i].y,xj=pts[j].x,zj=pts[j].y;const intersect=((zi>z)!==(zj>z))&&(x<(xj-xi)*(z-zi)/(zj-zi+1e-9)+xi);if(intersect)inside=!inside;}return inside;}
+@@ -453,10 +453,19 @@
+ }
+ const COLLIDER_CELL = 2.6;
+ const colliderGrid = new Map();
++// VISUAL geometry stays unchanged. Navigation deliberately collides only with
++// architecture, not every chair/desk/pedestal. This mirrors Signal Atrium's
++// simple navigation contract and prevents decorative meshes from sealing corridors.
++function isNavStructuralName(name=''){
++  return name.startsWith('Outer_') || name.startsWith('PearlGlass') ||
++         name.startsWith('PearlEntryPost') || name.startsWith('EntryPylon') ||
++         /^(Trading|Executive|Meeting|Director|Wine|Manager7|Manager8|Manager9|TeaRoom|BackOffice)(N|S|E|W)/.test(name);
++}
++const navColliders = colliders.filter(c=>isNavStructuralName(c.obj.name));
+ function gridKey(ix,iz){ return ix+','+iz; }
+ function buildColliderGrid(){
+   colliderGrid.clear();
+-  for(const c of colliders){
++  for(const c of navColliders){
+     const co=Math.cos(c.rotY), si=Math.sin(c.rotY);
+     const ex=Math.abs(co)*c.hx + Math.abs(si)*c.hz + PLAYER_RADIUS;
+     const ez=Math.abs(si)*c.hx + Math.abs(co)*c.hz + PLAYER_RADIUS;
+@@ -483,6 +492,24 @@
+   return true;
+ }
+ 
++// Signal-Atrium-style navigation: sub-step and slide instead of reverting the
++// whole frame when a diagonal step brushes a wall. This prevents the "stuck"
++// sensation at narrow door/corridor edges.
++function movePlayer(dx,dz){
++  const dist=Math.hypot(dx,dz);
++  const steps=Math.max(1,Math.ceil(dist/0.045));
++  const sx=dx/steps, sz=dz/steps;
++  for(let i=0;i<steps;i++){
++    const x0=camera.position.x, z0=camera.position.z;
++    const nx=x0+sx, nz=z0+sz;
++    if(canMove(nx,nz)){ camera.position.x=nx; camera.position.z=nz; continue; }
++    // wall sliding: X and Z are tested independently
++    if(canMove(nx,z0)) camera.position.x=nx;
++    if(canMove(camera.position.x,nz)) camera.position.z=nz;
++  }
++  camera.position.y=PLAYER_HEIGHT;
++}
++
+ function zoneName(x,z){
+   // Pearl interior first, excluding separate left Reception/Tea placement.
+   const q=((x-pearlCx)/pearlRx)**2+((z-pearlCz)/pearlRz)**2;
+@@ -514,12 +541,24 @@
+ 
+ const clock=new THREE.Clock();
+ let uiAccumulator=0, glowAccumulator=0, lastZone='';
+-function renderNow(){ renderer.render(scene,camera); }
++function renderNow(){
++  renderer.render(scene,camera);
++  // Explicitly submit commands to the browser compositor. Useful on macOS/Chrome
++  // where a complex WebGL scene can otherwise appear to update only after UI events.
++  renderer.getContext().flush();
++}
+ function animate(){
+   requestAnimationFrame(animate);
+   const dt=Math.min(clock.getDelta(),.04);
+   const t=performance.now()/1000;
+   if(started){
++    // Consume mouse input in the render loop, before movement, so look/WASD/presentation are synchronized.
++    if(pendingLookX || pendingLookY){
++      yaw -= pendingLookX*LOOK_SENSITIVITY;
++      pitch -= pendingLookY*LOOK_SENSITIVITY;
++      pendingLookX=0; pendingLookY=0;
++      applyLook();
++    }
+     const turnSpeed=1.65*dt;
+     if(keys.ArrowLeft) yaw += turnSpeed;
+     if(keys.ArrowRight) yaw -= turnSpeed;
+@@ -531,13 +570,9 @@
+     let f=(keys.KeyW?1:0)-(keys.KeyS?1:0), r=(keys.KeyD?1:0)-(keys.KeyA?1:0);
+     if(f||r){
+       const len=Math.hypot(f,r)||1; f/=len; r/=len;
+-      const ox=camera.position.x, oy=camera.position.y, oz=camera.position.z;
+       const fx=-Math.sin(yaw), fz=-Math.cos(yaw);
+       const rx=Math.cos(yaw), rz=-Math.sin(yaw);
+-      camera.position.x += (fx*f + rx*r)*speed;
+-      camera.position.z += (fz*f + rz*r)*speed;
+-      camera.position.y=PLAYER_HEIGHT;
+-      if(!canMove(camera.position.x,camera.position.z)) camera.position.set(ox,oy,oz);
++      movePlayer((fx*f + rx*r)*speed,(fz*f + rz*r)*speed);
+     }
+ 
+     // HUD / minimap / proximity checks do not need 60–120 updates per second.

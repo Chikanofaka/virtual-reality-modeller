@@ -1,0 +1,8 @@
+{
+  "survey": "Measured 8 by 6 metre studio, 2.8 metre ceiling, north at negative Z; synthetic example.",
+  "entrance": "South entrance at x=0, z=3; spawn at (0,1.65,2.2), facing negative Z.",
+  "rooms": "One studio occupies x=-4..4 and z=-3..3, entrance opening width 1.4 m, height 2.3 m.",
+  "furniture": "One desk and chair from procedural geometry; warm wood and light painted wall, no private images.",
+  "navigation": "One rectangular polygon, desk explicitly blocked, route remains clear for 0.22 metre radius.",
+  "experience": "Safari and Chrome, WASD, click-drag, E interactions, minimap, desktop first and manual browser acceptance."
+}

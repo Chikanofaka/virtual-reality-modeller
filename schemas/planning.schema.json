@@ -1,0 +1,585 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/virtual-space-mvp/planning.schema.json",
+  "title": "Virtual Space MVP planning contract",
+  "description": "Semantic topology, clearances, dimensions and approval hashes are additionally validated by scripts/harness.py. Coordinate system: right-handed Three.js, Y up, metres, radians.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project",
+    "units",
+    "provenance",
+    "shell",
+    "rooms",
+    "doors",
+    "entrance",
+    "navigation",
+    "furniture",
+    "materials",
+    "assets",
+    "runtime",
+    "scene"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "units": {
+      "const": "m"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "basis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scaleConfirmed": {
+          "const": true
+        },
+        "entranceConfirmed": {
+          "const": true
+        },
+        "layoutConfirmed": {
+          "const": true
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "basis",
+        "scaleConfirmed",
+        "entranceConfirmed",
+        "layoutConfirmed"
+      ]
+    },
+    "shell": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 200
+        },
+        "depth": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 200
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 200
+        }
+      },
+      "required": [
+        "width",
+        "depth",
+        "height"
+      ]
+    },
+    "rooms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bounds": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "floorY": {
+            "const": 0
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "accessPoint": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "open": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "bounds",
+          "accessPoint"
+        ]
+      }
+    },
+    "doors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "roomIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "center": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "width": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "height": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "axis": {
+            "enum": [
+              "x",
+              "z"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "roomIds",
+          "center",
+          "width",
+          "height",
+          "axis"
+        ]
+      }
+    },
+    "entrance": {
+      "type": "object",
+      "properties": {
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "yaw": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "position",
+        "yaw"
+      ]
+    },
+    "navigation": {
+      "type": "object",
+      "properties": {
+        "polygons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "vertices": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "minItems": 3
+              }
+            },
+            "required": [
+              "id",
+              "vertices"
+            ]
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bounds": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 4,
+                "maxItems": 4
+              }
+            },
+            "required": [
+              "id",
+              "bounds"
+            ]
+          }
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "a": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "b": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "thickness": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "required": [
+              "id",
+              "a",
+              "b",
+              "thickness"
+            ]
+          }
+        },
+        "spawn": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "routes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "points": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 2,
+                  "maxItems": 2
+                },
+                "minItems": 2
+              }
+            },
+            "required": [
+              "id",
+              "points"
+            ]
+          }
+        },
+        "collisionPolicy": {
+          "enum": [
+            "explicit-blockers",
+            "permissive-visual-partitions"
+          ]
+        }
+      },
+      "required": [
+        "polygons",
+        "blockers",
+        "spawn",
+        "routes",
+        "collisionPolicy"
+      ],
+      "additionalProperties": false
+    },
+    "furniture": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "desk",
+              "chair",
+              "sofa",
+              "shelf",
+              "table",
+              "plant",
+              "box"
+            ]
+          },
+          "position": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "size": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "rotation": {
+            "type": "number"
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "interaction": {
+            "type": "object",
+            "required": [
+              "label",
+              "message"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "message": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "position",
+          "size"
+        ]
+      }
+    },
+    "materials": {
+      "type": "object",
+      "properties": {
+        "floor": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "wall": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        }
+      },
+      "required": [
+        "floor",
+        "wall"
+      ]
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "image",
+              "video",
+              "model",
+              "document"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "license": {
+            "type": "string"
+          },
+          "placement": {
+            "type": "object",
+            "required": [
+              "position",
+              "rotation",
+              "scale"
+            ],
+            "properties": {
+              "position": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "rotation": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "scale": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "path",
+          "type",
+          "sha256"
+        ]
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "properties": {
+        "browsers": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "safari",
+              "chrome",
+              "firefox",
+              "edge"
+            ]
+          },
+          "contains": {
+            "const": "safari"
+          }
+        },
+        "playerRadius": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 1
+        },
+        "eyeHeight": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 2.5
+        },
+        "speed": {
+          "type": "number",
+          "minimum": 0.2,
+          "maximum": 6
+        }
+      },
+      "required": [
+        "browsers",
+        "playerRadius",
+        "eyeHeight",
+        "speed"
+      ]
+    },
+    "scene": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "pearl-v7",
+            "procedural",
+            "imported-glb"
+          ]
+        },
+        "details": {
+          "type": "string"
+        },
+        "assetId": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "mode"
+      ]
+    }
+  }
+}

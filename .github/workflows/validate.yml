@@ -1,0 +1,31 @@
+name: Validate harness and playable runtime
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Contract and CLI regressions
+        run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Input, navigation and scene regressions
+        run: node --test tests/runtime*.mjs
+      - name: Build the preserved Pearl example
+        run: python3 scripts/quickstart.py --build-only
+      - name: Install optional browser test tooling
+        run: npm install --ignore-scripts
+      - name: Install test browser
+        run: npx playwright install --with-deps chromium
+      - name: Real browser smoke
+        run: python3 scripts/run_browser_smoke.py

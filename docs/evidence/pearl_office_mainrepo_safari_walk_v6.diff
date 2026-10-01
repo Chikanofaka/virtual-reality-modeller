@@ -1,0 +1,195 @@
+--- pearl_office_mainrepo_signalnav_v5/runtime/app.js
++++ pearl_office_mainrepo_safari_walk_v6/runtime/app.js
+@@ -41,7 +41,8 @@
+ function startPlayer(){
+   started = true;
+   start.style.display = 'none';
+-  renderer.domElement.focus?.();
++  renderer.domElement.focus({preventScroll:true});
++  document.body.focus({preventScroll:true});
+   showToast('Player mode active — WASD to move, click-drag to look.');
+ }
+ enterButton.onclick = startPlayer;
+@@ -49,6 +50,7 @@
+ renderer.domElement.style.touchAction = 'none';
+ renderer.domElement.addEventListener('pointerdown', e => {
+   if(!started) return;
++  renderer.domElement.focus({preventScroll:true});
+   dragging = true;
+   lastPointerX = e.clientX; lastPointerY = e.clientY;
+   renderer.domElement.style.cursor = 'grabbing';
+@@ -239,7 +241,7 @@
+ floorShape.lineTo(8.2,-4.8); floorShape.lineTo(14.2,2.0);
+ floorShape.quadraticCurveTo(16.2,7.2,14.6,7.8); floorShape.closePath();
+ const floor = new THREE.Mesh(new THREE.ShapeGeometry(floorShape, 24), M.floor);
+-floor.rotation.x = Math.PI/2; floor.position.y = 0; floor.receiveShadow = true; scene.add(floor);
++floor.rotation.x = -Math.PI/2; floor.position.y = -0.006; floor.receiveShadow = true; scene.add(floor);
+ 
+ // Entry apron, aligned near the left-side entry gap.
+ const entryAngle = -0.72;
+@@ -402,7 +404,23 @@
+ renderer.shadowMap.needsUpdate = true;
+ 
+ // ---------- Interactions / gameplay ------------------------------------------
+-const keys={}; let mapVisible=true; let stage=0; let nearestInteractive=null; let cinematic=false;
++const keys=Object.create(null); let mapVisible=true; let stage=0; let nearestInteractive=null; let cinematic=false;
++const statusEl=document.getElementById('status');
++renderer.domElement.tabIndex=0;
++document.body.tabIndex=0;
++function normalizedCode(e){
++  const k=(e.key||'').toLowerCase();
++  if(k==='w') return 'KeyW'; if(k==='a') return 'KeyA'; if(k==='s') return 'KeyS'; if(k==='d') return 'KeyD';
++  if(k==='shift') return e.location===2?'ShiftRight':'ShiftLeft';
++  if(k==='arrowleft') return 'ArrowLeft'; if(k==='arrowright') return 'ArrowRight';
++  if(k==='arrowup') return 'ArrowUp'; if(k==='arrowdown') return 'ArrowDown';
++  return e.code || '';
++}
++function setKeyState(e,down){
++  const c=normalizedCode(e); if(!c) return; keys[c]=down;
++  if(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(c)) e.preventDefault();
++}
++
+ function showToast(text,ms=2100){toastEl.textContent=text;toastEl.style.opacity=1;clearTimeout(showToast.t);showToast.t=setTimeout(()=>toastEl.style.opacity=0,ms);}
+ function setObjective(text){objectiveEl.textContent='Objective: '+text;}
+ function advance(type){
+@@ -423,16 +441,17 @@
+   advance(it.type);
+ }
+ 
+-addEventListener('keydown',e=>{
+-  keys[e.code]=true;
+-  if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Space'].includes(e.code)) e.preventDefault();
+-  if(e.code==='KeyE') interact();
+-  if(e.code==='KeyM'){mapVisible=!mapVisible;mapWrap.classList.toggle('hidden',!mapVisible);}
+-  if(e.code==='KeyR') resetPlayer();
+-  if(e.code==='KeyQ') toggleCinematic();
+-});
+-addEventListener('keyup',e=>keys[e.code]=false);
+-addEventListener('blur',()=>{ for(const k of Object.keys(keys)) keys[k]=false; dragging=false; });
++window.addEventListener('keydown',e=>{
++  setKeyState(e,true);
++  const c=normalizedCode(e);
++  if(c==='KeyE' && !e.repeat) interact();
++  if(c==='KeyM' && !e.repeat){mapVisible=!mapVisible;mapWrap.classList.toggle('hidden',!mapVisible);}
++  if(c==='KeyR' && !e.repeat) resetPlayer();
++  if(c==='KeyQ' && !e.repeat) toggleCinematic();
++},{capture:true});
++window.addEventListener('keyup',e=>setKeyState(e,false),{capture:true});
++window.addEventListener('blur',()=>{ for(const k of Object.keys(keys)) keys[k]=false; dragging=false; });
++document.addEventListener('visibilitychange',()=>{ if(document.hidden) for(const k of Object.keys(keys)) keys[k]=false; });
+ 
+ function toggleCinematic(){
+   cinematic=!cinematic;
+@@ -451,59 +470,59 @@
+   const cx=-10.92,cz=1.93,a=entryAngle,c=Math.cos(a),s=Math.sin(a),dx=x-cx,dz=z-cz,lx=dx*c-dz*s,lz=dx*s+dz*c;
+   return Math.abs(lx)<1.7 && Math.abs(lz)<1.8;
+ }
+-const COLLIDER_CELL = 2.6;
+-const colliderGrid = new Map();
+-// VISUAL geometry stays unchanged. Navigation deliberately collides only with
+-// architecture, not every chair/desk/pedestal. This mirrors Signal Atrium's
+-// simple navigation contract and prevents decorative meshes from sealing corridors.
+-function isNavStructuralName(name=''){
+-  return name.startsWith('Outer_') || name.startsWith('PearlGlass') ||
+-         name.startsWith('PearlEntryPost') || name.startsWith('EntryPylon') ||
+-         /^(Trading|Executive|Meeting|Director|Wine|Manager7|Manager8|Manager9|TeaRoom|BackOffice)(N|S|E|W)/.test(name);
+-}
+-const navColliders = colliders.filter(c=>isNavStructuralName(c.obj.name));
+-function gridKey(ix,iz){ return ix+','+iz; }
+-function buildColliderGrid(){
+-  colliderGrid.clear();
+-  for(const c of navColliders){
+-    const co=Math.cos(c.rotY), si=Math.sin(c.rotY);
+-    const ex=Math.abs(co)*c.hx + Math.abs(si)*c.hz + PLAYER_RADIUS;
+-    const ez=Math.abs(si)*c.hx + Math.abs(co)*c.hz + PLAYER_RADIUS;
+-    const minX=Math.floor((c.obj.position.x-ex)/COLLIDER_CELL), maxX=Math.floor((c.obj.position.x+ex)/COLLIDER_CELL);
+-    const minZ=Math.floor((c.obj.position.z-ez)/COLLIDER_CELL), maxZ=Math.floor((c.obj.position.z+ez)/COLLIDER_CELL);
+-    for(let ix=minX;ix<=maxX;ix++) for(let iz=minZ;iz<=maxZ;iz++){
+-      const k=gridKey(ix,iz); let a=colliderGrid.get(k); if(!a) colliderGrid.set(k,a=[]); a.push(c);
+-    }
+-  }
+-}
+-buildColliderGrid();
+-function hitsCollider(x,z){
+-  const list=colliderGrid.get(gridKey(Math.floor(x/COLLIDER_CELL),Math.floor(z/COLLIDER_CELL))) || [];
+-  for(const c of list){
+-    const dx=x-c.obj.position.x,dz=z-c.obj.position.z,co=Math.cos(c.rotY),si=Math.sin(c.rotY);
+-    const lx=dx*co-dz*si,lz=dx*si+dz*co;
+-    if(Math.abs(lx)<c.hx+PLAYER_RADIUS && Math.abs(lz)<c.hz+PLAYER_RADIUS) return true;
+-  }
++// -----------------------------------------------------------------------------
++// V6 CONNECTED WALKABLE NAVMESH
++// The visual model remains the main repo. Navigation is now a separate continuous
++// walkable surface: outer circulation ring + rooms + Pearl interior + entry apron.
++// This prevents decorative/partition geometry from silently sealing the route.
++// -----------------------------------------------------------------------------
++function inRotRect(x,z,v,margin=.0){
++  const dx=x-v.x,dz=z-v.z,c=Math.cos(v.rot||0),si=Math.sin(v.rot||0);
++  const lx=dx*c-dz*si,lz=dx*si+dz*c;
++  return Math.abs(lx)<v.w/2+margin && Math.abs(lz)<v.d/2+margin;
++}
++function pearlQ(x,z,rx=pearlRx,rz=pearlRz){ return ((x-pearlCx)/rx)**2 + ((z-pearlCz)/rz)**2; }
++function inPearlPortal(x,z){
++  // generous portal around the one approved opening at Wine / Manager 1 junction
++  return Math.hypot(x-5.22,z-2.72) < 1.45;
++}
++function inMainCorridor(x,z){
++  // continuous elliptical circulation band surrounding the Pearl Office
++  const inner=((x)/7.45)**2 + ((z+.25)/4.35)**2;
++  const outer=((x)/11.65)**2 + ((z+.25)/7.35)**2;
++  return inner>0.92 && outer<1.12 && pointInPolygon(x,z,outer2);
++}
++function inAnyRoom(x,z){
++  for(const v of zoneVolumes) if(inRotRect(x,z,v,.10)) return true;
+   return false;
+ }
+ function canMove(x,z){
+-  if(!pointInPolygon(x,z,outer2) && !inEntryApron(x,z)) return false;
+-  if(hitsCollider(x,z)) return false;
+-  return true;
+-}
+-
+-// Signal-Atrium-style navigation: sub-step and slide instead of reverting the
+-// whole frame when a diagonal step brushes a wall. This prevents the "stuck"
+-// sensation at narrow door/corridor edges.
++  if(inEntryApron(x,z)) return true;
++  if(!pointInPolygon(x,z,outer2)) return false;
++
++  const q=pearlQ(x,z);
++  // Pearl interior is walkable. The glass band is solid except at the approved portal.
++  if(q<0.86) return true;
++  if(q>=0.86 && q<=1.05) return inPearlPortal(x,z);
++
++  // The connected outer circulation ring is the primary walkable spine.
++  if(inMainCorridor(x,z)) return true;
++
++  // Individual rooms / open galleries remain walkable from their corridor interfaces.
++  if(inAnyRoom(x,z)) return true;
++  return false;
++}
++
++// Sub-step + axis sliding. This is intentionally independent of the detailed
++// furniture/room meshes so visual density cannot freeze player locomotion.
+ function movePlayer(dx,dz){
+   const dist=Math.hypot(dx,dz);
+-  const steps=Math.max(1,Math.ceil(dist/0.045));
++  const steps=Math.max(1,Math.ceil(dist/0.035));
+   const sx=dx/steps, sz=dz/steps;
+   for(let i=0;i<steps;i++){
+     const x0=camera.position.x, z0=camera.position.z;
+     const nx=x0+sx, nz=z0+sz;
+-    if(canMove(nx,nz)){ camera.position.x=nx; camera.position.z=nz; continue; }
+-    // wall sliding: X and Z are tested independently
++    if(canMove(nx,nz)){camera.position.x=nx;camera.position.z=nz;continue;}
+     if(canMove(nx,z0)) camera.position.x=nx;
+     if(canMove(camera.position.x,nz)) camera.position.z=nz;
+   }
+@@ -583,6 +602,8 @@
+       const zn=zoneName(camera.position.x,camera.position.z);
+       if(zn!==lastZone){ zoneEl.textContent='Current zone: '+zn; lastZone=zn; }
+       if(stage===0 && pointInPolygon(camera.position.x,camera.position.z,outer2) && !inEntryApron(camera.position.x,camera.position.z)) setObjective('check in at Reception (press E)');
++      const active=[keys.KeyW&&'W',keys.KeyA&&'A',keys.KeyS&&'S',keys.KeyD&&'D'].filter(Boolean).join('');
++      statusEl.textContent=`Safari V6 · connected floor/navmesh · ${active?'WASD '+active:'WASD ready'} · x ${camera.position.x.toFixed(1)} / z ${camera.position.z.toFixed(1)}`;
+       updateNearest(); updateMap();
+     }
+   }

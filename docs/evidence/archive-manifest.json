@@ -1,0 +1,1180 @@
+{
+  "format": 1,
+  "scope": "Content audit only; no member extraction or code execution.",
+  "expected_archives": 11,
+  "missing_archives": [],
+  "archives": [
+    {
+      "archive": "floor_plan_evolution.zip",
+      "sha256": "3fef483f018708b56280507989cac4311a36c84ccab881cb334c665c7dfd24ff",
+      "entries": [
+        {
+          "path": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 22_52_12.png",
+          "size": 2341548,
+          "sha256": "3da3d7a1780cfcbeb59f3bfad23ad827e394c71ac495f4422726b63a3604f97d",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "__MACOSX/floor_plan_upgrades/._ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 22_52_12.png",
+          "size": 495,
+          "sha256": "4c51bfa11e76256af282eb4964729215c086bb4b2026515ddd19d2670791f255",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 18_16_37.png",
+          "size": 2947247,
+          "sha256": "d7932334f7fe483d89f1c7c7fb98f043a9aabc5251f228c56e415b9cb2dddd10",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "__MACOSX/floor_plan_upgrades/._ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 18_16_37.png",
+          "size": 721,
+          "sha256": "23ae2783a41688c79323b76b431f5d261067fe07a29eba64e02da4bd1d03f22b",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 22_46_40.png",
+          "size": 3003647,
+          "sha256": "4d7e1e26142c3558950a120682381e293b5f8904513f944fba454e82d6de0d47",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "__MACOSX/floor_plan_upgrades/._ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 22_46_40.png",
+          "size": 721,
+          "sha256": "688a07625a22936ce50e2fe6fb2887969eaedeb7eb17d4bff8cd535815d5d17c",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 17_50_54.png",
+          "size": 2914296,
+          "sha256": "1dbc476f340e95d7ac71971bab2c5926859530e1ef330020aa9efb6f7807fb59",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "__MACOSX/floor_plan_upgrades/._ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 17_50_54.png",
+          "size": 721,
+          "sha256": "2b26180751f2a64f6f9914164022774bcecb7be43f9b143a2388888c48df75fb",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 18_02_27.png",
+          "size": 2907459,
+          "sha256": "a5362ffd82557731a1e4a0651575232a4375ec6ba5b71963c2158db85d74ea84",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "__MACOSX/floor_plan_upgrades/._ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 18_02_27.png",
+          "size": 705,
+          "sha256": "f2e715f6d05c15271bf002e015f4d424264fdf513ee390999bc235360e8e2c0b",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 17_29_09.png",
+          "size": 2593130,
+          "sha256": "fce50d6eaab5658fb98d0845e1b3f70b62b45f4057edab3791bf224a481efa99",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "__MACOSX/floor_plan_upgrades/._ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 17_29_09.png",
+          "size": 721,
+          "sha256": "5239afd221861aa2417bcbc0d3c4973ba388ee70dfea72717f835c12f7ee263e",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "archive": "pearl_office_autonomous_game.zip",
+      "sha256": "85bff80267b1e4648b79845a1521d841df87c65afc331da89193c5b4b9ef8627",
+      "entries": [
+        {
+          "path": "pearl_office_autonomous_game/data/layout.json",
+          "size": 2556,
+          "sha256": "7dd6581ad085910eebb5eacf6fb4307d664db4380571983da703de546b970cf1",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_autonomous_game/runtime/app.js",
+          "size": 24707,
+          "sha256": "fa5edf5e4fc649e3cf4170063b7017176fdf62577bdfa5eb3e0b879c172588ab",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_autonomous_game/runtime/index.html",
+          "size": 5650,
+          "sha256": "afff498fa2f308c9f8fdf935590d3061aa580ee5c3fe82c1a26f7eafa725022b",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_autonomous_game/runtime/assets/floorplan_v1_5.png",
+          "size": 3330758,
+          "sha256": "51d25f84cb1bc4fcf6c47ac64f021d8b7a33038df78fc12ebd9f5d0a5720cd95",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_autonomous_game/README_FIRST.md",
+          "size": 3707,
+          "sha256": "e3973e417905a0eff56cbc95ce3bbbdebed85f50b5c4975cc037e25d4092820e",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_autonomous_game/ENGINEERING_STATUS.md",
+          "size": 1261,
+          "sha256": "bc26d160986fa9bb56bf06f1ebacfce6377e9b36079b4ad418c31094f939bfb1",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_autonomous_game/RUN_GAME.command",
+          "size": 405,
+          "sha256": "38ada6058e4871fd5d46dbfc14ca0c04aeb5843f0f078b49de1e6ed63c096194",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_autonomous_game/blender/BUILD_PEARL_OFFICE.py",
+          "size": 8143,
+          "sha256": "a358fc94ae73029ff8b2172e6c57d3f9807cc430d008e0edbfacae89274a0ee8",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_autonomous_game/blender/__pycache__/BUILD_PEARL_OFFICE.cpython-313.pyc",
+          "size": 16678,
+          "sha256": "9742ce44b97a2e0e54768567b05082f893715dac06a94be9233a613e11edbf9a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_autonomous_game/RUN_ALL.command",
+          "size": 528,
+          "sha256": "2929c3975b8cf0711d99b9191300f9c2b79aca5422bb57adaec9695aaab5164c",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "archive": "pearl_office_compatibility_game.zip",
+      "sha256": "131e2272e5a663f77f88159b4eec5f7b3965a3135faa1b692490876e9e3f2310",
+      "entries": [
+        {
+          "path": "pearl_office_compatibility_game/PLAY_PEARL_OFFICE.html",
+          "size": 13972,
+          "sha256": "0fb6c501f30a6138ada8e156ea1e6c735fcafe1ea58a5bff3b4d27dab0149371",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_compatibility_game/README.txt",
+          "size": 839,
+          "sha256": "c4ace20c4b5d6ae3f492ebd06cc7a399315b84fa9385b3e30db52a89962f224c",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "archive": "pearl_office_smooth_game.zip",
+      "sha256": "d7441b5ce2bb2319247fe0b3629a4aea474a1b1124998ffaef5273dcc08b9583",
+      "entries": [
+        {
+          "path": "pearl_office_smooth_game/data/layout.json",
+          "size": 2556,
+          "sha256": "7dd6581ad085910eebb5eacf6fb4307d664db4380571983da703de546b970cf1",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_smooth_game/runtime/app.js",
+          "size": 27049,
+          "sha256": "64e245a374dd32648a87266f05c43134bc5ed913f975acfd407f6554179e023e",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_smooth_game/runtime/index.html",
+          "size": 5748,
+          "sha256": "cdd351c604b0496d42715a919258ab7e8f0148ff10614181bd703f6cf656dafd",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_smooth_game/runtime/assets/floorplan_v1_5.png",
+          "size": 1106247,
+          "sha256": "771ace6f463d8fbf651a8d0c4df7299f9e4806d1ea05891ce127c4a02530c2bb",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_smooth_game/README_FIRST.md",
+          "size": 926,
+          "sha256": "7670eb30f8872a872aaf92c40d19a720606e342c451f5fdd85f6e3ecb90acd92",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_smooth_game/ENGINEERING_STATUS.md",
+          "size": 1261,
+          "sha256": "bc26d160986fa9bb56bf06f1ebacfce6377e9b36079b4ad418c31094f939bfb1",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_smooth_game/RUN_GAME.command",
+          "size": 405,
+          "sha256": "38ada6058e4871fd5d46dbfc14ca0c04aeb5843f0f078b49de1e6ed63c096194",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_smooth_game/blender/BUILD_PEARL_OFFICE.py",
+          "size": 8143,
+          "sha256": "a358fc94ae73029ff8b2172e6c57d3f9807cc430d008e0edbfacae89274a0ee8",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_smooth_game/blender/__pycache__/BUILD_PEARL_OFFICE.cpython-313.pyc",
+          "size": 16674,
+          "sha256": "a704a39735616478cb2771eb3444b755e115dee483d521c6268f584ee22cac9d",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_smooth_game/RUN_ALL.command",
+          "size": 528,
+          "sha256": "2929c3975b8cf0711d99b9191300f9c2b79aca5422bb57adaec9695aaab5164c",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "archive": "pearl_office_hybrid_hd.zip",
+      "sha256": "6b8cb0fa5e2a12c6d5c70174d6c7e9de05cd48f9e94786a45614cdad36a41f61",
+      "entries": [
+        {
+          "path": "pearl_office_hybrid_hd/README_FIRST.md",
+          "size": 1405,
+          "sha256": "618f3fe58bb5b38aaf1975c1f827a7aeab85529ce94318357dca2cb4eb97671d",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/ENGINEERING_STATUS.md",
+          "size": 541,
+          "sha256": "0ad6c4e402d1e587a76aa3b8632ff08cd2318ae822208349ca4c0530d058d07e",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/PLAY_PEARL_OFFICE_HYBRID_HD.html",
+          "size": 21639,
+          "sha256": "eed78f61118035b06695ee198d8f1819537f5bfca294da6ebf56db1d583592b0",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/floorplan_v1_5.png",
+          "size": 3330758,
+          "sha256": "51d25f84cb1bc4fcf6c47ac64f021d8b7a33038df78fc12ebd9f5d0a5720cd95",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/pearl_office.jpg",
+          "size": 1617683,
+          "sha256": "bb6e4f2cb7497f0242e4c3ad3972613f59a00114fb2234d9bc1b7f43c581ab5d",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/director_office.jpg",
+          "size": 1589995,
+          "sha256": "cbaf5fba528b69670efaeb1bbdabe4bba295cb525234fc4b673930d7858db9da",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/charity_gallery.jpg",
+          "size": 1410393,
+          "sha256": "29d36a96834e11207d796a8fab9d22b484e2385f92aa4353eb94ddeb02c3da86",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/executive_office.jpg",
+          "size": 1563861,
+          "sha256": "b68bb62a9d9bcca9fbc6527dd1b9297a2847c74590e1d2378db2fbede21bfc86",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/reception_awards.jpg",
+          "size": 1474244,
+          "sha256": "2d4fbfb73a9d3e31e57e0a36da88f64d1e8129379ee8157c7458ccd2d9096d68",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/tea_room.jpg",
+          "size": 1337445,
+          "sha256": "371b271cc0ae01ee21f2470af5b569c8dd1b089f5f53a57ca6fe95de717c244d",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/back_office.jpg",
+          "size": 1481723,
+          "sha256": "ca3372562ce092afce510206571c2e00881f47538b3040345a789d9b374a882a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/wine_room.jpg",
+          "size": 1045861,
+          "sha256": "e8c6cf26328303be492783e79bff5f3927510c2ef82fd653fd154c2dbb6e71f3",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/manager_office_3.jpg",
+          "size": 1398318,
+          "sha256": "4abb596eee5ac17708d8c395bf4171ecd2174491a34d623df08ebb1d35830c4b",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/trading_office.jpg",
+          "size": 1268505,
+          "sha256": "8a4ad85ba0c417c259c48b6e1b02e8d4e7ce92672b7cd644f0bb7aa9fd185fd7",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/manager_office_2.jpg",
+          "size": 1360118,
+          "sha256": "7e3d364088f3018a9ca42379d571420a814c4141e4b00641becbca520ff50f34",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/meeting_room.jpg",
+          "size": 1665025,
+          "sha256": "b8448137636ad076577b25949c69ed468cc5013d298c98465caa997c59d31c5c",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_hybrid_hd/assets/reference/manager_office_1.jpg",
+          "size": 1475667,
+          "sha256": "eb30deaef8b7a1a7bae2935aea0206e036e4a70886b6707d1a9a464d57934e08",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "archive": "pearl_office_ultra_hybrid_v2.zip",
+      "sha256": "92454eb3a1b70941446f48edae90cb711c2f2ffb88c8b5856e76e763baffef34",
+      "entries": [
+        {
+          "path": "pearl_office_ultra_hybrid_v2/README_FIRST.md",
+          "size": 1305,
+          "sha256": "17a458f3e4e821642e6bb9d4e84358e01c9e242b8f2aa357f02aff7b07ac1577",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/ENGINEERING_STATUS.md",
+          "size": 439,
+          "sha256": "f5c9862f9f3836479d38404d9e45ba693d45157f5e65b07195d667e454504f34",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/PLAY_PEARL_OFFICE_ULTRA_V2.html",
+          "size": 24706,
+          "sha256": "10cbdc6ebac25fc44fd10f604fea749803380a3b166c8b1954e1d2abf0f5f35e",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/layout.json",
+          "size": 2556,
+          "sha256": "7dd6581ad085910eebb5eacf6fb4307d664db4380571983da703de546b970cf1",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/RUN_GAME.command",
+          "size": 95,
+          "sha256": "8e1ce424c00e4c70e50367a1996d7054977636016aeaff8f301e3e9da058a6e5",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/blender/BUILD_PEARL_OFFICE_ULTRA.py",
+          "size": 17998,
+          "sha256": "b228fee09c838ce040f3b484ff6ab46798e00e30a679e4e8389102739f42392d",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/RUN_BLENDER_ULTRA.command",
+          "size": 568,
+          "sha256": "f496ca47013150966f6e975603fb6cee560c13667f8075afb1d20bea2e27f428",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/floorplan_v1_5.png",
+          "size": 3330758,
+          "sha256": "51d25f84cb1bc4fcf6c47ac64f021d8b7a33038df78fc12ebd9f5d0a5720cd95",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/pearl_office.jpg",
+          "size": 233046,
+          "sha256": "4ddcc59823cdf87018ce4a380cee1b1c000148e9fdd3870e38446641e12394c7",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/director_office.jpg",
+          "size": 247831,
+          "sha256": "da4418b6ee1e008f6b1a990483172fbd27f3458f1388581834b934ac9312c31d",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/charity_gallery.jpg",
+          "size": 207640,
+          "sha256": "efc705edf87c91252b9cd7a9de7f7b72de8e5acb4d6d7e555c59af82b90750ab",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/executive_office.jpg",
+          "size": 235699,
+          "sha256": "e6fa258f0e0219e923fbb36647bf46ce77678dc99fec98f187ec36916d26ad95",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/reception_awards.jpg",
+          "size": 216223,
+          "sha256": "fcc7b0b50988a09cd698e589e9e1585f299295a48d6b311bc6bf0d163d7bf58b",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/tea_room.jpg",
+          "size": 182758,
+          "sha256": "010ce0e4a340575dc23aaf30ad28667fa3f72ca68005f5736b8377f6fa4ae63d",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/back_office.jpg",
+          "size": 195961,
+          "sha256": "434fdffecf995c69a9e9633131eaf1292ed66a22c4fe26fe4034764ff8f4fe7a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/wine_room.jpg",
+          "size": 152462,
+          "sha256": "f50d1370a5ddf1496e713b4b36473b2b468fd2476d835b3ae14604b43f03c4d8",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/manager_office_3.jpg",
+          "size": 205719,
+          "sha256": "3f13cf6fde93da0b85b04fb9c5395b4de3f709d887fd7ddf5a8cbf247d338db7",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/trading_office.jpg",
+          "size": 181644,
+          "sha256": "e65e79dab537a3b0197bb0373a6863e31ecdada046e5df614afb4f3a39617945",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/manager_office_2.jpg",
+          "size": 214744,
+          "sha256": "ca5cef968f3aa38ccd486937fd93f586dfe777a70586ff82be1b43622ccf92e5",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/meeting_room.jpg",
+          "size": 246313,
+          "sha256": "79b7fc47bfee7f67848e4f03d450349eb53b5354bd19f1eb3293de81c2bb0af5",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/reference/manager_office_1.jpg",
+          "size": 216199,
+          "sha256": "0d9fb47585842e81c055259ad1677cfbc50631984c30e10cceda93bce002b957",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/pearl_office.jpg",
+          "size": 69450,
+          "sha256": "1661668d4c0591d28625f40b06f53f64fb9d9e2ecba8882d86b898afe1816e9e",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/director_office.jpg",
+          "size": 74866,
+          "sha256": "79f15bc2782613bfeec5af7d28e49aa1f41329e114392ed6bf70313e5786dd9e",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/charity_gallery.jpg",
+          "size": 56503,
+          "sha256": "07cedfa662cd086fbbfcc3134f51b1c16922d7baba4ad02244804bda8ba50c98",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/executive_office.jpg",
+          "size": 66316,
+          "sha256": "34b03a7388db5b55362449dbc284f46b8dba2c40d8ad88aa97883387e3f11930",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/reception_awards.jpg",
+          "size": 59043,
+          "sha256": "ba7ae19b1a17008287fca9b7cb9888898c7982ce060c21d6d7d35889533e4b60",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/tea_room.jpg",
+          "size": 50044,
+          "sha256": "bf09e17ec5e10a2ffbfb9858aa224b54f66c850adf2e8c28e157d880766d4350",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/back_office.jpg",
+          "size": 44183,
+          "sha256": "4961f92c533215222b6f449b9c80fe7582dd92aa365b0cbf1c823ee9077e7ff6",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/wine_room.jpg",
+          "size": 51187,
+          "sha256": "5dd83284510ec8b9d40721e8ea3109560504604ddefddd3bc0b4e5f559ad2195",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/manager_office_3.jpg",
+          "size": 58255,
+          "sha256": "93bf8d826df099db05440f643917de2f6b1a4486cfae860dac5a2a94d86af7e2",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/trading_office.jpg",
+          "size": 52776,
+          "sha256": "0d03145e9d39be1be2b1f6a353462a213cd3aced66d821df4a787868e5e380ef",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/manager_office_2.jpg",
+          "size": 65952,
+          "sha256": "4ec85ac207d3358b2bebc08125639f7bc07980232a41fda0e6d7f8809fcc82a3",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/meeting_room.jpg",
+          "size": 71732,
+          "sha256": "17d8ef7ecbacc31aeddf4bd298fa326d8b65a76fe5385fba5809eccc0ca46dfa",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_ultra_hybrid_v2/assets/textures/manager_office_1.jpg",
+          "size": 59301,
+          "sha256": "4cb546a9ec13525d38b1abfd0d8a0d14f84896c89090c52dc5cfdf362642509e",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "archive": "pearl_office_mainrepo_drag_v3.zip",
+      "sha256": "e9daafe11695e51887d75aac631be527722dd3a7bbdddbd42c92b94e3903d1b4",
+      "entries": [
+        {
+          "path": "pearl_office_mainrepo_drag_v3/README_FIRST.md",
+          "size": 1044,
+          "sha256": "08ebe9fccacc83dad90897c8f3ac4ac66191c66cccf54d5b0d7db32c6d299a74",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_drag_v3/ENGINEERING_STATUS.md",
+          "size": 319,
+          "sha256": "f0d5143c1e3d341f8abbca6306263067620e6c0d248afe1284801c6e226bcda0",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_drag_v3/RUN_GAME.command",
+          "size": 420,
+          "sha256": "9cbb01ded8755fb7ac5d8b26a5450f93598a22696a9029ed3380ed735682637e",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_drag_v3/RUN_ALL.command",
+          "size": 528,
+          "sha256": "2929c3975b8cf0711d99b9191300f9c2b79aca5422bb57adaec9695aaab5164c",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_drag_v3/data/layout.json",
+          "size": 2556,
+          "sha256": "7dd6581ad085910eebb5eacf6fb4307d664db4380571983da703de546b970cf1",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_drag_v3/runtime/app.js",
+          "size": 26991,
+          "sha256": "e7cd1612cbc32bc5b2eaa9e030199b1e407062ca112898b9fac0fc17b2d2c613",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_drag_v3/runtime/index.html",
+          "size": 5701,
+          "sha256": "6f6b2a539b5164b41090ec296cc31af20ac73334f2775cc4cf2ccee67b6dc268",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_drag_v3/blender/BUILD_PEARL_OFFICE.py",
+          "size": 8143,
+          "sha256": "a358fc94ae73029ff8b2172e6c57d3f9807cc430d008e0edbfacae89274a0ee8",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_drag_v3/blender/__pycache__/BUILD_PEARL_OFFICE.cpython-313.pyc",
+          "size": 16678,
+          "sha256": "9742ce44b97a2e0e54768567b05082f893715dac06a94be9233a613e11edbf9a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_drag_v3/runtime/assets/floorplan_v1_5.png",
+          "size": 3330758,
+          "sha256": "51d25f84cb1bc4fcf6c47ac64f021d8b7a33038df78fc12ebd9f5d0a5720cd95",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "archive": "pearl_office_mainrepo_runtime_optimized_v4.zip",
+      "sha256": "8a6fecfb15c587a37d9bbc3e9493b03eccbc24df5d1209b9655bbddd4c0a54ab",
+      "entries": [
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/data/layout.json",
+          "size": 2556,
+          "sha256": "7dd6581ad085910eebb5eacf6fb4307d664db4380571983da703de546b970cf1",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/runtime/app.js",
+          "size": 29186,
+          "sha256": "5b01b7cd133dedc9604c2dd4a4d5d0b92d63d36ea88ab91cfb71c11a4cd9482b",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/runtime/index.html",
+          "size": 5701,
+          "sha256": "6f6b2a539b5164b41090ec296cc31af20ac73334f2775cc4cf2ccee67b6dc268",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/runtime/assets/floorplan_v1_5.png",
+          "size": 3330758,
+          "sha256": "51d25f84cb1bc4fcf6c47ac64f021d8b7a33038df78fc12ebd9f5d0a5720cd95",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/RUNTIME_OPTIMIZATION_NOTES.md",
+          "size": 1443,
+          "sha256": "758fc3cc0cc3db9dce754f6ab595795508ad5845a20745a0a2c266c81ebf6c8c",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/README_FIRST.md",
+          "size": 1044,
+          "sha256": "08ebe9fccacc83dad90897c8f3ac4ac66191c66cccf54d5b0d7db32c6d299a74",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/ENGINEERING_STATUS.md",
+          "size": 319,
+          "sha256": "f0d5143c1e3d341f8abbca6306263067620e6c0d248afe1284801c6e226bcda0",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/RUN_GAME.command",
+          "size": 420,
+          "sha256": "9cbb01ded8755fb7ac5d8b26a5450f93598a22696a9029ed3380ed735682637e",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/blender/BUILD_PEARL_OFFICE.py",
+          "size": 8143,
+          "sha256": "a358fc94ae73029ff8b2172e6c57d3f9807cc430d008e0edbfacae89274a0ee8",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/blender/__pycache__/BUILD_PEARL_OFFICE.cpython-313.pyc",
+          "size": 16678,
+          "sha256": "9742ce44b97a2e0e54768567b05082f893715dac06a94be9233a613e11edbf9a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/RUN_SMOOTH.command",
+          "size": 647,
+          "sha256": "bf6db21e51a243b9fc8c112397181235477c0b11517027037381a3d1565ba57a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_runtime_optimized_v4/RUN_ALL.command",
+          "size": 528,
+          "sha256": "2929c3975b8cf0711d99b9191300f9c2b79aca5422bb57adaec9695aaab5164c",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "archive": "pearl_office_mainrepo_signalnav_v5.zip",
+      "sha256": "b7427d853a9462f3127d21cfd85179e4b97c852895606ca94d00c2591ebaeff8",
+      "entries": [
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/data/layout.json",
+          "size": 2556,
+          "sha256": "7dd6581ad085910eebb5eacf6fb4307d664db4380571983da703de546b970cf1",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/V5_DIAGNOSIS_AND_CONTROLS.md",
+          "size": 1563,
+          "sha256": "d8acdfb7006a06f8857b61d8b9851d3b9f8033770959fb987351ea415f144611",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/runtime/app.js",
+          "size": 30915,
+          "sha256": "147f9db290769fedbb9c713a1cd1bc1a87f7f310197a07397b4d40d8792e7b81",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/runtime/index.html",
+          "size": 5780,
+          "sha256": "bcbbe2d8ab5f50681cc007dbe15b0a52bb7e4184f24ec99f96aac01cc49917cb",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/runtime/assets/floorplan_v1_5.png",
+          "size": 3330758,
+          "sha256": "51d25f84cb1bc4fcf6c47ac64f021d8b7a33038df78fc12ebd9f5d0a5720cd95",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/RUNTIME_OPTIMIZATION_NOTES.md",
+          "size": 1443,
+          "sha256": "758fc3cc0cc3db9dce754f6ab595795508ad5845a20745a0a2c266c81ebf6c8c",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/README_FIRST.md",
+          "size": 1044,
+          "sha256": "08ebe9fccacc83dad90897c8f3ac4ac66191c66cccf54d5b0d7db32c6d299a74",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/ENGINEERING_STATUS.md",
+          "size": 319,
+          "sha256": "f0d5143c1e3d341f8abbca6306263067620e6c0d248afe1284801c6e226bcda0",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/RUN_CHROME_SMOOTH.command",
+          "size": 547,
+          "sha256": "a8c3a9d93df297baca500eab5dc5eb26a050eb15aa06f1d0566532cd8714a28a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/RUN_GAME.command",
+          "size": 420,
+          "sha256": "9cbb01ded8755fb7ac5d8b26a5450f93598a22696a9029ed3380ed735682637e",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/blender/BUILD_PEARL_OFFICE.py",
+          "size": 8143,
+          "sha256": "a358fc94ae73029ff8b2172e6c57d3f9807cc430d008e0edbfacae89274a0ee8",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/blender/__pycache__/BUILD_PEARL_OFFICE.cpython-313.pyc",
+          "size": 16678,
+          "sha256": "9742ce44b97a2e0e54768567b05082f893715dac06a94be9233a613e11edbf9a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/RUN_SMOOTH.command",
+          "size": 647,
+          "sha256": "bf6db21e51a243b9fc8c112397181235477c0b11517027037381a3d1565ba57a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/RUN_SAFARI_SMOOTH.command",
+          "size": 226,
+          "sha256": "93de12e0c1b367d3780c916bcf193108a1a9c9a3bfeb117fbd39de58fce0af19",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_signalnav_v5/RUN_ALL.command",
+          "size": 528,
+          "sha256": "2929c3975b8cf0711d99b9191300f9c2b79aca5422bb57adaec9695aaab5164c",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "archive": "pearl_office_mainrepo_safari_walk_v6.zip",
+      "sha256": "466e43afb6cfcceff8822eba7d71ebe21569d5b4c0bf310defc62cbd6ea6c4c1",
+      "entries": [
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/data/layout.json",
+          "size": 2556,
+          "sha256": "7dd6581ad085910eebb5eacf6fb4307d664db4380571983da703de546b970cf1",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/V5_DIAGNOSIS_AND_CONTROLS.md",
+          "size": 1563,
+          "sha256": "d8acdfb7006a06f8857b61d8b9851d3b9f8033770959fb987351ea415f144611",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/V6_ENGINEERING_NOTE.md",
+          "size": 814,
+          "sha256": "4765a5b64e770482826eb800ebd79f237304a1b713f48d896f4fc38585394735",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/runtime/app.js",
+          "size": 31994,
+          "sha256": "478a6b21a12492aef9dfbc3bbffef3a6a74a79692de7ede0c4d39abcb5610787",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/runtime/index.html",
+          "size": 5733,
+          "sha256": "6383d2c75b193221feff3490f36ced4b15473318c2b62e45b21bacec5293e2c3",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/runtime/assets/floorplan_v1_5.png",
+          "size": 3330758,
+          "sha256": "51d25f84cb1bc4fcf6c47ac64f021d8b7a33038df78fc12ebd9f5d0a5720cd95",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/RUNTIME_OPTIMIZATION_NOTES.md",
+          "size": 1443,
+          "sha256": "758fc3cc0cc3db9dce754f6ab595795508ad5845a20745a0a2c266c81ebf6c8c",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/README_FIRST.md",
+          "size": 1290,
+          "sha256": "bdeeafbf4c6dacb71c27a36fc7d9d3eb354d3213aa0ee1698929b2f910377ebf",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/RUN_SAFARI_WALK.command",
+          "size": 341,
+          "sha256": "ffe4297967e81c025de1cec6cc9ddbc158bd8b76b6c367f1dbb526bbf85616a9",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/ENGINEERING_STATUS.md",
+          "size": 319,
+          "sha256": "f0d5143c1e3d341f8abbca6306263067620e6c0d248afe1284801c6e226bcda0",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/RUN_CHROME_SMOOTH.command",
+          "size": 547,
+          "sha256": "a8c3a9d93df297baca500eab5dc5eb26a050eb15aa06f1d0566532cd8714a28a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/RUN_GAME.command",
+          "size": 341,
+          "sha256": "ffe4297967e81c025de1cec6cc9ddbc158bd8b76b6c367f1dbb526bbf85616a9",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/blender/BUILD_PEARL_OFFICE.py",
+          "size": 8143,
+          "sha256": "a358fc94ae73029ff8b2172e6c57d3f9807cc430d008e0edbfacae89274a0ee8",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/blender/__pycache__/BUILD_PEARL_OFFICE.cpython-313.pyc",
+          "size": 16678,
+          "sha256": "9742ce44b97a2e0e54768567b05082f893715dac06a94be9233a613e11edbf9a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/RUN_SMOOTH.command",
+          "size": 647,
+          "sha256": "bf6db21e51a243b9fc8c112397181235477c0b11517027037381a3d1565ba57a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/RUN_SAFARI_SMOOTH.command",
+          "size": 226,
+          "sha256": "93de12e0c1b367d3780c916bcf193108a1a9c9a3bfeb117fbd39de58fce0af19",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_walk_v6/RUN_ALL.command",
+          "size": 528,
+          "sha256": "2929c3975b8cf0711d99b9191300f9c2b79aca5422bb57adaec9695aaab5164c",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    },
+    {
+      "archive": "pearl_office_mainrepo_safari_wasd_v7.zip",
+      "sha256": "80c70689745ecb4a055ba025f5b0147309031b88fe1b3cde3fcbd6bc4aa1d553",
+      "entries": [
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/data/layout.json",
+          "size": 2556,
+          "sha256": "7dd6581ad085910eebb5eacf6fb4307d664db4380571983da703de546b970cf1",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/V5_DIAGNOSIS_AND_CONTROLS.md",
+          "size": 1563,
+          "sha256": "d8acdfb7006a06f8857b61d8b9851d3b9f8033770959fb987351ea415f144611",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/RUN_SAFARI_V7.command",
+          "size": 605,
+          "sha256": "36be08fce86e60b47604e0641c37a1735d8cd4afde8ffc1c347327d961b5eeda",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/V6_ENGINEERING_NOTE.md",
+          "size": 814,
+          "sha256": "4765a5b64e770482826eb800ebd79f237304a1b713f48d896f4fc38585394735",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/runtime/app_v7.js",
+          "size": 35137,
+          "sha256": "e77d75f8063e239cf271b8328d8a98f01416b2a6f1e256c1199e1015a03d5853",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/runtime/index.html",
+          "size": 6795,
+          "sha256": "256c694de9d1ed41f92090d4f0ed784e4a874b87490f779eb3a4e85d712c40cb",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/runtime/assets/floorplan_v1_5.png",
+          "size": 3330758,
+          "sha256": "51d25f84cb1bc4fcf6c47ac64f021d8b7a33038df78fc12ebd9f5d0a5720cd95",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/RUNTIME_OPTIMIZATION_NOTES.md",
+          "size": 1443,
+          "sha256": "758fc3cc0cc3db9dce754f6ab595795508ad5845a20745a0a2c266c81ebf6c8c",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/README_FIRST.md",
+          "size": 851,
+          "sha256": "08d6159e925a3f854eb024b2a3ff4bf60d9d70d91d9f4f9421dd53cd73dda9bd",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/RUN_SAFARI_WALK.command",
+          "size": 341,
+          "sha256": "ffe4297967e81c025de1cec6cc9ddbc158bd8b76b6c367f1dbb526bbf85616a9",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/ENGINEERING_STATUS.md",
+          "size": 319,
+          "sha256": "f0d5143c1e3d341f8abbca6306263067620e6c0d248afe1284801c6e226bcda0",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/RUN_CHROME_SMOOTH.command",
+          "size": 547,
+          "sha256": "a8c3a9d93df297baca500eab5dc5eb26a050eb15aa06f1d0566532cd8714a28a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/RUN_GAME.command",
+          "size": 605,
+          "sha256": "36be08fce86e60b47604e0641c37a1735d8cd4afde8ffc1c347327d961b5eeda",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/blender/BUILD_PEARL_OFFICE.py",
+          "size": 8143,
+          "sha256": "a358fc94ae73029ff8b2172e6c57d3f9807cc430d008e0edbfacae89274a0ee8",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/blender/__pycache__/BUILD_PEARL_OFFICE.cpython-313.pyc",
+          "size": 16678,
+          "sha256": "9742ce44b97a2e0e54768567b05082f893715dac06a94be9233a613e11edbf9a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/RUN_SMOOTH.command",
+          "size": 647,
+          "sha256": "bf6db21e51a243b9fc8c112397181235477c0b11517027037381a3d1565ba57a",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/RUN_SAFARI_SMOOTH.command",
+          "size": 226,
+          "sha256": "93de12e0c1b367d3780c916bcf193108a1a9c9a3bfeb117fbd39de58fce0af19",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/RUN_ALL.command",
+          "size": 528,
+          "sha256": "2929c3975b8cf0711d99b9191300f9c2b79aca5422bb57adaec9695aaab5164c",
+          "unsafe_path": false,
+          "symlink": false
+        },
+        {
+          "path": "pearl_office_mainrepo_safari_wasd_v7/V7_WASD_DIAGNOSIS.md",
+          "size": 1521,
+          "sha256": "4cfd4d00dc5280d46b228afcdaaa40fc284c9db6c16add737d0a33c4e04169a6",
+          "unsafe_path": false,
+          "symlink": false
+        }
+      ]
+    }
+  ]
+}

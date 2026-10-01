@@ -1,0 +1,36 @@
+{
+  "three_version": "0.180.0",
+  "tag": "r180",
+  "files": [
+    {
+      "path": "THREE-LICENSE.txt",
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+      "bytes": 1081,
+      "source": "https://github.com/mrdoob/three.js/tree/r180"
+    },
+    {
+      "path": "addons/loaders/GLTFLoader.js",
+      "sha256": "67ac5551fdafa6e349bd80c8f8e5e39c136d6b2fb1ad647db9abb21dc86f9e4a",
+      "bytes": 114739,
+      "source": "https://github.com/mrdoob/three.js/tree/r180"
+    },
+    {
+      "path": "addons/utils/BufferGeometryUtils.js",
+      "sha256": "fda7e946b8e0b5ab39b779206589e7a1079a22eb24efb89d7223e03fdfb1f751",
+      "bytes": 35539,
+      "source": "https://github.com/mrdoob/three.js/tree/r180"
+    },
+    {
+      "path": "three.core.js",
+      "sha256": "eb077d2417f61d3e6d9264c317cabc4ea35769ed6b0ab533067292a550784c20",
+      "bytes": 1403455,
+      "source": "https://github.com/mrdoob/three.js/tree/r180"
+    },
+    {
+      "path": "three.module.js",
+      "sha256": "c8211c69345d2e9949dc7a8ac969380497aa0600a5a8ac6a459c8cd02dd9cb8a",
+      "bytes": 603113,
+      "source": "https://github.com/mrdoob/three.js/tree/r180"
+    }
+  ]
+}

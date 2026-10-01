@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Pearl Office — Autonomous Interactive Tour</title>
+<style>
+  :root{color-scheme:dark}
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#071019;color:#f5fbff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  canvas{display:block}
+  #hud{position:fixed;inset:0;pointer-events:none;z-index:5}
+  #panel{position:absolute;left:18px;top:18px;max-width:470px;padding:14px 16px;border:1px solid rgba(82,201,255,.34);background:linear-gradient(180deg,rgba(6,15,24,.88),rgba(6,15,24,.68));backdrop-filter:blur(12px);border-radius:15px;box-shadow:0 18px 55px rgba(0,0,0,.35)}
+  #eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#73dcff;margin-bottom:7px}
+  #zone{font-size:13px;color:#c7d9e5;margin-bottom:5px}
+  #objective{font-size:17px;font-weight:720;margin-bottom:7px}
+  #help{font-size:12px;line-height:1.6;color:#a9bfce}
+  #status{margin-top:8px;font-size:11px;color:#d9f6ff}
+  .key{display:inline-block;border:1px solid rgba(255,255,255,.18);border-bottom-color:rgba(255,255,255,.40);border-radius:5px;padding:1px 5px;margin:0 2px;color:#f4fbff;background:rgba(255,255,255,.04)}
+  #center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;opacity:.8}
+  #center:before,#center:after{content:"";position:absolute;background:#fff}
+  #center:before{width:14px;height:1px;left:0;top:6.5px}#center:after{width:1px;height:14px;left:6.5px;top:0}
+  #start{pointer-events:auto;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(610px,calc(100vw - 42px));padding:30px 32px;border:1px solid rgba(82,201,255,.40);border-radius:20px;background:radial-gradient(circle at 50% 0%,rgba(23,116,150,.18),transparent 48%),rgba(5,13,21,.94);text-align:center;box-shadow:0 30px 100px rgba(0,0,0,.62)}
+  #start h1{font-size:34px;margin:0 0 7px;font-weight:760;letter-spacing:.01em}
+  #start .sub{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#6fdcff;margin-bottom:15px}
+  #start p{color:#b3c8d5;line-height:1.55;margin:0 auto 20px;max-width:520px}
+  #start button{border:0;border-radius:999px;padding:13px 25px;background:linear-gradient(135deg,#9cecff,#4cccf7);color:#041018;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 12px 28px rgba(43,197,247,.22)}
+  #toast{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);max-width:min(680px,calc(100vw - 40px));padding:11px 16px;border-radius:999px;background:rgba(5,13,21,.85);border:1px solid rgba(82,201,255,.28);font-size:13px;opacity:0;transition:opacity .2s;text-align:center}
+  #mapWrap{position:absolute;right:18px;top:18px;width:min(330px,29vw);aspect-ratio:4/3;border:1px solid rgba(255,255,255,.22);background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 18px 55px rgba(0,0,0,.35);transition:opacity .2s,transform .2s;pointer-events:none}
+  #mapWrap.hidden{opacity:0;transform:translateY(-8px)}
+  #map{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.85) contrast(.96) brightness(.92)}
+  #mapShade{position:absolute;inset:0;background:rgba(5,13,21,.12)}
+  #playerDot{position:absolute;width:10px;height:10px;border-radius:50%;background:#ff3d26;border:2px solid #fff;box-shadow:0 0 0 6px rgba(255,61,38,.18),0 0 18px rgba(255,61,38,.85);transform:translate(-50%,-50%)}
+  #mapLabel{position:absolute;left:10px;bottom:8px;padding:4px 7px;border-radius:6px;background:rgba(0,0,0,.58);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+  #interaction{position:absolute;left:50%;top:calc(50% + 32px);transform:translateX(-50%);font-size:12px;color:#fff;text-shadow:0 2px 12px #000;opacity:0;transition:opacity .15s}
+  #interaction.visible{opacity:1}
+
+  #dpad{position:absolute;left:20px;bottom:22px;width:150px;height:120px;pointer-events:auto;opacity:.72;display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(2,46px);gap:5px;align-items:center;justify-items:center}
+  #dpad button{width:46px;height:46px;border-radius:10px;border:1px solid rgba(120,220,255,.45);background:rgba(5,20,30,.78);color:#eafbff;font-weight:800;font-size:16px;touch-action:none;user-select:none;-webkit-user-select:none}
+  #dpad .w{grid-column:2;grid-row:1} #dpad .a{grid-column:1;grid-row:2} #dpad .s{grid-column:2;grid-row:2} #dpad .d{grid-column:3;grid-row:2}
+  #versionBadge{position:absolute;right:18px;bottom:18px;padding:7px 10px;border-radius:8px;background:rgba(0,0,0,.68);border:1px solid rgba(100,220,255,.35);font-size:11px;letter-spacing:.08em;color:#9feaff}
+  @media(max-width:850px){#mapWrap{width:210px;opacity:.92}#panel{max-width:360px}#help{font-size:11px}}
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="hud">
+  <div id="panel">
+    <div id="eyebrow">Pearl Office / Main Repo + Safari WASD V7</div>
+    <div id="zone">Current zone: Entry / Exterior</div>
+    <div id="objective">Objective: enter between Awards and Charity</div>
+    <div id="help"><span class="key">WASD</span> move · click-drag look · <span class="key">←→</span> turn · <span class="key">Shift</span> sprint · <span class="key">E</span> interact · <span class="key">M</span> map · <span class="key">R</span> reset · <span class="key">Q</span> quality</div>
+    <div id="status">V7 loaded · waiting for keyboard test</div>
+  </div>
+  <div id="mapWrap"><img id="map" src="assets/floorplan_v1_5.png" alt="Floor plan minimap"/><div id="mapShade"></div><div id="playerDot"></div><div id="mapLabel">v1.5 reference plan</div></div>
+  <div id="center"></div>
+  <div id="interaction">Press E to interact</div>
+  <div id="dpad" aria-label="movement diagnostic pad">
+    <button class="w" data-move="KeyW">W</button>
+    <button class="a" data-move="KeyA">A</button>
+    <button class="s" data-move="KeyS">S</button>
+    <button class="d" data-move="KeyD">D</button>
+  </div>
+  <div id="versionBadge">V7.0 · PORT 8027 · app_v7.js</div>
+  <div id="start"><div class="sub">Main repo visuals / Safari WASD hardened V7</div><h1>Pearl Office</h1><p>Same original 3D scene and resolution. V7 uses a unique server/asset version, hardened Safari keyboard capture, a single connected walkable shell, and live input telemetry. Use the small movement pad only as a diagnostic fallback.</p><button id="enter">ENTER V7 SAFARI WALK TOUR</button></div>
+  <div id="toast"></div>
+</div>
+<script type="module" src="app_v7.js?v=7.0.0"></script>
+</body>
+</html>

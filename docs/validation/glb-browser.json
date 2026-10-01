@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "browser": "chromium",
+  "browserVersion": "154.0.8037.92",
+  "buildId": "d929e0028518f6c9",
+  "checks": [
+    {
+      "check": "keyboard w",
+      "displacement": 0.1247499999999997
+    },
+    {
+      "check": "keyboard a",
+      "displacement": 0.125
+    },
+    {
+      "check": "keyboard s",
+      "displacement": 0.1252500000000003
+    },
+    {
+      "check": "keyboard d",
+      "displacement": 0.125
+    },
+    {
+      "check": "drag-look + distinct rendered canvas",
+      "passed": true
+    },
+    {
+      "check": "virtual pad moves + release outside clears hold",
+      "passed": true
+    },
+    {
+      "check": "hash-verified local GLB imported before Enter",
+      "models": 1,
+      "meshes": 1
+    },
+    {
+      "check": "stale URL rejected; no-store; no external requests; single render owner",
+      "passed": true
+    }
+  ],
+  "final": {
+    "ready": true,
+    "started": true,
+    "buildId": "d929e0028518f6c9",
+    "version": "0.1.0",
+    "actualPort": "56108",
+    "position": {
+      "x": 0,
+      "y": 1.65,
+      "z": 2.0337499999999995
+    },
+    "yaw": 0,
+    "pitch": 0,
+    "input": {
+      "physical": [],
+      "virtual": [],
+      "held": []
+    },
+    "frames": 77,
+    "renderCount": 77,
+    "simulationTicks": 16,
+    "meshCount": 16,
+    "interactableCount": 0,
+    "importedModels": 1,
+    "importedMeshes": 1,
+    "nearest": null,
+    "errors": []
+  },
+  "errors": [],
+  "externalRequests": [],
+  "limitations": [
+    "Automated key delivery, not a physical hardware keyboard.",
+    "Headless rendering is not macOS window-compositor certification."
+  ]
+}

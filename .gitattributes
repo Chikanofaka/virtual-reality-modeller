@@ -1,0 +1,4 @@
+# Preserve exact upstream bytes and generated diff context.
+runtime/vendor/** -whitespace
+examples/pearl-office/upstream-v7/** -whitespace
+docs/evidence/*.diff -whitespace

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "virtual-space-mvp-harness",
+  "version": "0.1.0",
+  "description": "Local evidence-led planning, building and validation of playable 3D spaces, with a preserved Pearl Office V7 baseline.",
+  "author": {"name": "Virtual Space MVP Harness contributors"},
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Virtual Space MVP Harness",
+        "shortDescription": "Plan and build playable spaces",
+        "longDescription": "Guide uploads and missing-data questions into a locked planning pack, then build and test a local first-person 3D space. Includes source evidence, browser diagnostics and portable CLI tools.",
+        "developerName": "Virtual Space MVP Harness contributors",
+        "category": "Developer Tools",
+        "defaultPrompt": "Help me turn my floor plan and reference materials into a planned, validated and playable 3D space."
+      }
+    }
+  }
+}

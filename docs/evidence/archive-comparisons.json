@@ -1,0 +1,317 @@
+[
+  {
+    "from": "floor_plan_evolution.zip",
+    "to": "pearl_office_autonomous_game.zip",
+    "interpretation": "Supplied comparison order; alternate renderers are branches, not necessarily direct descendants.",
+    "added": [
+      "ENGINEERING_STATUS.md",
+      "README_FIRST.md",
+      "RUN_ALL.command",
+      "RUN_GAME.command",
+      "blender/BUILD_PEARL_OFFICE.py",
+      "data/layout.json",
+      "runtime/app.js",
+      "runtime/assets/floorplan_v1_5.png",
+      "runtime/index.html"
+    ],
+    "removed": [
+      "ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 17_29_09.png",
+      "ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 17_50_54.png",
+      "ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 18_02_27.png",
+      "ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 18_16_37.png",
+      "ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 22_46_40.png",
+      "ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 22_52_12.png"
+    ],
+    "modified": [],
+    "unchanged": []
+  },
+  {
+    "from": "pearl_office_autonomous_game.zip",
+    "to": "pearl_office_compatibility_game.zip",
+    "interpretation": "Supplied comparison order; alternate renderers are branches, not necessarily direct descendants.",
+    "added": [
+      "PLAY_PEARL_OFFICE.html",
+      "README.txt"
+    ],
+    "removed": [
+      "ENGINEERING_STATUS.md",
+      "README_FIRST.md",
+      "RUN_ALL.command",
+      "RUN_GAME.command",
+      "blender/BUILD_PEARL_OFFICE.py",
+      "data/layout.json",
+      "runtime/app.js",
+      "runtime/assets/floorplan_v1_5.png",
+      "runtime/index.html"
+    ],
+    "modified": [],
+    "unchanged": []
+  },
+  {
+    "from": "pearl_office_compatibility_game.zip",
+    "to": "pearl_office_smooth_game.zip",
+    "interpretation": "Supplied comparison order; alternate renderers are branches, not necessarily direct descendants.",
+    "added": [
+      "ENGINEERING_STATUS.md",
+      "README_FIRST.md",
+      "RUN_ALL.command",
+      "RUN_GAME.command",
+      "blender/BUILD_PEARL_OFFICE.py",
+      "data/layout.json",
+      "runtime/app.js",
+      "runtime/assets/floorplan_v1_5.png",
+      "runtime/index.html"
+    ],
+    "removed": [
+      "PLAY_PEARL_OFFICE.html",
+      "README.txt"
+    ],
+    "modified": [],
+    "unchanged": []
+  },
+  {
+    "from": "pearl_office_smooth_game.zip",
+    "to": "pearl_office_hybrid_hd.zip",
+    "interpretation": "Supplied comparison order; alternate renderers are branches, not necessarily direct descendants.",
+    "added": [
+      "PLAY_PEARL_OFFICE_HYBRID_HD.html",
+      "assets/floorplan_v1_5.png",
+      "assets/reference/back_office.jpg",
+      "assets/reference/charity_gallery.jpg",
+      "assets/reference/director_office.jpg",
+      "assets/reference/executive_office.jpg",
+      "assets/reference/manager_office_1.jpg",
+      "assets/reference/manager_office_2.jpg",
+      "assets/reference/manager_office_3.jpg",
+      "assets/reference/meeting_room.jpg",
+      "assets/reference/pearl_office.jpg",
+      "assets/reference/reception_awards.jpg",
+      "assets/reference/tea_room.jpg",
+      "assets/reference/trading_office.jpg",
+      "assets/reference/wine_room.jpg"
+    ],
+    "removed": [
+      "RUN_ALL.command",
+      "RUN_GAME.command",
+      "blender/BUILD_PEARL_OFFICE.py",
+      "data/layout.json",
+      "runtime/app.js",
+      "runtime/assets/floorplan_v1_5.png",
+      "runtime/index.html"
+    ],
+    "modified": [
+      "ENGINEERING_STATUS.md",
+      "README_FIRST.md"
+    ],
+    "unchanged": []
+  },
+  {
+    "from": "pearl_office_hybrid_hd.zip",
+    "to": "pearl_office_ultra_hybrid_v2.zip",
+    "interpretation": "Supplied comparison order; alternate renderers are branches, not necessarily direct descendants.",
+    "added": [
+      "PLAY_PEARL_OFFICE_ULTRA_V2.html",
+      "RUN_BLENDER_ULTRA.command",
+      "RUN_GAME.command",
+      "assets/textures/back_office.jpg",
+      "assets/textures/charity_gallery.jpg",
+      "assets/textures/director_office.jpg",
+      "assets/textures/executive_office.jpg",
+      "assets/textures/manager_office_1.jpg",
+      "assets/textures/manager_office_2.jpg",
+      "assets/textures/manager_office_3.jpg",
+      "assets/textures/meeting_room.jpg",
+      "assets/textures/pearl_office.jpg",
+      "assets/textures/reception_awards.jpg",
+      "assets/textures/tea_room.jpg",
+      "assets/textures/trading_office.jpg",
+      "assets/textures/wine_room.jpg",
+      "blender/BUILD_PEARL_OFFICE_ULTRA.py",
+      "layout.json"
+    ],
+    "removed": [
+      "PLAY_PEARL_OFFICE_HYBRID_HD.html"
+    ],
+    "modified": [
+      "ENGINEERING_STATUS.md",
+      "README_FIRST.md",
+      "assets/reference/back_office.jpg",
+      "assets/reference/charity_gallery.jpg",
+      "assets/reference/director_office.jpg",
+      "assets/reference/executive_office.jpg",
+      "assets/reference/manager_office_1.jpg",
+      "assets/reference/manager_office_2.jpg",
+      "assets/reference/manager_office_3.jpg",
+      "assets/reference/meeting_room.jpg",
+      "assets/reference/pearl_office.jpg",
+      "assets/reference/reception_awards.jpg",
+      "assets/reference/tea_room.jpg",
+      "assets/reference/trading_office.jpg",
+      "assets/reference/wine_room.jpg"
+    ],
+    "unchanged": [
+      "assets/floorplan_v1_5.png"
+    ]
+  },
+  {
+    "from": "pearl_office_ultra_hybrid_v2.zip",
+    "to": "pearl_office_mainrepo_drag_v3.zip",
+    "interpretation": "Supplied comparison order; alternate renderers are branches, not necessarily direct descendants.",
+    "added": [
+      "RUN_ALL.command",
+      "blender/BUILD_PEARL_OFFICE.py",
+      "data/layout.json",
+      "runtime/app.js",
+      "runtime/assets/floorplan_v1_5.png",
+      "runtime/index.html"
+    ],
+    "removed": [
+      "PLAY_PEARL_OFFICE_ULTRA_V2.html",
+      "RUN_BLENDER_ULTRA.command",
+      "assets/floorplan_v1_5.png",
+      "assets/reference/back_office.jpg",
+      "assets/reference/charity_gallery.jpg",
+      "assets/reference/director_office.jpg",
+      "assets/reference/executive_office.jpg",
+      "assets/reference/manager_office_1.jpg",
+      "assets/reference/manager_office_2.jpg",
+      "assets/reference/manager_office_3.jpg",
+      "assets/reference/meeting_room.jpg",
+      "assets/reference/pearl_office.jpg",
+      "assets/reference/reception_awards.jpg",
+      "assets/reference/tea_room.jpg",
+      "assets/reference/trading_office.jpg",
+      "assets/reference/wine_room.jpg",
+      "assets/textures/back_office.jpg",
+      "assets/textures/charity_gallery.jpg",
+      "assets/textures/director_office.jpg",
+      "assets/textures/executive_office.jpg",
+      "assets/textures/manager_office_1.jpg",
+      "assets/textures/manager_office_2.jpg",
+      "assets/textures/manager_office_3.jpg",
+      "assets/textures/meeting_room.jpg",
+      "assets/textures/pearl_office.jpg",
+      "assets/textures/reception_awards.jpg",
+      "assets/textures/tea_room.jpg",
+      "assets/textures/trading_office.jpg",
+      "assets/textures/wine_room.jpg",
+      "blender/BUILD_PEARL_OFFICE_ULTRA.py",
+      "layout.json"
+    ],
+    "modified": [
+      "ENGINEERING_STATUS.md",
+      "README_FIRST.md",
+      "RUN_GAME.command"
+    ],
+    "unchanged": []
+  },
+  {
+    "from": "pearl_office_mainrepo_drag_v3.zip",
+    "to": "pearl_office_mainrepo_runtime_optimized_v4.zip",
+    "interpretation": "Supplied comparison order; alternate renderers are branches, not necessarily direct descendants.",
+    "added": [
+      "RUNTIME_OPTIMIZATION_NOTES.md",
+      "RUN_SMOOTH.command"
+    ],
+    "removed": [],
+    "modified": [
+      "runtime/app.js"
+    ],
+    "unchanged": [
+      "ENGINEERING_STATUS.md",
+      "README_FIRST.md",
+      "RUN_ALL.command",
+      "RUN_GAME.command",
+      "blender/BUILD_PEARL_OFFICE.py",
+      "data/layout.json",
+      "runtime/assets/floorplan_v1_5.png",
+      "runtime/index.html"
+    ]
+  },
+  {
+    "from": "pearl_office_mainrepo_runtime_optimized_v4.zip",
+    "to": "pearl_office_mainrepo_signalnav_v5.zip",
+    "interpretation": "Supplied comparison order; alternate renderers are branches, not necessarily direct descendants.",
+    "added": [
+      "RUN_CHROME_SMOOTH.command",
+      "RUN_SAFARI_SMOOTH.command",
+      "V5_DIAGNOSIS_AND_CONTROLS.md"
+    ],
+    "removed": [],
+    "modified": [
+      "runtime/app.js",
+      "runtime/index.html"
+    ],
+    "unchanged": [
+      "ENGINEERING_STATUS.md",
+      "README_FIRST.md",
+      "RUNTIME_OPTIMIZATION_NOTES.md",
+      "RUN_ALL.command",
+      "RUN_GAME.command",
+      "RUN_SMOOTH.command",
+      "blender/BUILD_PEARL_OFFICE.py",
+      "data/layout.json",
+      "runtime/assets/floorplan_v1_5.png"
+    ]
+  },
+  {
+    "from": "pearl_office_mainrepo_signalnav_v5.zip",
+    "to": "pearl_office_mainrepo_safari_walk_v6.zip",
+    "interpretation": "Supplied comparison order; alternate renderers are branches, not necessarily direct descendants.",
+    "added": [
+      "RUN_SAFARI_WALK.command",
+      "V6_ENGINEERING_NOTE.md"
+    ],
+    "removed": [],
+    "modified": [
+      "README_FIRST.md",
+      "RUN_GAME.command",
+      "runtime/app.js",
+      "runtime/index.html"
+    ],
+    "unchanged": [
+      "ENGINEERING_STATUS.md",
+      "RUNTIME_OPTIMIZATION_NOTES.md",
+      "RUN_ALL.command",
+      "RUN_CHROME_SMOOTH.command",
+      "RUN_SAFARI_SMOOTH.command",
+      "RUN_SMOOTH.command",
+      "V5_DIAGNOSIS_AND_CONTROLS.md",
+      "blender/BUILD_PEARL_OFFICE.py",
+      "data/layout.json",
+      "runtime/assets/floorplan_v1_5.png"
+    ]
+  },
+  {
+    "from": "pearl_office_mainrepo_safari_walk_v6.zip",
+    "to": "pearl_office_mainrepo_safari_wasd_v7.zip",
+    "interpretation": "Supplied comparison order; alternate renderers are branches, not necessarily direct descendants.",
+    "added": [
+      "RUN_SAFARI_V7.command",
+      "V7_WASD_DIAGNOSIS.md",
+      "runtime/app_v7.js"
+    ],
+    "removed": [
+      "runtime/app.js"
+    ],
+    "modified": [
+      "README_FIRST.md",
+      "RUN_GAME.command",
+      "runtime/index.html"
+    ],
+    "unchanged": [
+      "ENGINEERING_STATUS.md",
+      "RUNTIME_OPTIMIZATION_NOTES.md",
+      "RUN_ALL.command",
+      "RUN_CHROME_SMOOTH.command",
+      "RUN_SAFARI_SMOOTH.command",
+      "RUN_SAFARI_WALK.command",
+      "RUN_SMOOTH.command",
+      "V5_DIAGNOSIS_AND_CONTROLS.md",
+      "V6_ENGINEERING_NOTE.md",
+      "blender/BUILD_PEARL_OFFICE.py",
+      "data/layout.json",
+      "runtime/assets/floorplan_v1_5.png"
+    ]
+  }
+]

@@ -1,0 +1,74 @@
+{
+  "passed": true,
+  "browser": "chromium",
+  "browserVersion": "154.0.8037.92",
+  "buildId": "625373a63b5668d1",
+  "checks": [
+    {
+      "check": "keyboard w",
+      "displacement": 0.12525000000000241
+    },
+    {
+      "check": "keyboard a",
+      "displacement": 0.12475000000000064
+    },
+    {
+      "check": "keyboard s",
+      "displacement": 0.12500000000000186
+    },
+    {
+      "check": "keyboard d",
+      "displacement": 0.12500000000000097
+    },
+    {
+      "check": "drag-look + distinct rendered canvas",
+      "passed": true
+    },
+    {
+      "check": "virtual pad moves + release outside clears hold",
+      "passed": true
+    },
+    {
+      "check": "reception → wine → Pearl console interaction progression",
+      "passed": true
+    },
+    {
+      "check": "stale URL rejected; no-store; no external requests; single render owner",
+      "passed": true
+    }
+  ],
+  "final": {
+    "ready": true,
+    "started": true,
+    "buildId": "625373a63b5668d1",
+    "version": "0.1.0",
+    "actualPort": "56142",
+    "position": {
+      "x": 0,
+      "y": 1.68,
+      "z": -2.65
+    },
+    "yaw": -0.95,
+    "pitch": 0,
+    "input": {
+      "physical": [],
+      "virtual": [],
+      "held": []
+    },
+    "frames": 90,
+    "renderCount": 90,
+    "simulationTicks": 16,
+    "meshCount": 473,
+    "interactableCount": 13,
+    "importedModels": 0,
+    "importedMeshes": 0,
+    "nearest": "Pearl Office shared console",
+    "errors": []
+  },
+  "errors": [],
+  "externalRequests": [],
+  "limitations": [
+    "Automated key delivery, not a physical hardware keyboard.",
+    "Headless rendering is not macOS window-compositor certification."
+  ]
+}

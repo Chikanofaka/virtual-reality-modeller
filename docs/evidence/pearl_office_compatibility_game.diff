@@ -1,0 +1,581 @@
+--- pearl_office_autonomous_game/runtime/app.js
++++ pearl_office_compatibility_game/PLAY_PEARL_OFFICE.html
+@@ -1,446 +1,137 @@
+-import * as THREE from 'three';
+-import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
++<!doctype html>
++<html lang="en">
++<head>
++<meta charset="utf-8" />
++<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
++<title>Pearl Office — Compatibility Player</title>
++<style>
++  :root{color-scheme:dark;--cyan:#72e7ff;--panel:rgba(5,18,28,.88);--line:rgba(114,231,255,.42)}
++  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#071019;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
++  #game{position:fixed;inset:0;width:100%;height:100%;display:block;background:#071019;cursor:crosshair;touch-action:none}
++  #hud{position:fixed;left:18px;top:18px;width:min(560px,calc(100vw - 36px));box-sizing:border-box;padding:15px 17px;border:1px solid var(--line);border-radius:16px;background:var(--panel);backdrop-filter:blur(8px);pointer-events:none}
++  .eyebrow{font-size:12px;letter-spacing:.28em;color:var(--cyan);margin-bottom:7px}.zone{font-size:15px;color:#d8e6ef}.objective{font-weight:760;font-size:18px;color:white;margin-top:4px}.keys{font-size:13px;color:#bdd0db;margin-top:10px;line-height:1.65}.key{display:inline-block;border:1px solid #526571;border-radius:6px;background:#16232d;color:white;padding:1px 6px;margin-right:3px}.tiny{font-size:11px;color:#9fb5c2;margin-top:7px}
++  #map{position:fixed;right:18px;top:18px;width:min(300px,30vw);aspect-ratio:1.35;background:rgba(244,239,226,.95);border:1px solid rgba(255,255,255,.5);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);pointer-events:none}
++  #map.hidden{display:none}
++  #toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%);background:rgba(5,18,28,.92);border:1px solid var(--line);color:white;padding:10px 16px;border-radius:999px;font-size:13px;opacity:0;transition:opacity .15s;pointer-events:none;white-space:nowrap;max-width:85vw;overflow:hidden;text-overflow:ellipsis}
++  #interaction{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);color:#071019;background:#7ce9ff;padding:8px 14px;border-radius:10px;font-weight:800;font-size:13px;display:none;pointer-events:none}
++  #badge{position:fixed;right:18px;bottom:18px;background:rgba(5,18,28,.82);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 11px;color:#b6c9d4;font-size:11px;pointer-events:none}
++  #cross{position:fixed;left:50%;top:50%;width:12px;height:12px;transform:translate(-50%,-50%);pointer-events:none}
++  #cross:before,#cross:after{content:"";position:absolute;background:rgba(255,255,255,.75)}#cross:before{left:5px;top:0;width:2px;height:12px}#cross:after{top:5px;left:0;height:2px;width:12px}
++  @media(max-width:800px){#map{width:38vw}.keys{font-size:12px}#hud{width:calc(100vw - 36px);padding-right:42vw}}
++</style>
++</head>
++<body>
++<canvas id="game" tabindex="0"></canvas>
++<canvas id="map"></canvas>
++<div id="hud">
++  <div class="eyebrow">PEARL OFFICE / COMPATIBILITY PLAYER</div>
++  <div class="zone" id="zone">Current zone: Entry / Exterior</div>
++  <div class="objective" id="objective">Objective: enter between Awards and Charity</div>
++  <div class="keys"><span class="key">WASD</span> move · <span class="key">drag</span> look · <span class="key">← →</span> turn · <span class="key">Shift</span> sprint · <span class="key">E</span> interact · <span class="key">M</span> map · <span class="key">R</span> reset</div>
++  <div class="tiny">No WebGL · no pointer lock · no mouse capture · works directly from this HTML file.</div>
++</div>
++<div id="interaction"></div><div id="toast"></div><div id="badge">Canvas 2D raycaster · 30 FPS target</div><div id="cross"></div>
++<script>
++(() => {
++'use strict';
++const canvas=document.getElementById('game'), ctx=canvas.getContext('2d',{alpha:false});
++const mapCanvas=document.getElementById('map'), mctx=mapCanvas.getContext('2d');
++const zoneEl=document.getElementById('zone'), objectiveEl=document.getElementById('objective'), toastEl=document.getElementById('toast'), interactionEl=document.getElementById('interaction');
++let VW=960,VH=540; canvas.width=VW;canvas.height=VH; mapCanvas.width=540;mapCanvas.height=400;
++function fit(){canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';} fit(); addEventListener('resize',fit);
+ 
+-// -----------------------------------------------------------------------------
+-// PEARL OFFICE — PROCEDURAL FIRST PLAYABLE
+-// Topology basis: finalized v1.5 planning image + approved corrections.
+-// Three.js world: X = left/right, Y = up, Z = plan vertical (top is negative Z).
+-// -----------------------------------------------------------------------------
++// World coordinates follow the finalized planning logic: rounded triangular outer shell, central Pearl ellipse.
++const walls=[];
++function wall(ax,ay,bx,by,color='#b8a98c',kind='wall'){walls.push({ax,ay,bx,by,color,kind});}
++function poly(points,color='#b8a98c'){for(let i=0;i<points.length-1;i++)wall(points[i][0],points[i][1],points[i+1][0],points[i+1][1],color);}
++// Outer shell with left-side entry gap between Charity and Awards.
++poly([[-14.4,7.4],[-15.2,5.8],[-14.4,3.7],[-13.75,2.7]],'#8a7967');
++poly([[-12.65,1.45],[-8.0,-4.9],[-1.7,-9.1],[0,-10.0],[1.7,-9.1],[8,-4.9],[13.0,-0.5],[15.0,4.8],[14.2,7.4],[-14.4,7.4]],'#8a7967');
++// central Pearl office curved glass wall, with single opening at lower-right (Wine/Manager 1 junction)
++const cx=0,cy=-0.5,rx=7.4,ry=4.55,N=58;
++let prev=null;
++for(let i=0;i<=N;i++){
++  const a=i/N*Math.PI*2; const x=cx+Math.cos(a)*rx,y=cy+Math.sin(a)*ry;
++  // opening at lower-right of plan: angle ~25..48 degrees in our +y-down map
++  const deg=(a*180/Math.PI+360)%360; const gap=deg>24&&deg<49;
++  if(prev&&!gap&&!prev.gap) wall(prev.x,prev.y,x,y,'#71cddd','glass');
++  prev={x,y,gap};
++}
++// Peripheral room partitions / inner-facing walls, kept sparse for smooth navigation.
++// Trading + executive top
++wall(-8.2,-4.8,-8.2,-8.1,'#a38d72'); wall(-8.2,-4.8,-2.1,-4.8,'#a38d72'); wall(-2.1,-4.8,-2.1,-8.9,'#a38d72');
++wall(-1.3,-4.8,-1.3,-9.3,'#a38d72'); wall(-1.3,-4.8,4.5,-4.8,'#a38d72'); wall(4.5,-4.8,4.5,-7.6,'#a38d72');
++// Meeting long upper-right; leave broad doorway toward corridor
++wall(5.2,-4.3,11.7,-1.5,'#a38d72'); wall(11.7,-1.5,13.0,1.0,'#a38d72');
++// Director and Wine boundaries
++wall(9.7,0.1,13.5,0.1,'#a38d72'); wall(9.7,0.1,9.7,2.9,'#a38d72');
++wall(10.3,3.3,14.1,3.3,'#6f4b33'); wall(10.3,3.3,10.3,6.9,'#6f4b33');
++// Manager offices bottom-right/bottom
++wall(7.3,5.0,7.3,7.35,'#a38d72'); wall(4.0,5.0,4.0,7.35,'#a38d72'); wall(0.7,5.0,0.7,7.35,'#a38d72'); wall(-2.8,5.0,-2.8,7.35,'#a38d72');
++wall(-2.8,5.0,7.3,5.0,'#a38d72');
++// Tea closed at center-left and Back Office at lower-left corner
++wall(-7.2,2.5,-4.7,2.5,'#a38d72'); wall(-4.7,2.5,-4.7,5.0,'#a38d72'); wall(-7.2,5.0,-4.7,5.0,'#a38d72');
++wall(-12.6,5.3,-8.6,5.3,'#a38d72'); wall(-8.6,5.3,-8.6,7.3,'#a38d72');
++// Reception as open-ended anchor facing entry — no enclosing wall on entry side.
++wall(-8.0,-0.4,-5.4,-0.4,'#d1b58e');
+ 
+-const scene = new THREE.Scene();
+-scene.background = new THREE.Color(0x09131b);
+-scene.fog = new THREE.FogExp2(0x09131b, 0.018);
++const zones=[
++ ['Trading Office',-8.1,-8.9,-2.2,-4.9],['Executive Office',-1.2,-9.2,4.4,-4.9],['Meeting Room',5.0,-7.0,13.2,-1.0],
++ ['Director Office',9.8,.2,13.7,3.0],['Wine Room',10.4,3.4,14.2,7.2],['Manager Office 1',4.1,5.1,7.2,7.3],
++ ['Manager Office 2',.8,5.1,3.9,7.3],['Manager Office 3',-2.7,5.1,.6,7.3],['Tea Room',-7.1,2.6,-4.8,4.9],
++ ['Back Office',-12.5,5.4,-8.7,7.3],['Reception',-9.0,-1.0,-5.0,2.1],['Awards Section',-13.6,-3.4,-8.4,1.2],
++ ['Charity Gallery',-14.3,1.5,-9.0,5.1]
++];
++const objects=[
++ {x:-6.9,y:.6,label:'Reception desk',type:'reception',c:'#f4d5aa'},
++ {x:-10.6,y:-.4,label:'Awards display',type:'awards',c:'#ffd05b'},
++ {x:-12.4,y:2.8,label:'Charity display',type:'charity',c:'#ff845f'},
++ {x:-5.9,y:3.7,label:'Tea service',type:'tea',c:'#d28b52'},
++ {x:8.3,y:-2.6,label:'Meeting screen',type:'meeting',c:'#70dbff'},
++ {x:12.1,y:5.0,label:'Wine display',type:'wine',c:'#ff9852'},
++ {x:4.9,y:2.0,label:'Pearl console',type:'pearl',c:'#72e7ff'}
++];
+ 
+-const camera = new THREE.PerspectiveCamera(66, innerWidth / innerHeight, 0.05, 120);
+-const renderer = new THREE.WebGLRenderer({ antialias: true });
+-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+-renderer.setSize(innerWidth, innerHeight);
+-renderer.shadowMap.enabled = true;
+-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+-renderer.outputColorSpace = THREE.SRGBColorSpace;
+-renderer.toneMapping = THREE.ACESFilmicToneMapping;
+-renderer.toneMappingExposure = 1.22;
+-document.body.appendChild(renderer.domElement);
+-
+-const controls = new PointerLockControls(camera, document.body);
+-const start = document.getElementById('start');
+-document.getElementById('enter').onclick = () => controls.lock();
+-controls.addEventListener('lock', () => start.style.display = 'none');
+-controls.addEventListener('unlock', () => start.style.display = 'block');
+-
+-const zoneEl = document.getElementById('zone');
+-const objectiveEl = document.getElementById('objective');
+-const toastEl = document.getElementById('toast');
+-const interactionEl = document.getElementById('interaction');
+-const mapWrap = document.getElementById('mapWrap');
+-const playerDot = document.getElementById('playerDot');
+-
+-const PLAYER_HEIGHT = 1.68;
+-const PLAYER_RADIUS = 0.30;
+-const ENTRY_CENTER = new THREE.Vector2(-10.25, 1.15);
+-const SPAWN = new THREE.Vector3(-11.75, PLAYER_HEIGHT, 2.35);
+-const SPAWN_YAW = -0.95;
+-
+-// ---------- Materials ---------------------------------------------------------
+-function std(color, rough = 0.55, metal = 0.0, extra = {}) {
+-  return new THREE.MeshStandardMaterial({ color, roughness: rough, metalness: metal, ...extra });
++let px=-14.4,py=2.45,ang=-.33, keys={}, dragging=false,lastX=0,lastY=0,mapVisible=true,stage=0,nearest=null;
++const FOV=Math.PI/3, MOVE=2.5, RADIUS=.22;
++function reset(){px=-14.4;py=2.45;ang=-.33;stage=0;objectiveEl.textContent='Objective: enter between Awards and Charity';showToast('Reset to Entry / Exit');}
++function showToast(t){toastEl.textContent=t;toastEl.style.opacity=1;clearTimeout(showToast.t);showToast.t=setTimeout(()=>toastEl.style.opacity=0,1800)}
++function segDist(px0,py0,a,b,c,d){const vx=c-a,vy=d-b,wx=px0-a,wy=py0-b,l2=vx*vx+vy*vy;let t=l2?Math.max(0,Math.min(1,(wx*vx+wy*vy)/l2)):0;const qx=a+t*vx,qy=b+t*vy;return Math.hypot(px0-qx,py0-qy)}
++function canMove(x,y){for(const w of walls)if(segDist(x,y,w.ax,w.ay,w.bx,w.by)<RADIUS)return false;return x>-16.2&&x<16.2&&y>-10.5&&y<8.0;}
++function zoneName(){const q=(px/rx)**2+((py-cy)/ry)**2;if(q<.9 && !(px<-4.4&&py>2.2))return 'Pearl Office';for(const z of zones){if(px>=z[1]&&px<=z[3]&&py>=z[2]&&py<=z[4])return z[0];}if(px<-13.0&&py>1.6&&py<3.5)return 'Entry / Exterior';return 'Clockwise Circulation';}
++function rayHit(ox,oy,dx,dy){let best=1e9,hit=null;for(const w of walls){const sx=w.bx-w.ax,sy=w.by-w.ay;const den=(-dx*sy+dy*sx);if(Math.abs(den)<1e-8)continue;const s=(-dy*(ox-w.ax)+dx*(oy-w.ay))/den;const t=( sx*(oy-w.ay)-sy*(ox-w.ax))/den;if(s>=0&&s<=1&&t>=0&&t<best){best=t;hit=w;}}return hit?{d:best,w:hit}:null;}
++function shade(hex,f){const n=parseInt(hex.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,b=n&255;return `rgb(${Math.max(0,Math.min(255,r*f))|0},${Math.max(0,Math.min(255,g*f))|0},${Math.max(0,Math.min(255,b*f))|0})`}
++function draw3D(){
++  const g=ctx.createLinearGradient(0,0,0,VH);g.addColorStop(0,'#0a1722');g.addColorStop(.5,'#12212b');g.addColorStop(.501,'#c9c1b1');g.addColorStop(1,'#8f887d');ctx.fillStyle=g;ctx.fillRect(0,0,VW,VH);
++  const rays=360, zbuf=new Float32Array(rays), colW=VW/rays, proj=(VH*.78)/Math.tan(FOV/2);
++  for(let i=0;i<rays;i++){
++    const ra=ang-FOV/2+(i+.5)/rays*FOV, dx=Math.cos(ra),dy=Math.sin(ra), h=rayHit(px,py,dx,dy); if(!h){zbuf[i]=99;continue;}
++    const dist=Math.max(.001,h.d*Math.cos(ra-ang)); zbuf[i]=dist; const wallH=Math.min(VH*1.8,proj/dist); const y0=(VH-wallH)/2;
++    const fog=Math.max(.22,1-dist/20); ctx.fillStyle=shade(h.w.color,fog);ctx.fillRect(i*colW,y0,colW+1,wallH);
++    if(h.w.kind==='glass'){ctx.fillStyle='rgba(105,225,255,.22)';ctx.fillRect(i*colW,y0,colW+1,wallH);}
++  }
++  // billboard interaction objects
++  const drawObjs=[];for(const o of objects){const dx=o.x-px,dy=o.y-py,dist=Math.hypot(dx,dy),oa=Math.atan2(dy,dx);let da=oa-ang;while(da>Math.PI)da-=Math.PI*2;while(da<-Math.PI)da+=Math.PI*2;if(Math.abs(da)<FOV*.62&&dist>.2)drawObjs.push({o,dist,da});}
++  drawObjs.sort((a,b)=>b.dist-a.dist);
++  for(const s of drawObjs){const sx=VW/2+(s.da/(FOV/2))*VW/2,ri=Math.max(0,Math.min(rays-1,Math.floor(sx/VW*rays)));if(s.dist>zbuf[ri]+.25)continue;const size=Math.min(150,180/s.dist+18),sy=VH/2+proj/(s.dist*2.5);ctx.fillStyle=s.o.c;ctx.globalAlpha=.92;ctx.fillRect(sx-size/2,sy-size,size,size);ctx.globalAlpha=1;ctx.fillStyle='#071019';ctx.font='700 12px system-ui';ctx.textAlign='center';ctx.fillText(s.o.label,sx,sy-size-7);}
++  // soft vignette
++  const vg=ctx.createRadialGradient(VW/2,VH/2,VH*.2,VW/2,VH/2,VW*.65);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.38)');ctx.fillStyle=vg;ctx.fillRect(0,0,VW,VH);
+ }
+-function emissive(color, intensity = 2.0, base = 0x101010) {
+-  return new THREE.MeshStandardMaterial({ color: base, roughness: 0.30, metalness: 0.15, emissive: color, emissiveIntensity: intensity });
++function drawMap(){if(!mapVisible)return;mctx.clearRect(0,0,mapCanvas.width,mapCanvas.height);mctx.fillStyle='#f1ecdf';mctx.fillRect(0,0,mapCanvas.width,mapCanvas.height);const S=15,ox=mapCanvas.width/2,oy=190;function X(x){return ox+x*S}function Y(y){return oy+y*S}
++  mctx.lineWidth=3;for(const w of walls){mctx.strokeStyle=w.kind==='glass'?'#49a9bb':'#4b4944';mctx.beginPath();mctx.moveTo(X(w.ax),Y(w.ay));mctx.lineTo(X(w.bx),Y(w.by));mctx.stroke();}
++  for(const o of objects){mctx.fillStyle=o.c;mctx.beginPath();mctx.arc(X(o.x),Y(o.y),4,0,Math.PI*2);mctx.fill();}
++  mctx.fillStyle='#ff3e35';mctx.beginPath();mctx.arc(X(px),Y(py),6,0,Math.PI*2);mctx.fill();mctx.strokeStyle='#ff3e35';mctx.beginPath();mctx.moveTo(X(px),Y(py));mctx.lineTo(X(px+Math.cos(ang)*1.2),Y(py+Math.sin(ang)*1.2));mctx.stroke();
++  mctx.fillStyle='#111';mctx.font='700 13px system-ui';mctx.fillText('PEARL OFFICE — LIVE MAP',12,20);
+ }
+-const M = {
+-  shell: std(0x273039, .48, .25),
+-  shellDark: std(0x111923, .38, .42),
+-  floor: std(0xc8c2b5, .74, .03),
+-  corridor: std(0xe6ddcc, .62, .02),
+-  officeFloor: std(0xd7d1c4, .68, .02),
+-  wood: std(0x8b5b36, .48, .03),
+-  woodDark: std(0x4c2c1b, .44, .04),
+-  white: std(0xeceae3, .43, .02),
+-  black: std(0x151a1f, .34, .35),
+-  navy: std(0x1f4564, .44, .05),
+-  blueLeather: std(0x1e5c82, .39, .02),
+-  orangeLeather: std(0xb55c27, .41, .02),
+-  gold: std(0xb68a36, .30, .65),
+-  tea: std(0x70462b, .48, .03),
+-  green: std(0x3f7744, .72, .00),
+-  screen: emissive(0x4ed8ff, 3.0, 0x0b1720),
+-  warmScreen: emissive(0xffb154, 2.3, 0x25140a),
+-  redGlow: emissive(0xff5b43, 2.5, 0x2b0805),
+-};
+-const glassMat = new THREE.MeshPhysicalMaterial({
+-  color: 0x99e2ef, roughness: 0.14, metalness: 0.04,
+-  transparent: true, opacity: 0.28, transmission: 0.55, thickness: 0.08,
+-  clearcoat: 1.0, clearcoatRoughness: 0.12, side: THREE.DoubleSide
+-});
+-
+-// ---------- Scene utilities ---------------------------------------------------
+-const colliders = [];
+-const interactables = [];
+-const zoneVolumes = [];
+-const dynamicGlow = [];
+-
+-function addCollider(obj, sx, sz, rotY = 0, padding = 0.0) {
+-  colliders.push({ obj, hx: sx / 2 + padding, hz: sz / 2 + padding, rotY });
+-}
+-function box(name, sx, sy, sz, x, y, z, material, rotY = 0, collide = false, padding = 0.0) {
+-  const mesh = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), material);
+-  mesh.name = name;
+-  mesh.position.set(x, y, z);
+-  mesh.rotation.y = rotY;
+-  mesh.castShadow = true;
+-  mesh.receiveShadow = true;
+-  scene.add(mesh);
+-  if (collide) addCollider(mesh, sx, sz, rotY, padding);
+-  return mesh;
+-}
+-function cyl(name, r, h, x, y, z, material, segments = 32, collide = false) {
+-  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, segments), material);
+-  mesh.name = name;
+-  mesh.position.set(x, y, z);
+-  mesh.castShadow = true;
+-  mesh.receiveShadow = true;
+-  scene.add(mesh);
+-  if (collide) addCollider(mesh, r * 2, r * 2, 0, .05);
+-  return mesh;
+-}
+-function wallSegment(name, ax, az, bx, bz, height = 3.25, thickness = .24, material = M.shell) {
+-  const dx = bx - ax, dz = bz - az;
+-  const len = Math.hypot(dx, dz);
+-  const angle = Math.atan2(dz, dx);
+-  return box(name, len, height, thickness, (ax + bx) / 2, height / 2, (az + bz) / 2, material, -angle, true, .02);
+-}
+-function floorRect(name, w, d, x, z, material, rotY = 0, y = 0.015) {
+-  return box(name, w, .03, d, x, y, z, material, rotY, false);
+-}
+-function labelSprite(text, x, y, z, accent = '#ffffff', scale = 2.2) {
+-  const c = document.createElement('canvas'); c.width = 512; c.height = 128;
+-  const ctx = c.getContext('2d');
+-  ctx.fillStyle = 'rgba(7,14,20,.82)';
+-  ctx.roundRect(8, 8, 496, 112, 20); ctx.fill();
+-  ctx.strokeStyle = accent; ctx.lineWidth = 3; ctx.stroke();
+-  ctx.fillStyle = '#fff'; ctx.font = '700 34px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+-  ctx.fillText(text, 256, 64);
+-  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
+-  const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false });
+-  const s = new THREE.Sprite(mat); s.position.set(x, y, z); s.scale.set(scale * 2.5, scale * .625, 1); scene.add(s); return s;
+-}
+-function plant(x, z, s = 1) {
+-  cyl('PlantPot', .24*s, .36*s, x, .18*s, z, std(0xeee5d7,.6,.02), 20, true);
+-  const stem = cyl('PlantStem', .035*s, .72*s, x, .66*s, z, M.green, 10, false);
+-  for (let i=0;i<8;i++) {
+-    const a=i/8*Math.PI*2;
+-    const leaf = new THREE.Mesh(new THREE.SphereGeometry(.22*s,12,8), M.green);
+-    leaf.scale.set(.65,1.7,.45); leaf.position.set(x+Math.cos(a)*.18*s, .82*s+(i%2)*.12*s, z+Math.sin(a)*.18*s); leaf.rotation.z=a*.25; scene.add(leaf);
+-  }
+-  return stem;
+-}
+-function chair(x,z,rot=0,colorMat=M.black) {
+-  box('ChairSeat', .55,.12,.55,x,.48,z,colorMat,rot,true);
+-  box('ChairBack', .55,.72,.10,x+Math.sin(rot)*.23,.83,z+Math.cos(rot)*.23,colorMat,rot,true);
+-  cyl('ChairStem', .06,.38,x,.25,z,M.black,12,false);
+-}
+-function desk(x,z,w=2.2,d=.8,rot=0,material=M.wood) {
+-  box('DeskTop',w,.10,d,x,.78,z,material,rot,true);
+-  const sin=Math.sin(rot), cos=Math.cos(rot);
+-  for(const sx of [-1,1]) for(const sz of [-1,1]) {
+-    const lx=sx*(w/2-.14), lz=sz*(d/2-.13);
+-    const wx=x+lx*cos+lz*sin, wz=z-lx*sin+lz*cos;
+-    box('DeskLeg',.09,.72,.09,wx,.38,wz,M.black,rot,false);
+-  }
+-}
+-function monitor(x,z,rot=0,wide=.54) {
+-  const screen = box('Monitor',wide,.34,.045,x,1.13,z,M.screen,rot,false);
+-  box('MonitorStem',.05,.22,.05,x,.94,z,M.black,rot,false);
+-  return screen;
+-}
+-function sofa(x,z,w=2.1,rot=0,material=M.blueLeather) {
+-  box('SofaSeat',w,.32,.78,x,.38,z,material,rot,true);
+-  const dx=Math.sin(rot)*.32, dz=Math.cos(rot)*.32;
+-  box('SofaBack',w,.78,.20,x+dx,.82,z+dz,material,rot,true);
+-  const sideOffset=w/2-.12;
+-  const cos=Math.cos(rot), sin=Math.sin(rot);
+-  for(const s of [-1,1]) {
+-    const wx=x+s*sideOffset*cos, wz=z-s*sideOffset*sin;
+-    box('SofaArm',.24,.46,.82,wx,.54,wz,material,rot,true);
+-  }
+-}
+-function roundTable(x,z,r=.55,mat=M.wood) {
+-  cyl('RoundTable',r,.10,x,.68,z,mat,40,true); cyl('RoundTableStem',.08,.65,x,.34,z,M.black,14,false);
+-}
+-function shelf(x,z,w=2.6,h=2.2,rot=0,mat=M.woodDark) {
+-  box('ShelfBack',w,h,.18,x,h/2,z,mat,rot,true);
+-  for(let i=0;i<4;i++) box('ShelfBoard',w,.07,.45,x,.38+i*.5,z-.08, M.wood,rot,false);
+-}
+-function displayPedestal(x,z,label,type='award') {
+-  const p=box('DisplayPedestal',.55,.78,.55,x,.39,z,M.white,0,true);
+-  const artifact = type==='award' ? cyl('Award',.13,.38,x,.98,z,M.gold,10,false) : box('CharityArtifact',.25,.34,.18,x,.98,z,M.warmScreen,0,false);
+-  interactables.push({obj:artifact,label,type});
+-  return p;
+-}
+-function addPoint(x,y,z,color,intensity=35,dist=8){const l=new THREE.PointLight(color,intensity,dist,2);l.position.set(x,y,z);l.castShadow=true;scene.add(l);return l;}
+-
+-// ---------- Pearl-shaped floor + outer shell ---------------------------------
+-const outer2 = [
+-  new THREE.Vector2(-14.6, 7.8), new THREE.Vector2(-16.0, 6.2),
+-  new THREE.Vector2(-14.2, 2.0), new THREE.Vector2(-8.2,-4.8),
+-  new THREE.Vector2(-1.6,-9.6), new THREE.Vector2(0,-10.55),
+-  new THREE.Vector2(1.6,-9.6), new THREE.Vector2(8.2,-4.8),
+-  new THREE.Vector2(14.2,2.0), new THREE.Vector2(16.0,6.2),
+-  new THREE.Vector2(14.6,7.8), new THREE.Vector2(-14.6,7.8)
+-];
+-const floorShape = new THREE.Shape();
+-floorShape.moveTo(-14.6,7.8);
+-floorShape.quadraticCurveTo(-16.2,7.2,-16.0,6.2);
+-floorShape.quadraticCurveTo(-14.9,3.0,-14.2,2.0);
+-floorShape.lineTo(-8.2,-4.8); floorShape.lineTo(-1.6,-9.6);
+-floorShape.quadraticCurveTo(0,-10.9,1.6,-9.6);
+-floorShape.lineTo(8.2,-4.8); floorShape.lineTo(14.2,2.0);
+-floorShape.quadraticCurveTo(16.2,7.2,14.6,7.8); floorShape.closePath();
+-const floor = new THREE.Mesh(new THREE.ShapeGeometry(floorShape, 24), M.floor);
+-floor.rotation.x = Math.PI/2; floor.position.y = 0; floor.receiveShadow = true; scene.add(floor);
+-
+-// Entry apron, aligned near the left-side entry gap.
+-const entryAngle = -0.72;
+-floorRect('EntryApron',3.2,2.5,-10.95,1.92,M.floor,entryAngle,-.005);
+-
+-// Outer wall segments; explicit gap between Awards and Charity.
+-const shellPts = [
+-  [-14.6,7.8],[-16.0,6.2],[-14.2,2.0],[-8.2,-4.8],[-1.6,-9.6],[0,-10.55],[1.6,-9.6],[8.2,-4.8],[14.2,2.0],[16.0,6.2],[14.6,7.8]
+-];
+-// left lower and upper sections with entry gap from roughly (-11.05,1.95) to (-9.75,.55)
+-wallSegment('Outer_BottomLeft',-14.6,7.8,-16.0,6.2);
+-wallSegment('Outer_LeftLower',-16.0,6.2,-11.25,1.93);
+-wallSegment('Outer_LeftUpperA',-9.65,.45,-8.2,-4.8);
+-wallSegment('Outer_LeftUpperB',-8.2,-4.8,-1.6,-9.6);
+-wallSegment('Outer_TopL',-1.6,-9.6,0,-10.55);
+-wallSegment('Outer_TopR',0,-10.55,1.6,-9.6);
+-wallSegment('Outer_RightUpper',1.6,-9.6,8.2,-4.8);
+-wallSegment('Outer_RightMid',8.2,-4.8,14.2,2.0);
+-wallSegment('Outer_RightLowerA',14.2,2.0,16.0,6.2);
+-wallSegment('Outer_BottomRight',16.0,6.2,14.6,7.8);
+-wallSegment('Outer_Bottom',14.6,7.8,-14.6,7.8);
+-
+-// Entry light pylons visually mark the actual external entry.
+-for(const [x,z] of [[-11.15,1.72],[-9.78,.42]]) { box('EntryPylon',.28,2.65,.28,x,1.33,z,M.shellDark,entryAngle,true); box('EntryGlow',.10,1.8,.08,x,1.48,z,M.screen,entryAngle,false); }
+-labelSprite('ENTRY / EXIT',-11.2,2.7,1.45,'#67dfff',1.55);
+-
+-// ---------- Central Pearl Office ---------------------------------------------
+-const pearlCx=0, pearlCz=-.25, pearlRx=7.25, pearlRz=4.15;
+-const pearlFloor = new THREE.Mesh(new THREE.CircleGeometry(1,96), M.officeFloor);
+-pearlFloor.scale.set(pearlRx,pearlRz,1); pearlFloor.rotation.x=-Math.PI/2; pearlFloor.position.set(pearlCx,.018,pearlCz); pearlFloor.receiveShadow=true; scene.add(pearlFloor);
+-
+-// Glass ellipse, with the only entry gap on lower-right at Wine / Manager 1 junction.
+-const panelCount=44;
+-for(let i=0;i<panelCount;i++){
+-  const a0=i/panelCount*Math.PI*2, a1=(i+1)/panelCount*Math.PI*2, ac=(a0+a1)/2;
+-  // gap around lower-right: angle ~0.65 radians (positive X, positive Z)
+-  if(ac>0.42 && ac<0.91) continue;
+-  const x0=pearlCx+pearlRx*Math.cos(a0), z0=pearlCz+pearlRz*Math.sin(a0);
+-  const x1=pearlCx+pearlRx*Math.cos(a1), z1=pearlCz+pearlRz*Math.sin(a1);
+-  const dx=x1-x0,dz=z1-z0,len=Math.hypot(dx,dz),ang=Math.atan2(dz,dx);
+-  const g=box('PearlGlass',len,2.55,.075,(x0+x1)/2,1.275,(z0+z1)/2,glassMat,-ang,true,.01);
+-  if(i%4===0) box('PearlMullion',.08,2.7,.10,(x0+x1)/2,1.35,(z0+z1)/2,M.shellDark,-ang,true);
+-}
+-// Entry markers at pearl opening
+-box('PearlEntryPostA',.12,2.75,.12,5.72,1.38,2.30,M.shellDark,0,true);
+-box('PearlEntryPostB',.12,2.75,.12,4.70,1.38,3.15,M.shellDark,0,true);
+-labelSprite('ONLY ENTRY → PEARL OFFICE',6.2,2.45,2.85,'#ff694f',1.30);
+-
+-// Pearl Office work islands
+-for(const [x,z,r] of [[-3.35,-.65,-.40],[3.35,-.65,.40],[0,2.15,0]]){
+-  desk(x,z,3.3,.9,r,M.white);
+-  for(const s of [-1,1]){
+-    const dx=Math.cos(r)*s*.85, dz=-Math.sin(r)*s*.85;
+-    monitor(x+dx,z+dz,r,.48);
+-    chair(x+dx,z+dz+.62*Math.cos(r),r,M.black);
+-  }
+-}
+-// Shared console near top of central office
+-const pearlConsole = desk(0,-2.65,1.9,.75,0,M.white); monitor(0,-2.63,0,.72);
+-interactables.push({obj:pearlConsole,label:'Pearl Office shared console',type:'pearl'});
+-for(const p of [[-5.5,-2.6],[-5.7,1.1],[-4.8,2.4],[4.9,-2.8],[5.6,.7],[4.5,2.5],[-1.8,3.1],[1.8,3.1]]) plant(...p,.82);
+-
+-// ---------- Room construction helpers ----------------------------------------
+-function roomPad(name,x,z,w,d,rot,colorMat, label, opts={}){
+-  floorRect(name+'Floor',w,d,x,z,colorMat,rot,.025);
+-  if(label) labelSprite(label,x,2.55,z,'#e8f6ff',1.18);
+-  zoneVolumes.push({name:label||name,x,z,w,d,rot});
+-  // four perimeter walls with one inner-facing door gap if enclosed
+-  if(opts.open) return;
+-  const h=2.8,t=.15,door=opts.door||1.25;
+-  const side=opts.doorSide||'south';
+-  const addLocalWall=(lname,cx,cz,sx,sz)=>{
+-    const c=Math.cos(rot),s=Math.sin(rot); const wx=x+cx*c+cz*s,wz=z-cx*s+cz*c;
+-    box(name+lname,sx,h,sz,wx,h/2,wz,M.shell,rot,true);
+-  };
+-  if(side==='south'){
+-    addLocalWall('N',0,-d/2,w,t);
+-    addLocalWall('W',-w/2,0,t,d);
+-    addLocalWall('E',w/2,0,t,d);
+-    const seg=(w-door)/2; addLocalWall('S1',-(door+seg)/2,d/2,seg,t); addLocalWall('S2',(door+seg)/2,d/2,seg,t);
+-  }else if(side==='north'){
+-    addLocalWall('S',0,d/2,w,t);addLocalWall('W',-w/2,0,t,d);addLocalWall('E',w/2,0,t,d);
+-    const seg=(w-door)/2;addLocalWall('N1',-(door+seg)/2,-d/2,seg,t);addLocalWall('N2',(door+seg)/2,-d/2,seg,t);
+-  }else if(side==='west'){
+-    addLocalWall('N',0,-d/2,w,t);addLocalWall('S',0,d/2,w,t);addLocalWall('E',w/2,0,t,d);
+-    const seg=(d-door)/2;addLocalWall('W1',-w/2,-(door+seg)/2,t,seg);addLocalWall('W2',-w/2,(door+seg)/2,t,seg);
+-  }else{
+-    addLocalWall('N',0,-d/2,w,t);addLocalWall('S',0,d/2,w,t);addLocalWall('W',-w/2,0,t,d);
+-    const seg=(d-door)/2;addLocalWall('E1',w/2,-(door+seg)/2,t,seg);addLocalWall('E2',w/2,(door+seg)/2,t,seg);
+-  }
+-}
+-
+-// 1 Reception — open, facing the external entry, outside Pearl Office.
+-roomPad('Reception',-7.55,.40,3.7,3.0,-.16,std(0xd8c7a6,.62,.02),'1  RECEPTION',{open:true});
+-const receptionDesk = box('ReceptionDesk',2.8,.85,.72,-7.25,.43,.55,M.white,-.16,true);
+-box('ReceptionDeskFront',2.7,.65,.08,-7.14,.48,.91,M.gold,-.16,false);
+-chair(-6.6,-.32,-.16,M.orangeLeather); roundTable(-5.95,-.22,.38,M.white); plant(-8.8,-.25,.8);
+-interactables.push({obj:receptionDesk,label:'Reception desk — guest check-in',type:'reception'});
+-
+-// 10 Tea Room — closed and directly below Reception, outside Pearl Office.
+-roomPad('TeaRoom',-7.20,4.25,3.6,2.45,0,M.officeFloor,'10  TEA ROOM',{doorSide:'north'});
+-desk(-7.2,4.35,2.1,.75,0,M.tea); for(const x of [-7.85,-6.55]) chair(x,5.02,Math.PI,M.black);
+-const teaService=box('TeaService',.82,.10,.38,-7.2,.90,4.34,M.gold,0,false); interactables.push({obj:teaService,label:'Tea service',type:'tea'});
+-
+-// 13 Awards Section — open-ended gallery above external entry.
+-roomPad('Awards',-9.55,-2.30,4.0,3.5,-.55,std(0xd2c3a2,.65,.02),'13  AWARDS',{open:true});
+-shelf(-10.05,-2.95,2.2,1.9,-.55,M.woodDark);
+-for(const p of [[-9.1,-2.0],[-10.65,-1.6],[-8.8,-3.2]]) displayPedestal(...p,'Awards display','award');
+-interactables.push({obj:scene.getObjectByName('ShelfBack'),label:'Awards wall',type:'awards'});
+-
+-// 12 Charity Gallery — open corridor below entry; no enclosing walls.
+-roomPad('Charity',-12.2,2.85,4.3,3.9,-.48,std(0xd8c9ab,.68,.01),'12  CHARITY GALLERY',{open:true});
+-for(const p of [[-12.9,1.6],[-13.35,2.7],[-12.5,3.9],[-11.35,3.0]]) displayPedestal(...p,'Charity display','charity');
+-
+-// 2 Trading Office at top-left.
+-roomPad('Trading',-4.20,-7.55,5.0,2.8,-.03,std(0xc9d7dc,.64,.03),'2  TRADING OFFICE',{doorSide:'south'});
+-desk(-4.25,-7.55,3.65,.85,0,M.wood); for(const x of [-5.25,-4.25,-3.25]) {monitor(x,-7.52,0,.48);chair(x,-6.95,Math.PI,M.black);}
+-
+-// 3 Executive Office, top-right of apex.
+-roomPad('Executive',2.45,-7.55,4.2,2.9,.04,std(0xd7cfc0,.63,.02),'3  EXECUTIVE OFFICE',{doorSide:'south'});
+-desk(3.15,-7.35,1.75,.78,.05,M.wood); monitor(3.15,-7.34,.05,.52); sofa(1.50,-7.35,1.65,0,M.orangeLeather);roundTable(2.0,-6.85,.42,M.white);
+-
+-// 4 Meeting Room — long right-upper space.
+-roomPad('Meeting',8.00,-4.95,5.5,3.15,-.43,std(0xd7d0c5,.63,.02),'4  MEETING ROOM',{doorSide:'west'});
+-desk(8.05,-4.92,3.45,1.15,-.43,M.wood); for(let i=-2;i<=2;i++){const u=i*.68;chair(8.05+u*Math.cos(-.43),-4.92-u*Math.sin(-.43)+.90,-.43+Math.PI,M.black);chair(8.05+u*Math.cos(-.43),-4.92-u*Math.sin(-.43)-.90,-.43,M.black);} const meetingScreen=box('MeetingScreen',1.8,1.0,.07,9.95,1.55,-3.82,M.screen,-.43,false);interactables.push({obj:meetingScreen,label:'Meeting Room presentation screen',type:'meeting'});
+-
+-// 5 Director Office — right-mid.
+-roomPad('Director',11.30,-.70,3.25,2.85,-.18,std(0xc8d0d5,.64,.02),'5  DIRECTOR OFFICE',{doorSide:'west'});
+-desk(11.55,-1.2,1.65,.75,-.18,M.wood);monitor(11.55,-1.18,-.18,.45);sofa(11.05,.18,1.65,-.18,M.blueLeather);roundTable(11.55,.25,.38,M.white);
+-
+-// 6 Wine Room — right-lower pearl corner.
+-roomPad('Wine',12.30,4.20,4.05,4.35,.30,std(0x5a3522,.45,.02),'6  WINE ROOM',{doorSide:'west'});
+-sofa(13.25,4.75,2.1,.30,M.orangeLeather);roundTable(12.15,3.85,.58,M.wood);shelf(13.3,3.25,2.2,2.25,.30,M.woodDark); const wineGlow=box('WineFeature',1.7,1.15,.06,13.0,1.65,2.32,M.warmScreen,.30,false);interactables.push({obj:wineGlow,label:'Wine display',type:'wine'});
+-
+-// 7,8,9 Manager Offices along lower edge.
+-for(const [id,x] of [[7,8.65],[8,3.70],[9,-1.00]]){
+-  roomPad('Manager'+id,x,6.62,3.6,2.15,0,std(0xcbd6dc,.67,.02),`${id}  MANAGER OFFICE ${id-6}`,{doorSide:'north'});
+-  desk(x,6.70,1.6,.70,0,M.wood);monitor(x,6.68,0,.46);chair(x,7.20,Math.PI,M.black);
+-}
+-
+-// 11 Back Office — bottom-left corner, directly connected to Charity side.
+-roomPad('BackOffice',-12.50,6.15,5.0,3.1,-.18,std(0xc7d0d2,.68,.02),'11  BACK OFFICE',{doorSide:'north'});
+-desk(-12.5,6.2,2.6,.85,-.18,M.white);monitor(-13.05,6.18,-.18,.44);monitor(-11.95,6.18,-.18,.44);chair(-13.0,6.85,Math.PI-.18,M.black);chair(-12.0,6.85,Math.PI-.18,M.black);
+-
+-// ---------- Architectural rhythm, corridor lamps, and wayfinding ------------
+-for(let i=0;i<20;i++){
+-  const a=i/20*Math.PI*2; const rx=8.5, rz=5.1;
+-  const x=rx*Math.cos(a), z=-.25+rz*Math.sin(a);
+-  if(x<-7.0 && z>-1 && z<5.5) continue; // keep left reception/tea zone readable
+-  cyl('CorridorLight',.045,.06,x,.06,z,M.screen,10,false);
+-}
+-
+-scene.add(new THREE.HemisphereLight(0xd7edff,0x5d4330,1.25));
+-const sun=new THREE.DirectionalLight(0xfff0d5,2.6);sun.position.set(-5,10,-7);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);scene.add(sun);
+-addPoint(-8,2.6,-1.5,0xffd99a,42,9);addPoint(8,2.8,-4.0,0xb8dcff,32,8);addPoint(11,2.5,3.5,0xffa34f,38,8);addPoint(0,3.2,-.2,0x9ee8ff,36,10);addPoint(-12,2.4,4.5,0xffd7a6,28,7);
+-
+-// ---------- Interactions / gameplay ------------------------------------------
+-const keys={}; let mapVisible=true; let stage=0; let nearestInteractive=null;
+-function showToast(text,ms=2100){toastEl.textContent=text;toastEl.style.opacity=1;clearTimeout(showToast.t);showToast.t=setTimeout(()=>toastEl.style.opacity=0,ms);}
+-function setObjective(text){objectiveEl.textContent='Objective: '+text;}
+-function advance(type){
+-  if(stage===0 && type==='reception'){stage=1;setObjective('follow the clockwise loop toward the Wine Room');showToast('Checked in. Follow the blue circulation loop clockwise.');}
+-  else if(stage===1 && type==='wine'){stage=2;setObjective('find the single opening into the Pearl Office');showToast('Wine Room reached. The Pearl Office opening is beside this corner.');}
+-  else if(stage===2 && type==='pearl'){stage=3;setObjective('explore freely — planning-to-game loop complete');showToast('Pearl Office console online. You have completed the first tour loop.',3200);}
+-}
+-function interact(){
+-  if(!nearestInteractive){showToast('Move closer to an interactive object.');return;}
+-  const it=nearestInteractive;
+-  if(it.type==='reception') showToast('Reception: guest check-in complete.');
+-  if(it.type==='awards') showToast('Awards Section: photo-derived display wall and trophy zone.');
+-  if(it.type==='charity') showToast('Charity Gallery: open-ended display corridor — no room enclosure.');
+-  if(it.type==='tea') showToast('Tea Room: enclosed hospitality room beside Reception.');
+-  if(it.type==='meeting'){it.obj.material.emissiveIntensity=it.obj.material.emissiveIntensity>4?3:6;showToast('Meeting Room screen toggled.');}
+-  if(it.type==='wine'){it.obj.material.emissiveIntensity=it.obj.material.emissiveIntensity>4?2.3:5.5;showToast('Wine display lighting toggled.');}
+-  if(it.type==='pearl'){showToast('Pearl Office shared console: central workspace synchronized.');}
+-  advance(it.type);
+-}
+-
+-addEventListener('keydown',e=>{
+-  keys[e.code]=true;
+-  if(e.code==='KeyE') interact();
+-  if(e.code==='KeyM'){mapVisible=!mapVisible;mapWrap.classList.toggle('hidden',!mapVisible);}
+-  if(e.code==='KeyR') resetPlayer();
+-});
+-addEventListener('keyup',e=>keys[e.code]=false);
+-
+-function resetPlayer(){camera.position.copy(SPAWN);camera.rotation.set(0,SPAWN_YAW,0);stage=0;setObjective('enter between Awards and Charity');showToast('Player reset to entry.');}
+-resetPlayer();
+-
+-function pointInPolygon(x,z,pts){let inside=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++) {const xi=pts[i].x,zi=pts[i].y,xj=pts[j].x,zj=pts[j].y;const intersect=((zi>z)!==(zj>z))&&(x<(xj-xi)*(z-zi)/(zj-zi+1e-9)+xi);if(intersect)inside=!inside;}return inside;}
+-function inEntryApron(x,z){
+-  // local rectangle around the external left-side door
+-  const cx=-10.92,cz=1.93,a=entryAngle,c=Math.cos(a),s=Math.sin(a),dx=x-cx,dz=z-cz,lx=dx*c-dz*s,lz=dx*s+dz*c;
+-  return Math.abs(lx)<1.7 && Math.abs(lz)<1.8;
+-}
+-function hitsCollider(x,z){
+-  for(const c of colliders){const dx=x-c.obj.position.x,dz=z-c.obj.position.z;const co=Math.cos(c.rotY),si=Math.sin(c.rotY);const lx=dx*co-dz*si,lz=dx*si+dz*co;if(Math.abs(lx)<c.hx+PLAYER_RADIUS && Math.abs(lz)<c.hz+PLAYER_RADIUS)return true;}return false;
+-}
+-function canMove(x,z){
+-  if(!pointInPolygon(x,z,outer2) && !inEntryApron(x,z)) return false;
+-  if(hitsCollider(x,z)) return false;
+-  return true;
+-}
+-
+-function zoneName(x,z){
+-  // Pearl interior first, excluding separate left Reception/Tea placement.
+-  const q=((x-pearlCx)/pearlRx)**2+((z-pearlCz)/pearlRz)**2;
+-  if(q<.92 && !(x<-5.2 && z>-1.2)) return 'Pearl Office';
+-  for(const v of zoneVolumes){const dx=x-v.x,dz=z-v.z,c=Math.cos(v.rot),s=Math.sin(v.rot),lx=dx*c-dz*s,lz=dx*s+dz*c;if(Math.abs(lx)<v.w/2&&Math.abs(lz)<v.d/2)return v.name.replace(/^\d+\s+/,'');}
+-  if(inEntryApron(x,z)) return 'Entry / Exterior';
+-  return 'Clockwise Circulation';
+-}
+-function updateNearest(){
+-  let best=null,bd=2.15;
+-  const cp=camera.position;
+-  for(const it of interactables){const wp=it.obj.getWorldPosition(new THREE.Vector3());const d=Math.hypot(cp.x-wp.x,cp.z-wp.z);if(d<bd){bd=d;best=it;}}
+-  nearestInteractive=best; interactionEl.classList.toggle('visible',!!best); if(best)interactionEl.textContent='Press E — '+best.label;
+-}
+-function updateMap(){
+-  // map world [-16,16]x[-10.8,8.5] into cropped reference-image percentages.
+-  const x=camera.position.x,z=camera.position.z;
+-  const px=14 + ((x+16)/32)*72; const py=13 + ((z+10.8)/19.3)*70;
+-  playerDot.style.left=px+'%';playerDot.style.top=py+'%';
+-}
+-
+-const clock=new THREE.Clock();
+-function animate(){
+-  requestAnimationFrame(animate);
+-  const dt=Math.min(clock.getDelta(),.05);
+-  const t=performance.now()/1000;
+-  if(controls.isLocked){
+-    const speed=((keys.ShiftLeft||keys.ShiftRight)?5.2:3.05)*dt;
+-    const f=(keys.KeyW?1:0)-(keys.KeyS?1:0), r=(keys.KeyD?1:0)-(keys.KeyA?1:0);
+-    const old=camera.position.clone(); if(f)controls.moveForward(f*speed);if(r)controls.moveRight(r*speed);camera.position.y=PLAYER_HEIGHT;
+-    if(!canMove(camera.position.x,camera.position.z))camera.position.copy(old);
+-    zoneEl.textContent='Current zone: '+zoneName(camera.position.x,camera.position.z);
+-    if(stage===0 && pointInPolygon(camera.position.x,camera.position.z,outer2) && !inEntryApron(camera.position.x,camera.position.z)) setObjective('check in at Reception (press E)');
+-    updateNearest();updateMap();
+-  }
+-  dynamicGlow.forEach((o,i)=>o.material.emissiveIntensity=2.2+Math.sin(t*1.5+i)*.5);
+-  renderer.render(scene,camera);
+-}
+-animate();
+-
+-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
++function updateInteraction(){nearest=null;let bd=1.3;for(const o of objects){const d=Math.hypot(px-o.x,py-o.y);if(d<bd){bd=d;nearest=o}}interactionEl.style.display=nearest?'block':'none';if(nearest)interactionEl.textContent='Press E — '+nearest.label;}
++function interact(){if(!nearest){showToast('Move closer to an interactive object');return;}const t=nearest.type;showToast(nearest.label+' activated');if(stage===0&&t==='reception'){stage=1;objectiveEl.textContent='Objective: follow the clockwise loop toward the Wine Room';}else if(stage===1&&t==='wine'){stage=2;objectiveEl.textContent='Objective: use the single opening into the Pearl Office';}else if(stage===2&&t==='pearl'){stage=3;objectiveEl.textContent='Objective: explore freely — first tour complete';}}
++let last=performance.now();
++function tick(){const now=performance.now(),dt=Math.min(.05,(now-last)/1000);last=now;let turn=0;if(keys.ArrowLeft)turn-=1;if(keys.ArrowRight)turn+=1;ang+=turn*1.8*dt;const sp=(keys.ShiftLeft||keys.ShiftRight?4.0:MOVE)*dt;let f=(keys.KeyW||keys.ArrowUp?1:0)-(keys.KeyS||keys.ArrowDown?1:0),s=(keys.KeyD?1:0)-(keys.KeyA?1:0);let nx=px+(Math.cos(ang)*f+Math.cos(ang+Math.PI/2)*s)*sp,ny=py+(Math.sin(ang)*f+Math.sin(ang+Math.PI/2)*s)*sp;if(canMove(nx,py))px=nx;if(canMove(px,ny))py=ny;zoneEl.textContent='Current zone: '+zoneName();updateInteraction();draw3D();drawMap();}
++setInterval(tick,1000/30);tick();
++addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();keys[e.code]=true;if(e.code==='KeyE')interact();if(e.code==='KeyM'){mapVisible=!mapVisible;mapCanvas.classList.toggle('hidden',!mapVisible)}if(e.code==='KeyR')reset();});addEventListener('keyup',e=>keys[e.code]=false);
++canvas.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture?.(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX;lastX=e.clientX;ang+=dx*.004;});canvas.addEventListener('pointerup',e=>{dragging=false;canvas.releasePointerCapture?.(e.pointerId)});canvas.addEventListener('pointercancel',()=>dragging=false);
++canvas.focus();
++})();
++</script>
++</body>
++</html>

@@ -1,0 +1,65 @@
+[
+  {
+    "from": "pearl_office_autonomous_game.zip",
+    "to": "pearl_office_compatibility_game.zip",
+    "source_from": "runtime/app.js",
+    "source_to": "PLAY_PEARL_OFFICE.html",
+    "diff": "pearl_office_compatibility_game.diff"
+  },
+  {
+    "from": "pearl_office_compatibility_game.zip",
+    "to": "pearl_office_smooth_game.zip",
+    "source_from": "PLAY_PEARL_OFFICE.html",
+    "source_to": "runtime/app.js",
+    "diff": "pearl_office_smooth_game.diff"
+  },
+  {
+    "from": "pearl_office_smooth_game.zip",
+    "to": "pearl_office_hybrid_hd.zip",
+    "source_from": "runtime/app.js",
+    "source_to": "PLAY_PEARL_OFFICE_HYBRID_HD.html",
+    "diff": "pearl_office_hybrid_hd.diff"
+  },
+  {
+    "from": "pearl_office_hybrid_hd.zip",
+    "to": "pearl_office_ultra_hybrid_v2.zip",
+    "source_from": "PLAY_PEARL_OFFICE_HYBRID_HD.html",
+    "source_to": "PLAY_PEARL_OFFICE_ULTRA_V2.html",
+    "diff": "pearl_office_ultra_hybrid_v2.diff"
+  },
+  {
+    "from": "pearl_office_ultra_hybrid_v2.zip",
+    "to": "pearl_office_mainrepo_drag_v3.zip",
+    "source_from": "PLAY_PEARL_OFFICE_ULTRA_V2.html",
+    "source_to": "runtime/app.js",
+    "diff": "pearl_office_mainrepo_drag_v3.diff"
+  },
+  {
+    "from": "pearl_office_mainrepo_drag_v3.zip",
+    "to": "pearl_office_mainrepo_runtime_optimized_v4.zip",
+    "source_from": "runtime/app.js",
+    "source_to": "runtime/app.js",
+    "diff": "pearl_office_mainrepo_runtime_optimized_v4.diff"
+  },
+  {
+    "from": "pearl_office_mainrepo_runtime_optimized_v4.zip",
+    "to": "pearl_office_mainrepo_signalnav_v5.zip",
+    "source_from": "runtime/app.js",
+    "source_to": "runtime/app.js",
+    "diff": "pearl_office_mainrepo_signalnav_v5.diff"
+  },
+  {
+    "from": "pearl_office_mainrepo_signalnav_v5.zip",
+    "to": "pearl_office_mainrepo_safari_walk_v6.zip",
+    "source_from": "runtime/app.js",
+    "source_to": "runtime/app.js",
+    "diff": "pearl_office_mainrepo_safari_walk_v6.diff"
+  },
+  {
+    "from": "pearl_office_mainrepo_safari_walk_v6.zip",
+    "to": "pearl_office_mainrepo_safari_wasd_v7.zip",
+    "source_from": "runtime/app.js",
+    "source_to": "runtime/app_v7.js",
+    "diff": "pearl_office_mainrepo_safari_wasd_v7.diff"
+  }
+]

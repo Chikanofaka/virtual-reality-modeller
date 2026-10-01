@@ -1,0 +1,82 @@
+--- pearl_office_hybrid_hd/PLAY_PEARL_OFFICE_HYBRID_HD.html
++++ pearl_office_ultra_hybrid_v2/PLAY_PEARL_OFFICE_ULTRA_V2.html
+@@ -1,7 +1,7 @@
+ <!doctype html>
+ <html lang="en"><head><meta charset="utf-8"/>
+ <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+-<title>Pearl Office — Hybrid HD Player</title>
++<title>Pearl Office — Ultra Hybrid V2</title>
+ <style>
+ :root{color-scheme:dark;--cyan:#7be8ff;--panel:rgba(6,18,27,.90);--line:rgba(123,232,255,.38);--warm:#ffd08b}
+ *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#081018;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+@@ -17,14 +17,26 @@
+ @media(max-width:850px){#hud{min-width:0;width:calc(100vw - 36px);padding-right:35vw}#mapWrap{width:32vw}.keys{font-size:11px}#photoPanel{width:calc(100vw - 36px);max-width:430px}}
+ </style></head><body>
+ <canvas id="game" tabindex="0"></canvas>
+-<div id="hud"><div class="eyebrow">PEARL OFFICE / HYBRID HD COMPATIBILITY BUILD</div><div class="zone" id="zone">Current zone: Entry / Exterior</div><div class="objective" id="objective">Objective: enter between Awards and Charity</div><div class="keys"><span class="key">WASD</span> move · <span class="key">drag</span> look · <span class="key">← →</span> turn · <span class="key">Shift</span> sprint · <span class="key">E</span> interact/photo · <span class="key">M</span> map · <span class="key">R</span> reset · <span class="key">H</span> quality</div><div class="perf">Canvas 2D renderer · <b id="quality">AUTO-HD</b> · <span id="fps">-- FPS</span> · no pointer-lock / no WebGL</div></div>
++<div id="hud"><div class="eyebrow">PEARL OFFICE / ULTRA HYBRID V2 — PHOTO-TEXTURED COMPATIBILITY BUILD</div><div class="zone" id="zone">Current zone: Entry / Exterior</div><div class="objective" id="objective">Objective: enter between Awards and Charity</div><div class="keys"><span class="key">WASD</span> move · <span class="key">drag</span> look · <span class="key">← →</span> turn · <span class="key">Shift</span> sprint · <span class="key">E</span> interact/photo · <span class="key">M</span> map · <span class="key">R</span> reset · <span class="key">H</span> quality · <span class="key">V</span> photo texture</div><div class="perf">Photo-textured Canvas 2D · <b id="quality">AUTO-HD</b> · <span id="fps">-- FPS</span> · <b id="texStatus">textures loading</b> · synchronized input</div></div>
+ <div id="mapWrap"><img id="mapImg" src="assets/floorplan_v1_5.png"/><canvas id="mapCanvas"></canvas></div>
+ <div id="interaction"></div><div id="toast"></div><div id="cross"></div>
+ <div id="photoPanel"><button id="photoClose">×</button><img id="photoImg"/><div class="caption" id="photoCaption"></div></div>
+-<div id="start"><div class="card"><div class="eyebrow">ENGINEER BUILD / PLAYER MODE</div><h1>Pearl Office — Hybrid HD</h1><p>This build combines the detailed 3D-like office scene with the latest compatible input system. It deliberately avoids WebGL and pointer lock, so keyboard and mouse updates stay synchronized.</p><button id="startBtn">ENTER OFFICE</button><div class="modeRow"><span>WASD = continuous move</span><span>•</span><span>click-drag = look</span><span>•</span><span>H = quality toggle</span></div></div></div>
++<div id="start"><div class="card"><div class="eyebrow">ENGINEER BUILD / PLAYER MODE</div><h1>Pearl Office — Ultra Hybrid V2</h1><p>This build cherry-picks the richer room geometry and 3D object language from the original autonomous build, then layers room-specific photo textures on the compatibility renderer. It keeps the synchronized no-WebGL controls that work on your Mac.</p><button id="startBtn">ENTER OFFICE</button><div class="modeRow"><span>WASD = continuous move</span><span>•</span><span>click-drag = look</span><span>•</span><span>H = quality toggle</span></div></div></div>
+ <script>
+ (()=>{'use strict';
+ const PHOTO_MAP={"Reception / Awards": "assets/reference/reception_awards.jpg", "Trading Office": "assets/reference/trading_office.jpg", "Executive Office": "assets/reference/executive_office.jpg", "Meeting Room": "assets/reference/meeting_room.jpg", "Director Office": "assets/reference/director_office.jpg", "Wine Room": "assets/reference/wine_room.jpg", "Pearl Office": "assets/reference/pearl_office.jpg", "Manager Office 1": "assets/reference/manager_office_1.jpg", "Manager Office 2": "assets/reference/manager_office_2.jpg", "Manager Office 3": "assets/reference/manager_office_3.jpg", "Tea Room": "assets/reference/tea_room.jpg", "Back Office": "assets/reference/back_office.jpg", "Charity Gallery": "assets/reference/charity_gallery.jpg"};
++const TEXTURE_MAP={}; for(const [k,v] of Object.entries(PHOTO_MAP)) TEXTURE_MAP[k]=v.replace('assets/reference/','assets/textures/');
++let photoTextureMode=true; const texImages={}; let texLoaded=0; const texStatusEl=document.getElementById('texStatus');
++for(const [k,p] of Object.entries(TEXTURE_MAP)){const im=new Image(); im.decoding='async'; im.onload=()=>{texLoaded++; texStatusEl.textContent=`${texLoaded}/${Object.keys(TEXTURE_MAP).length} textures`;}; im.onerror=()=>{}; im.src=p; texImages[k]=im;}
++function textureZoneAt(x,y){
++  const cands=[['Trading Office',-8.3,-9.3,-2.0,-4.6],['Executive Office',-1.5,-9.5,4.8,-4.5],['Meeting Room',4.7,-7.4,13.5,-.8],['Director Office',9.5,-.1,13.9,3.2],['Wine Room',10.0,3.0,14.5,7.4],['Manager Office 1',4.0,4.8,7.5,7.6],['Manager Office 2',.6,4.8,4.1,7.6],['Manager Office 3',-3.0,4.8,.8,7.6],['Tea Room',-7.5,2.2,-4.3,5.2],['Back Office',-12.9,5.0,-8.4,7.6],['Reception / Awards',-13.8,-3.8,-5.0,2.4],['Charity Gallery',-14.8,1.1,-8.7,5.4]];
++  const q=(x/7.7)**2+((y+.5)/4.9)**2; if(q<1.08) return 'Pearl Office';
++  for(const z of cands)if(x>=z[1]&&x<=z[3]&&y>=z[2]&&y<=z[4])return z[0];
++  // nearest room texture fallback
++  let best='Reception / Awards',bd=1e9; for(const z of cands){const mx=(z[1]+z[3])/2,my=(z[2]+z[4])/2,d=(x-mx)**2+(y-my)**2;if(d<bd){bd=d;best=z[0];}} return best;
++}
++function textureForWall(w){return textureZoneAt((w.ax+w.bx)/2,(w.ay+w.by)/2);}
++
+ const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false,desynchronized:true});
+ const mapCanvas=document.getElementById('mapCanvas'),mctx=mapCanvas.getContext('2d');
+ const zoneEl=document.getElementById('zone'),objectiveEl=document.getElementById('objective'),toastEl=document.getElementById('toast'),interactionEl=document.getElementById('interaction');
+@@ -69,7 +81,9 @@
+ function roundRectPath(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r);}
+ function drawObject(o,sx,baseY,sz,dist){const sc=Math.min(4.2,1.25/dist*VH*.62)*o.scale;const x=sx,w=sc*(o.type==='boardroom'?2.5:o.type==='island'?2.2:o.type==='sofa'?1.8:o.type==='shelf'?1.25:1.2),h=sc*(o.type==='plant'?1.45:o.type==='monitors'?.7:o.type==='display'?1.4:.9);ctx.save();ctx.translate(x,baseY);ctx.globalAlpha=Math.min(1,1.6-dist/22);
+  const shadowH=h*.18;ctx.fillStyle='rgba(0,0,0,.22)';ctx.beginPath();ctx.ellipse(0,shadowH*.8,w*.55,shadowH,0,0,Math.PI*2);ctx.fill();
+- if(o.type==='plant'){ctx.fillStyle='#69482f';ctx.fillRect(-w*.18,-h*.18,w*.36,h*.25);ctx.fillStyle=o.color;for(let i=0;i<7;i++){ctx.save();ctx.rotate((i-3)*.35);ctx.beginPath();ctx.ellipse(0,-h*.55,w*.16,h*.34,0,0,Math.PI*2);ctx.fill();ctx.restore();}}
++ if(o.type==='plant'){ctx.fillStyle='#69482f';ctx.fillRect(-w*.18,-h*.18,w*.36,h*.25);ctx.fillStyle=o.color;for(let i=0;i<7;i++){ctx.save();ctx.rotate((i-3)*.35);ctx.beginPath();ctx.ellipse(0,-h*.55,w*.16,h*.34,0,0,Math.PI*2);ctx.fill();// detail accents: metallic trim / screen glow / contact line
++ ctx.strokeStyle='rgba(255,255,255,.20)';ctx.lineWidth=Math.max(1,sc*.018);if(o.type!=='plant'){ctx.beginPath();ctx.moveTo(-w*.42,-h*.18);ctx.lineTo(w*.42,-h*.18);ctx.stroke();}
++ ctx.restore();}}
+  else if(o.type==='sofa'){ctx.fillStyle=o.color;roundRectPath(ctx,-w/2,-h*.55,w,h*.52,Math.max(3,w*.08));ctx.fill();ctx.fillStyle='rgba(255,255,255,.12)';ctx.fillRect(-w*.42,-h*.47,w*.84,h*.07);ctx.fillStyle='rgba(0,0,0,.22)';ctx.fillRect(-w*.45,-h*.15,w*.9,h*.16)}
+  else if(o.type==='shelf'){ctx.fillStyle=o.color;ctx.fillRect(-w/2,-h*.75,w,h*.72);ctx.fillStyle='#e6c66e';for(let i=0;i<3;i++){ctx.fillRect(-w*.4,-h*(.62-i*.18),w*.8,Math.max(2,h*.035));}}
+  else if(o.type==='monitors'){ctx.fillStyle='#1b2b34';for(let i=-1;i<=1;i++){ctx.fillRect(i*w*.3-w*.13,-h*.65,w*.26,h*.38);ctx.fillStyle='#65d8f8';ctx.fillRect(i*w*.3-w*.115,-h*.62,w*.23,h*.31);ctx.fillStyle='#1b2b34';}}
+@@ -80,8 +94,20 @@
+  const sky=ctx.createLinearGradient(0,0,0,VH*.5);sky.addColorStop(0,'#0b1721');sky.addColorStop(1,'#25333b');ctx.fillStyle=sky;ctx.fillRect(0,0,VW,VH*.52);
+  // warm floor with perspective grid
+  const floor=ctx.createLinearGradient(0,VH*.48,0,VH);floor.addColorStop(0,'#ded5c5');floor.addColorStop(1,'#8f877b');ctx.fillStyle=floor;ctx.fillRect(0,VH*.48,VW,VH*.52);ctx.strokeStyle='rgba(77,68,57,.14)';ctx.lineWidth=1;for(let i=1;i<12;i++){const t=i/12,y=VH*.5+(VH*.5)*(t*t);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(VW,y);ctx.stroke();}for(let i=-10;i<=10;i++){ctx.beginPath();ctx.moveTo(VW/2,VH*.5);ctx.lineTo(VW/2+i*VW*.11,VH);ctx.stroke();}
++ // architectural ceiling/cove-light bands
++ const cg=ctx.createLinearGradient(0,VH*.10,VW, VH*.10);cg.addColorStop(0,'rgba(255,219,159,.02)');cg.addColorStop(.5,'rgba(255,238,196,.16)');cg.addColorStop(1,'rgba(255,219,159,.02)');ctx.fillStyle=cg;ctx.fillRect(0,VH*.12,VW,VH*.018);ctx.fillRect(0,VH*.22,VW,VH*.010);
++ // subtle marble floor highlights
++ ctx.strokeStyle='rgba(255,255,255,.055)';for(let k=0;k<9;k++){ctx.beginPath();const yy=VH*(.61+k*.045);ctx.moveTo(0,yy);ctx.bezierCurveTo(VW*.28,yy-18,VW*.65,yy+15,VW,yy-8);ctx.stroke();}
++
+  const rays=Math.max(300,Math.round(VW/3.2)),zbuf=new Float32Array(rays),colW=VW/rays,proj=(VH*.82)/Math.tan(FOV/2);
+- for(let i=0;i<rays;i++){const ra=ang-FOV/2+(i+.5)/rays*FOV,dx=Math.cos(ra),dy=Math.sin(ra),hit=rayHit(px,py,dx,dy);if(!hit){zbuf[i]=99;continue;}const dist=Math.max(.001,hit.d*Math.cos(ra-ang));zbuf[i]=dist;const wallH=Math.min(VH*1.75,proj/dist),y0=(VH-wallH)/2;ctx.fillStyle=matColor(hit.w.mat,hit.u,dist);ctx.fillRect(i*colW,y0,colW+1,wallH);if(hit.w.kind==='glass'){ctx.fillStyle='rgba(116,226,245,.18)';ctx.fillRect(i*colW,y0,colW+1,wallH);ctx.fillStyle='rgba(255,255,255,.16)';if((i%18)<2)ctx.fillRect(i*colW,y0,colW+1,wallH);}}
++ for(let i=0;i<rays;i++){const ra=ang-FOV/2+(i+.5)/rays*FOV,dx=Math.cos(ra),dy=Math.sin(ra),hit=rayHit(px,py,dx,dy);if(!hit){zbuf[i]=99;continue;}const dist=Math.max(.001,hit.d*Math.cos(ra-ang));zbuf[i]=dist;const wallH=Math.min(VH*1.75,proj/dist),y0=(VH-wallH)/2;const tkey=textureForWall(hit.w),tim=texImages[tkey];
++    if(photoTextureMode&&tim&&tim.complete&&tim.naturalWidth>0){
++      const sx=Math.max(0,Math.min(tim.naturalWidth-2,Math.floor((1-hit.u)*(tim.naturalWidth-2))));
++      ctx.drawImage(tim,sx,0,2,tim.naturalHeight,i*colW,y0,colW+1,wallH);
++      const shade=Math.min(.62,Math.max(.04,(dist-2)/24));ctx.fillStyle=`rgba(4,10,14,${shade})`;ctx.fillRect(i*colW,y0,colW+1,wallH);
++      if((i%34)<2){ctx.fillStyle='rgba(255,238,205,.10)';ctx.fillRect(i*colW,y0,colW+1,wallH);}
++    }else{ctx.fillStyle=matColor(hit.w.mat,hit.u,dist);ctx.fillRect(i*colW,y0,colW+1,wallH);}
++    if(hit.w.kind==='glass'){ctx.fillStyle='rgba(116,226,245,.12)';ctx.fillRect(i*colW,y0,colW+1,wallH);ctx.fillStyle='rgba(225,250,255,.22)';if((i%18)<2)ctx.fillRect(i*colW,y0,colW+1,wallH);}}
+  // objects: far to near, z-buffer center test
+  const visible=[];for(const o of objs){const dx=o.x-px,dy=o.y-py,dist=Math.hypot(dx,dy),a=Math.atan2(dy,dx);let rel=a-ang;while(rel>Math.PI)rel-=Math.PI*2;while(rel<-Math.PI)rel+=Math.PI*2;if(Math.abs(rel)>FOV*.64||dist<.25)continue;const sx=VW/2+(rel/(FOV/2))*VW/2,ri=Math.max(0,Math.min(rays-1,Math.floor(sx/colW)));if(dist<zbuf[ri]+.25)visible.push({o,dist,sx});}visible.sort((a,b)=>b.dist-a.dist);for(const v of visible){const baseY=VH*.5+(proj/v.dist)*.38;drawObject(v.o,v.sx,baseY,0,v.dist);}
+  // subtle vignette
+@@ -94,7 +120,7 @@
+ function drawMap(){mctx.clearRect(0,0,mapCanvas.width,mapCanvas.height);const w=mapCanvas.width,h=mapCanvas.height;const X=x=>(x+16.5)/33*w,Y=y=>(y+10.8)/19*h;mctx.fillStyle='rgba(0,0,0,.0)';mctx.fillRect(0,0,w,h);mctx.strokeStyle='rgba(30,50,60,.55)';mctx.lineWidth=1.5;for(const wall of walls){mctx.beginPath();mctx.moveTo(X(wall.ax),Y(wall.ay));mctx.lineTo(X(wall.bx),Y(wall.by));mctx.stroke();}mctx.fillStyle='#ff553a';mctx.beginPath();mctx.arc(X(px),Y(py),6,0,Math.PI*2);mctx.fill();mctx.strokeStyle='#ff553a';mctx.lineWidth=3;mctx.beginPath();mctx.moveTo(X(px),Y(py));mctx.lineTo(X(px+Math.cos(ang)*1.2),Y(py+Math.sin(ang)*1.2));mctx.stroke();}
+ let last=performance.now();function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;update(dt);drawScene();if(mapVisible)drawMap();frames++;if(now-fpsStamp>1000){lastFps=Math.round(frames*1000/(now-fpsStamp));fpsEl.textContent=lastFps+' FPS';frames=0;fpsStamp=now;autoTune();}requestAnimationFrame(loop)}requestAnimationFrame(loop);
+ // inputs: always synchronous, never pointer lock
+-addEventListener('keydown',e=>{if(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight','ArrowLeft','ArrowRight'].includes(e.code)){keys[e.code]=true;e.preventDefault();}if(e.code==='KeyE'){interact();e.preventDefault();}if(e.code==='KeyM'){mapVisible=!mapVisible;document.getElementById('mapWrap').classList.toggle('hidden',!mapVisible);e.preventDefault();}if(e.code==='KeyR'){reset();e.preventDefault();}if(e.code==='KeyH'){manualQuality=manualQuality===0?1:manualQuality===1?-1:0;qualityEl.textContent=manualQuality===1?'FORCED HD':manualQuality===-1?'PERFORMANCE':'AUTO-HD';renderScale=manualQuality===1?1:manualQuality===-1?.58:.82;resize();showToast('Quality: '+qualityEl.textContent);e.preventDefault();}});addEventListener('keyup',e=>keys[e.code]=false);addEventListener('blur',()=>{keys={};dragging=false});
++addEventListener('keydown',e=>{if(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight','ArrowLeft','ArrowRight'].includes(e.code)){keys[e.code]=true;e.preventDefault();}if(e.code==='KeyE'){interact();e.preventDefault();}if(e.code==='KeyM'){mapVisible=!mapVisible;document.getElementById('mapWrap').classList.toggle('hidden',!mapVisible);e.preventDefault();}if(e.code==='KeyR'){reset();e.preventDefault();}if(e.code==='KeyH'){manualQuality=manualQuality===0?1:manualQuality===1?-1:0;qualityEl.textContent=manualQuality===1?'FORCED HD':manualQuality===-1?'PERFORMANCE':'AUTO-HD';renderScale=manualQuality===1?1:manualQuality===-1?.58:.82;resize();showToast('Quality: '+qualityEl.textContent);e.preventDefault();}if(e.code==='KeyV'){photoTextureMode=!photoTextureMode;showToast(photoTextureMode?'Photo-textured walls ON':'Photo-textured walls OFF');e.preventDefault();}});addEventListener('keyup',e=>keys[e.code]=false);addEventListener('blur',()=>{keys={};dragging=false});
+ canvas.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;canvas.setPointerCapture?.(e.pointerId);canvas.focus();});canvas.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;ang+=dx*.0042;});canvas.addEventListener('pointerup',e=>{dragging=false;try{canvas.releasePointerCapture?.(e.pointerId)}catch{}});canvas.addEventListener('contextmenu',e=>e.preventDefault());
+ reset();
+ })();

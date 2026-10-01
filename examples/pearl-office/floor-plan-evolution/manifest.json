@@ -1,0 +1,44 @@
+[
+  {
+    "file": "01-plan-v1-0.png",
+    "visible_version": "v1.0",
+    "zip_entry_as_decoded_by_python": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 17_29_09.png",
+    "sha256": "fce50d6eaab5658fb98d0845e1b3f70b62b45f4057edab3791bf224a481efa99",
+    "authority": "planning illustration explicitly not to scale; red annotations retained when present"
+  },
+  {
+    "file": "02-plan-v1-1.png",
+    "visible_version": "v1.1",
+    "zip_entry_as_decoded_by_python": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 17_50_54.png",
+    "sha256": "1dbc476f340e95d7ac71971bab2c5926859530e1ef330020aa9efb6f7807fb59",
+    "authority": "planning illustration explicitly not to scale; red annotations retained when present"
+  },
+  {
+    "file": "03-plan-v1-2.png",
+    "visible_version": "v1.2",
+    "zip_entry_as_decoded_by_python": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 18_02_27.png",
+    "sha256": "a5362ffd82557731a1e4a0651575232a4375ec6ba5b71963c2158db85d74ea84",
+    "authority": "planning illustration explicitly not to scale; red annotations retained when present"
+  },
+  {
+    "file": "04-plan-v1-3.png",
+    "visible_version": "v1.3",
+    "zip_entry_as_decoded_by_python": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 18_16_37.png",
+    "sha256": "d7932334f7fe483d89f1c7c7fb98f043a9aabc5251f228c56e415b9cb2dddd10",
+    "authority": "planning illustration explicitly not to scale; red annotations retained when present"
+  },
+  {
+    "file": "05-plan-v1-4.png",
+    "visible_version": "v1.4",
+    "zip_entry_as_decoded_by_python": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 22_46_40.png",
+    "sha256": "4d7e1e26142c3558950a120682381e293b5f8904513f944fba454e82d6de0d47",
+    "authority": "planning illustration explicitly not to scale; red annotations retained when present"
+  },
+  {
+    "file": "06-plan-v1-5.png",
+    "visible_version": "v1.5",
+    "zip_entry_as_decoded_by_python": "floor_plan_upgrades/ChatGPT \u03c3\u00a2\u255b\u03c3\u00e2\u00c5 2026\u03c3\u2563\u25249\u00b5\u00a3\u00ea30\u00b5\u00f9\u00d1 22_52_12.png",
+    "sha256": "3da3d7a1780cfcbeb59f3bfad23ad827e394c71ac495f4422726b63a3604f97d",
+    "authority": "planning illustration explicitly not to scale; red annotations retained when present"
+  }
+]
