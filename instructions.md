@@ -9,11 +9,12 @@ sources and hash provenance. Never claim a ZIP was inspected if it was only name
    entrance, doors, circulation, furniture, materials, intended interactions,
    browser/device, visual target and performance budget. Distinguish measurements
    from assumptions. Use `ingest` and the evidence ledger.
-For a custom discovery game, map each success criterion to ordered
-`gameplay.objectives` and furniture interaction IDs. Read
-[the fresh-user trial](docs/external-user-trial.md) for the complete synthetic
-example and delegation/evidence handoffs. Use the owner's actual measurements and
-browser targets; fixture approval never approves their real space.
+
+   For a custom discovery game, map each success criterion to ordered
+   `gameplay.objectives` and furniture interaction IDs. Read
+   [the fresh-user trial](docs/external-user-trial.md) for the complete synthetic
+   example and delegation/evidence handoffs. Use the owner's actual measurements and
+   browser targets; fixture approval never approves their real space.
 
 2. **Interrogate:** ask the next small set of blocking questions, using
    `interrogate` and `prompts/`. Unknown is a valid answer; it is not approval.

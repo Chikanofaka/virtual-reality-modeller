@@ -1,5 +1,11 @@
 # Release validation — 0.1.0
 
+This page preserves the original release evidence. For the later local repairs,
+53 Python / 19 JavaScript tests, new-user delivery loop and Blender compatibility
+checks, read the [2026-10-04 local audit](local-audit-2026-10-04.md) and
+[2026-10-05 onboarding follow-up](onboarding-review-2026-10-05.md). The original
+results below do not describe the current modified build.
+
 Delivery recorded on **2026-10-02 (Asia/Tokyo)**. These results apply to the
 delivered source and the Pearl build **`625373a63b5668d1`**. Tests used macOS,
 Python 3.9, Node 24.19.0 and installed Google Chrome 154.0.8037.92 in headless

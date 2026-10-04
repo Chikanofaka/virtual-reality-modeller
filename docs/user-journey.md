@@ -24,8 +24,8 @@ Planning lock is a scope agreement, not a guarantee of exact architectural accur
 2. Click Enter. Verify the canvas has focus and no blocking error appears.
 3. Hold W, then A/S/D. Position should change continuously; release must stop movement.
 4. Drag continuously while walking. View and direction must remain synchronized.
-5. Walk from entry through the required destinations, through the approved central portal and back to entry.
-6. Trigger an interaction, toggle the minimap and reset.
+5. Walk from entry through the project's required destinations and approved openings, then back to entry. The central portal belongs to the Pearl example only.
+6. Complete the project's required interactions, check its completion condition, toggle the minimap and reset. For ordered objectives, also try a later target first and verify reset permits replay.
 7. Switch away while holding a movement key, return, and verify no stuck movement.
 8. Report any failure with the build/browser identity, reproduction steps and telemetry. A screenshot alone does not establish presented motion; use a short recording when needed.
 

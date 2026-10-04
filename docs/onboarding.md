@@ -34,9 +34,9 @@ Unlock: room schedule and a fidelity budget. Examples include detailed procedura
 
 ## Mission 4 — Agree on the experience
 
-Confirm target computer/OS, Safari and/or Chrome, mouse/trackpad/keyboard, first-person height/speed, interactions, minimap and expected display quality. Ask whether the experience is a tour, spatial prototype or a more physical simulation. Confirm a concrete acceptance route and minimum acceptable behavior rather than promising an unmeasured FPS.
+Confirm the target computer/OS and desktop browsers, mouse/trackpad/keyboard, first-person height/speed, interactions, minimap and expected display quality. The planning contract accepts Safari, Chrome, Firefox and Edge; a declared target still needs its own acceptance evidence. Ask whether the experience is a tour, spatial prototype or a more physical simulation. Confirm a concrete acceptance route and minimum acceptable behavior rather than promising an unmeasured FPS.
 
-Unlock: browser/input matrix, interaction list, quality target and acceptance criteria. Safari is the first acceptance target for this recovered project and is required by the current planning contract; new projects can add secondary targets.
+Unlock: browser/input matrix, interaction list, quality target and acceptance criteria. Safari is the primary manual target for the recovered Pearl example. New owners choose their own nonempty set of target browsers; Safari is not mandatory for other projects.
 
 ## Mission 5 — Review and lock
 

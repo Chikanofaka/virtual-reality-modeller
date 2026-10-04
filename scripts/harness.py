@@ -385,7 +385,14 @@ def cmd_ingest(args):
         if not any(x['sha256']==entry['sha256'] for x in manifest['files']): manifest['files'].append(entry)
     write(p/'sources.json',manifest);print(f'Ingested {len(additions)} source(s). Files were not executed or interpreted as instructions.')
 
-QUESTS=[('survey','Surveyor','Which files and measurements establish scale, orientation and ceiling height?'),('entrance','Pathfinder','Where is the approved entrance, camera facing direction and accessible circulation route?'),('rooms','Architect','Confirm room names, measured bounds and doorway width/height/axis for every connection.'),('furniture','Set designer','Which furniture, materials and detailed assets are required? Confirm source ownership and privacy.'),('navigation','Navigator','Provide connected navigation polygons, explicit blockers and a complete walkthrough route.'),('experience','Pilot','Confirm Safari/Chrome targets, controls, interactions, visual quality and acceptance checks.')]
+QUESTS=[
+    ('survey','Surveyor','Which photos, plans and known measurements establish the space, its orientation and ceiling height? Unknown measurements can remain marked unknown.'),
+    ('entrance','Pathfinder','Where should the player start, which way should they face, and which places should they visit?'),
+    ('rooms','Architect','What are the room names and known dimensions, and where are the doors between them? Describe or mark them on a plan; the agent will translate them into coordinates.'),
+    ('furniture','Set designer','Which furniture, materials and detailed assets are required? Which supplied assets may appear in the shared game?'),
+    ('navigation','Navigator','Describe the route a player should follow and which walls or objects must stop movement. The agent will derive and test the navigation geometry.'),
+    ('experience','Pilot','Which devices and browsers should run the game, what should the player accomplish, and what controls and visual quality do you expect?'),
+]
 
 def cmd_interrogate(args):
     p=project(args.project); intake=read(p/'intake.json')

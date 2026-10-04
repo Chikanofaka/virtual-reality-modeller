@@ -186,8 +186,10 @@ or set `BROWSER_EXECUTABLE` to local Chrome):
 node tests/browser-smoke.mjs 'http://127.0.0.1:PORT/?build=BUILD_ID'
 ```
 
-See [browser validation](docs/browser-validation.md) and
-[validation report](docs/validation-report.md) for what was actually tested.
+See [browser validation](docs/browser-validation.md),
+[original release validation](docs/validation-report.md),
+[local audit](docs/local-audit-2026-10-04.md), and
+[onboarding follow-up](docs/onboarding-review-2026-10-05.md) for the exact builds and checks tested.
 
 | Platform | Support scope |
 |---|---|

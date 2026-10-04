@@ -50,5 +50,5 @@ Evidence origins are defined in [version evolution](version-evolution.md). Sever
 - [ ] No repeated runtime errors during play; interaction factories return usable objects.
 - [ ] Package identity, port behavior and cache policy have been tested.
 - [ ] Detailed scene and agreed resolution are retained, or a change is explicitly accepted.
-- [ ] Safari and Chrome results identify exactly which checks ran and which remain manual.
+- [ ] Results for each declared target browser identify exactly which checks ran and which remain manual.
 - [ ] Source asset rights, known limitations, launch guide and package hash are recorded.

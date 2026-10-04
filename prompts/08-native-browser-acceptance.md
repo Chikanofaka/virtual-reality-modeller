@@ -1,4 +1,4 @@
-# Native Safari / Chrome playtest record
+# Native target-browser playtest record
 
 Build badge and module hash: {{identity}}
 Browser/version + OS: {{environment}}
@@ -14,9 +14,9 @@ Run the same locked scene in each target browser. For each item mark PASS / FAIL
 3. Hold physical W/A/S/D; position changes smoothly and stops on release.
 4. Hold each virtual movement button; release outside the control stops movement.
 5. Walk and drag simultaneously; every intermediate view presents continuously.
-6. Reach each required destination, traverse the intended central portal and complete the return route.
+6. Reach each required destination through this project's approved openings and complete the return route. Pearl's central portal is example-specific.
 7. Intended barriers block; approved openings remain passable; visible floor supports the route.
-8. Interaction, minimap, reset and quality mode respond once per action.
+8. Required interactions reach the expected completion state; ordered goals cannot be skipped. Reset permits replay. Minimap and quality mode respond once per action.
 9. Hold a key, switch away, return: no stuck movement or drag.
 10. Resize/reopen; identity and scene fidelity stay correct.
 
