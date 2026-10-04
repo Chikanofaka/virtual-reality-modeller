@@ -1,0 +1,8 @@
+{
+  "survey": "Synthetic trial only: authored 8 by 6 metre studio with 2.8 metre ceiling; north is negative Z. Source is templates/external-user-game.json, derived from measured-studio.json. No real photographs or survey were supplied.",
+  "entrance": "Synthetic south entrance at x=0, z=3, 1.4 metres wide and 2.3 metres high. Start at (0,1.65,2.2), facing negative Z. These are test-fixture values, not approval of a real building.",
+  "rooms": "One synthetic studio spans x=-4..4 and z=-3..3 on floorY=0. Its room access point is (0,0); the south opening is the only external door. No stairs, additional rooms or architectural fidelity are claimed.",
+  "furniture": "Use the authored procedural work-desk and reading-chair. Both have E interactions. The desk blocks movement; the chair is decorative. No source photos, personal information or external models are distributed.",
+  "navigation": "Use the explicit wall segments, desk blocker and 0.22 metre player radius. Walk from (0,2.2) via (2,1), (2,-2), (0,-2) for the desk, then (2,-2), (2,1) for the chair and return to (0,2.2).",
+  "experience": "Desktop Safari and Chrome trial: WASD, drag-look, E interactions, minimap and reset. Inspect work-desk then reading-chair to complete the game; early chair interaction must not skip the desk, and reset restores the first objective. Procedural boxes/furniture are the accepted synthetic visual scope; actual browser acceptance needs separately recorded observations."
+}

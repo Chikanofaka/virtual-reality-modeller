@@ -126,6 +126,28 @@ class WorkflowTests(unittest.TestCase):
     def test_manifest_does_not_ignore_nested_integrity_named_asset(self):
         dest=self.build();asset=dest/'assets'/'integrity.json';asset.parent.mkdir();asset.write_text('untracked')
         with self.assertRaisesRegex(ValueError,'integrity'):h.verify_build(dest)
+    def test_current_build_pointer_identity_must_match(self):
+        self.build();record=h.read(self.p/'current-build.json');record['buildId']='wrong-build';h.write(self.p/'current-build.json',record)
+        with self.assertRaisesRegex(ValueError,'identity'):h.current_build(self.p)
+    def test_asset_change_during_copy_cannot_create_a_build(self):
+        source=self.p/'selected.txt';source.write_text('approved asset')
+        plan=h.read(self.p/'planning.json');plan['assets']=[{'id':'selected','type':'document','path':source.name,'sha256':h.sha(source)}];h.write(self.p/'planning.json',plan)
+        self.approve();original=shutil.copyfile
+        def mutate_copy(src,dst,*args,**kwargs):
+            result=original(src,dst,*args,**kwargs)
+            if pathlib.Path(src).resolve()==source.resolve():pathlib.Path(dst).write_text('changed while copying')
+            return result
+        with mock.patch.object(h.shutil,'copyfile',side_effect=mutate_copy):self.call('build',self.p,expected=2)
+        self.assertFalse((self.p/'current-build.json').exists())
+        self.assertFalse(list(self.p.glob('builds/*')))
+    def test_plan_change_during_build_cannot_publish_stale_identity(self):
+        self.approve();original=h.build_manifest
+        def change_plan(directory):
+            plan=h.read(self.p/'planning.json');plan['runtime']['speed']=3;h.write(self.p/'planning.json',plan)
+            return original(directory)
+        with mock.patch.object(h,'build_manifest',side_effect=change_plan):self.call('build',self.p,expected=2)
+        self.assertFalse((self.p/'current-build.json').exists())
+        self.assertFalse(list(self.p.glob('builds/*')))
     def test_server_has_fresh_port_identity_and_no_cache(self):
         dest=self.build();server=h.make_server(dest);thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
         try:

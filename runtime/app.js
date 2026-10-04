@@ -5,6 +5,7 @@ import {createNavigation,pearlNavigationConfig} from './navigation.js';
 import {attachInput} from './input.js';
 import {verifyBuildIdentity} from './build-identity.js';
 import {loadModels} from './assets.js';
+import {createGameplay} from './gameplay.js';
 
 const $=id=>document.getElementById(id);
 const diagnostics={ready:false,started:false,frames:0,renderCount:0,simulationTicks:0,errors:[],build:null,actualPort:location.port};
@@ -28,10 +29,12 @@ async function boot() {
   const pearl=config.scene?.mode==='pearl-v7';
   const visual=pearl?createPearlScene(THREE,config):createPlannedScene(THREE,config);
   const {scene,sun,interactables,zones,dynamicGlow}=visual;
+  const gameplay=createGameplay(config.gameplay);
   const imported=await loadModels(config,scene,message=>{$('startDescription').textContent=message;});
   diagnostics.importedModels=imported.models;diagnostics.importedMeshes=imported.meshes;
   const navigation=createNavigation(config.navigation?.polygons?.length?config:pearlNavigationConfig());
-  for(const item of interactables) if(!item.obj?.position)throw new Error(`Invalid interactable: ${item.label}. Scene adapter must return actual meshes.`);
+  for(const item of interactables) if(!item.obj?.position)throw new Error(`Invalid interactable: ${item.label}. Scene adapter must return positioned objects.`);
+  if(gameplay.enabled)for(const objective of config.gameplay.objectives)if(!interactables.some(item=>item.id===objective.targetId))throw new Error(`Objective ${objective.id} has no interactive target: ${objective.targetId}`);
   const spawn=config.navigation?.spawn||config.entrance?.position||[-11.75,1.68,2.35];
   const eyeHeight=config.runtime?.eyeHeight||spawn[1]||1.68;
   const initialYaw=config.entrance?.yaw??-.95;
@@ -52,8 +55,16 @@ async function boot() {
   diagnostics.interactableCount=interactables.length;
   function toast(text){$('toast').textContent=text;$('toast').classList.add('visible');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.remove('visible'),2600);}
   function objective(text){$('objective').textContent='Objective: '+text;}
-  function reset(){camera.position.set(spawn[0],eyeHeight,spawn[2]);yaw=initialYaw;pitch=0;stage=0;input?.reset('reset to entrance');objective(pearl?'check in at Reception (E)':'explore your planned space');}
+  function updateObjective(){objective(gameplay.enabled?(gameplay.snapshot().currentObjective?.label||gameplay.completionMessage):pearl?'check in at Reception (E)':'explore your planned space');}
+  function findNearest(){
+    let best=null,distance=2.15;
+    for(const item of interactables){const d=Math.hypot(camera.position.x-item.obj.position.x,camera.position.z-item.obj.position.z);if(d<distance){distance=d;best=item;}}
+    return best;
+  }
+  function reset(){camera.position.set(spawn[0],eyeHeight,spawn[2]);yaw=initialYaw;pitch=0;stage=0;gameplay.reset();nearest=null;waypoint=null;input?.reset('reset to entrance');updateObjective();}
   function interact() {
+    // Actions use the current location, even between throttled HUD updates.
+    nearest=findNearest();
     if(!nearest){toast('Move closer to an interactive object.');return;}
     if(['meeting','wine'].includes(nearest.type)) {
       // Clone shared source materials before changing one interactive feature.
@@ -61,6 +72,10 @@ async function boot() {
       nearest.obj.material.emissiveIntensity=nearest.obj.material.emissiveIntensity>4?2.3:5.5;
     }
     toast(nearest.message||nearest.label);
+    if(gameplay.enabled){
+      if(gameplay.interact(nearest.id)){updateObjective();if(gameplay.snapshot().complete)toast(gameplay.completionMessage);}
+      return;
+    }
     if(stage===0&&nearest.type==='reception'){stage=1;objective('follow the circulation loop to the Wine Room');}
     else if(stage===1&&nearest.type==='wine'){stage=2;objective('enter the Pearl Office through its southeast opening');}
     else if(stage===2&&nearest.type==='pearl'){stage=3;objective('tour complete — explore freely');toast('Pearl Office console online. Tour complete.');}
@@ -74,7 +89,7 @@ async function boot() {
   reset();
   $('startTitle').textContent=config.project?.name||(pearl?'Pearl Office':'Virtual Space');
   $('eyebrow').textContent=pearl?'Pearl Office / V7 preserved scene':'Virtual Space / approved planning pack';
-  $('startDescription').textContent=pearl?'Explore all 13 detailed zones with WASD and click-drag look. Check in at Reception, visit Wine, then reach the Pearl Office console. The movement pad helps diagnose keyboard focus.':'Your approved plan is ready. Click Enter, use WASD to walk, drag to look, and click the minimap to place a destination marker.';
+  $('startDescription').textContent=pearl?'Explore all 13 detailed zones with WASD and click-drag look. Check in at Reception, visit Wine, then reach the Pearl Office console. The movement pad helps diagnose keyboard focus.':gameplay.enabled?'Your space is ready. Walk with WASD, drag to look, and press E near objects to complete the objectives in order.':'Your approved plan is ready. Click Enter, use WASD to walk, drag to look, and click the minimap to place a destination marker.';
   $('enter').textContent='PREPARING FIRST FRAME…';
   $('enter').onclick=()=>{if(!diagnostics.ready)return;started=true;diagnostics.started=true;$('start').hidden=true;input.focus();toast('WASD move · drag look · E interact · M minimap · R reset');};
   $('interactButton').onclick=()=>{if(started){interact();input.focus();}};
@@ -104,8 +119,7 @@ async function boot() {
     return 'Circulation / entrance';
   }
   function updateHUD(){
-    let best=null,distance=2.15;
-    for(const item of interactables){const d=Math.hypot(camera.position.x-item.obj.position.x,camera.position.z-item.obj.position.z);if(d<distance){distance=d;best=item;}}
+    const best=findNearest();
     nearest=best;$('interaction').textContent=best?'Press E — '+best.label:'';
     $('interaction').classList.toggle('visible',!!best);
     $('zone').textContent='Current zone: '+currentZone();
@@ -114,9 +128,9 @@ async function boot() {
     if(waypoint){const distance=Math.hypot(camera.position.x-waypoint.x,camera.position.z-waypoint.z);$('mapLabel').textContent=`Destination ${distance.toFixed(1)} m · click to change`;if(distance<.7){waypoint=null;toast('Destination reached');}}
     paintMap();
   }
-  diagnostics.snapshot=()=>({ready:diagnostics.ready,started,buildId:build.buildId,version:build.version,actualPort:location.port,position:{x:camera.position.x,y:camera.position.y,z:camera.position.z},yaw,pitch,input:input.snapshot(),frames:diagnostics.frames,renderCount:diagnostics.renderCount,simulationTicks:diagnostics.simulationTicks,meshCount:sceneMeshCount,interactableCount:interactables.length,importedModels:imported.models,importedMeshes:imported.meshes,nearest:nearest?.label||null,errors:[...diagnostics.errors]});
+  diagnostics.snapshot=()=>({ready:diagnostics.ready,started,buildId:build.buildId,planHash:build.planHash,runtimeHash:build.runtimeHash,version:build.version,actualPort:location.port,position:{x:camera.position.x,y:camera.position.y,z:camera.position.z},yaw,pitch,input:input.snapshot(),frames:diagnostics.frames,renderCount:diagnostics.renderCount,simulationTicks:diagnostics.simulationTicks,meshCount:sceneMeshCount,interactableCount:interactables.length,importedModels:imported.models,importedMeshes:imported.meshes,nearest:nearest?.label||null,nearestId:nearest?.id||null,gameplay:gameplay.snapshot(),errors:[...diagnostics.errors]});
   // Explicit test mode is only for local automated navigation/interaction smoke checks.
-  if(new URLSearchParams(location.search).get('test')==='1')diagnostics.test={setPosition(x,z){if(!navigation.canMove(x,z))throw new Error('Test position is not walkable');camera.position.set(x,eyeHeight,z);},canMove:navigation.canMove};
+  if(new URLSearchParams(location.search).get('test')==='1')diagnostics.test={setPosition(x,z){if(!navigation.canMove(x,z))throw new Error('Test position is not walkable');camera.position.set(x,eyeHeight,z);},setYaw(value){if(!Number.isFinite(value))throw new Error('Test yaw must be finite');yaw=value;},canMove:navigation.canMove};
   addEventListener('resize',()=>resizePending=true);
   canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();input.reset('WebGL context lost');fatal(new Error('Graphics context was lost. Reload this build; try Balanced quality and close other GPU-heavy tabs.'));});
   updateHUD();

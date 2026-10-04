@@ -182,6 +182,13 @@ def _validate_config(c, connectivity=True):
     if not isinstance(c,dict): fail('Planning pack must be a JSON object')
     for required in ('project','provenance','shell','rooms','doors','entrance','navigation','furniture','materials','assets','runtime','scene'):
         if required not in c: fail(f'Missing required planning field: {required}')
+    for name in ('project','provenance','shell','entrance','navigation','materials','runtime','scene'):
+        if not isinstance(c[name],dict): fail(f'{name} must be an object')
+    for name in ('rooms','doors','furniture','assets'):
+        if not isinstance(c[name],list) or not all(isinstance(item,dict) for item in c[name]): fail(f'{name} must be a list of objects')
+    for name in ('polygons','blockers','segments','routes'):
+        value=c['navigation'].get(name,[])
+        if not isinstance(value,list) or not all(isinstance(item,dict) for item in value): fail(f'navigation.{name} must be a list of objects')
     if c.get('schema_version')!='1.0': fail('schema_version must be 1.0')
     if c.get('units')!='m': fail('Plans must be explicitly normalized to metres (units=m)')
     if not isinstance(c.get('project'),dict) or not c['project'].get('name') or not re.fullmatch('[a-z0-9][a-z0-9-]{0,63}',c['project'].get('id','')): fail('project requires name and stable lowercase id')
@@ -196,7 +203,8 @@ def _validate_config(c, connectivity=True):
     for key,low,high in [('playerRadius',.1,1),('eyeHeight',.5,2.5),('speed',.2,6)]:
         if not finite(rt.get(key)) or not low<=rt[key]<=high: fail(f'runtime.{key} must be between {low} and {high}')
     if rt['eyeHeight']>=shell['height']: fail('eyeHeight must be below ceiling')
-    if not isinstance(rt.get('browsers'),list) or 'safari' not in rt['browsers'] or not set(rt['browsers'])<= {'safari','chrome','firefox','edge'}: fail('Target browsers must include safari and use supported names')
+    browsers=rt.get('browsers')
+    if not isinstance(browsers,list) or not browsers or not all(isinstance(b,str) and b in {'safari','chrome','firefox','edge'} for b in browsers) or len(set(browsers))!=len(browsers): fail('Target browsers must be a nonempty list of unique supported names')
     rooms=c.get('rooms')
     if not isinstance(rooms,list) or not rooms: fail('At least one measured room is required')
     ids=set()
@@ -255,6 +263,20 @@ def _validate_config(c, connectivity=True):
         if not isinstance(value,str) or not re.fullmatch('#[0-9a-fA-F]{6}',value): fail(f'materials.{name} requires an explicit hex color')
     scene=c.get('scene',{})
     if scene.get('mode') not in ('pearl-v7','procedural','imported-glb'): fail('Scene mode must be pearl-v7, procedural, or imported-glb')
+    if 'gameplay' in c:
+        gameplay=c['gameplay']
+        if scene['mode']=='pearl-v7': fail('Custom gameplay requires a procedural or imported-glb scene')
+        if not isinstance(gameplay,dict) or set(gameplay)!={'objectives','completionMessage'}: fail('gameplay requires objectives and completionMessage only')
+        if not isinstance(gameplay['completionMessage'],str) or not gameplay['completionMessage'].strip(): fail('gameplay.completionMessage must be a non-empty string')
+        objectives=gameplay['objectives']
+        if not isinstance(objectives,list) or not objectives: fail('gameplay.objectives must be a non-empty list')
+        interactive_ids={item['id'] for item in c['furniture'] if 'interaction' in item}
+        objective_ids=set()
+        for objective in objectives:
+            if not isinstance(objective,dict) or set(objective)!={'id','label','targetId'} or not all(isinstance(objective.get(k),str) and objective[k].strip() for k in ('id','label','targetId')): fail('Each gameplay objective requires id, label and targetId strings')
+            if objective['id'] in objective_ids: fail('gameplay objective ids must be unique')
+            objective_ids.add(objective['id'])
+            if objective['targetId'] not in interactive_ids: fail('gameplay targetId must refer to furniture with an interaction')
     if scene.get('mode')=='imported-glb' and not any(a.get('id')==scene.get('assetId') and a.get('type')=='model' for a in c['assets']): fail('imported-glb scene.assetId must reference a selected model asset')
     asset_ids=set()
     for asset in c.get('assets',[]):
@@ -265,6 +287,7 @@ def _validate_config(c, connectivity=True):
         if not re.fullmatch('[a-f0-9]{64}',asset.get('sha256','')): fail('Asset sha256 is required')
         if asset['type']=='model' and not asset['path'].lower().endswith('.glb'): fail('Model assets must use self-contained .glb files')
         if 'placement' in asset:
+            if not isinstance(asset['placement'],dict): fail('asset placement must be an object')
             for key in ('position','rotation','scale'): vector(asset['placement'].get(key),3,f'asset placement.{key}')
             if not all(0<v<=100 for v in asset['placement']['scale']): fail('Asset placement scale must be positive and <= 100')
     validate_structural_barriers(c)
@@ -308,6 +331,20 @@ def _validate_config(c, connectivity=True):
     if len(reached)!=len(cells): fail(f'Navigation is disconnected: {len(cells)-len(reached)} clearance-valid cells cannot reach spawn')
     for pt in targets:
         if nearest(pt) not in reached: fail('An approved route point is unreachable')
+    if 'gameplay' in c:
+        # Match the runtime's horizontal proximity and first-in-list tie rule.
+        # A connected floor alone cannot prove an objective can be activated.
+        interactive=[item for item in c['furniture'] if 'interaction' in item]
+        remaining={o['targetId'] for o in c['gameplay']['objectives']}
+        for ix,iz in reached:
+            x,z=minx+ix*step,minz+iz*step
+            closest=None;distance=2.15
+            for item in interactive:
+                d=math.hypot(x-item['position'][0],z-item['position'][2])
+                if d<distance: closest=item['id'];distance=d
+            remaining.discard(closest)
+            if not remaining: break
+        if remaining: fail('Gameplay targets have no reachable nearest-interaction approach: '+', '.join(sorted(remaining)))
     return {'walkableCells':len(cells),'connectedCells':len(reached),'gridStepMeters':step,'routePoints':len(targets),'method':'radius-disk samples, segment samples and 4-neighbor grid flood-fill; browser QA still required'}
 
 _VALIDATION_CACHE = {}
@@ -421,6 +458,8 @@ def cmd_build(args):
         write(temp/'config.json',config)
         write(temp/'build.json',{'buildId':build_id,'planHash':h,'runtimeHash':rh,'version':VERSION,'createdAt':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime())})
         write(temp/'integrity.json',{'files':build_manifest(temp)})
+        verify_build(temp)
+        if approved(p)!=h: fail('Planning inputs changed while building; review and approve the changed inputs')
         dest.parent.mkdir(exist_ok=True);temp.rename(dest)
     except Exception:
         shutil.rmtree(temp,ignore_errors=True);raise
@@ -432,7 +471,9 @@ def current_build(p):
     if not (p/'current-build.json').exists(): fail('No current build; run build first')
     record=read(p/'current-build.json');dest=(p/record['path']).resolve()
     if not dest.is_relative_to((p/'builds').resolve()) or not dest.is_dir(): fail('Invalid build path')
-    if read(dest/'build.json')['planHash']!=plan_hash(p): fail('Build no longer matches the planning lock')
+    metadata=read(dest/'build.json')
+    if metadata.get('buildId')!=record.get('buildId') or dest.name!=metadata.get('buildId'): fail('Current build identity does not match its directory and pointer')
+    if metadata['planHash']!=plan_hash(p): fail('Build no longer matches the planning lock')
     return dest
 
 def verify_build(dest):
@@ -450,11 +491,54 @@ def verify_build(dest):
         if asset['type']=='model': inspect_glb(path)
     return validate_config(config)
 
+def structural_validation(p,dest=None):
+    """Fresh structural evidence, explicitly separate from browser acceptance."""
+    config=read(p/'planning.json');result=validate_config(config);h=plan_hash(p);build_id=None
+    if dest is not None:
+        result['build']=verify_build(dest)
+        metadata=read(dest/'build.json')
+        if metadata['planHash']!=h: fail('Build no longer matches the planning lock')
+        build_id=metadata['buildId']
+    return {'passed':True,'evidenceType':'structural','scope':'planning-and-build' if dest is not None else 'planning-only',
+            'buildId':build_id,'planHash':h,'generatedAt':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
+            'result':result,'targetBrowsers':config['runtime']['browsers'],'automatedBrowserEvidence':{'status':'not-supplied'},
+            'browserAcceptance':'unverified until manual walkthroughs of declared target browsers are recorded'}
+
+def supplied_browser_evidence(path,validation):
+    """Check supplied report consistency; never claim to have rerun its checks."""
+    path=pathlib.Path(path).expanduser().resolve()
+    if path.stat().st_size>1_000_000: fail('Browser report exceeds the 1 MB limit')
+    raw=path.read_bytes();report=json.loads(raw)
+    if not isinstance(report,dict) or report.get('passed') is not True: fail('Browser report must declare passed: true')
+    if report.get('buildId')!=validation['buildId']: fail('Browser report buildId does not match the packaged build')
+    if 'planHash' in report and report['planHash']!=validation['planHash']: fail('Browser report planHash does not match the packaged build')
+    checks=report.get('checks')
+    if not isinstance(checks,list) or not checks: fail('Browser report must contain nonempty checks')
+    for check in checks:
+        if not isinstance(check,dict) or not isinstance(check.get('check'),str) or not check['check'].strip(): fail('Browser report contains an invalid check')
+        if 'passed' in check and check['passed'] is not True: fail('Browser report contains a failed check')
+    for field in ('errors','externalRequests'):
+        if field in report and report[field]!=[]: fail(f'Browser report contains {field}')
+    if 'final' in report:
+        final=report['final']
+        if not isinstance(final,dict): fail('Browser report final snapshot is invalid')
+        if 'buildId' in final and final['buildId']!=validation['buildId']: fail('Browser report final buildId does not match the packaged build')
+        if final.get('errors',[])!=[]: fail('Browser report final snapshot contains errors')
+    metadata={'status':'supplied','evidenceType':'supplied-automated-browser-report',
+              'file':'browser-report.json','sha256':hashlib.sha256(raw).hexdigest(),
+              'buildId':report['buildId'],'planHashPresent':'planHash' in report,
+              'limitations':['Supplied report checked for consistency; browser checks were not rerun by package.',
+                             'Automated evidence does not establish manual acceptance for declared target browsers.']}
+    for field in ('browser','browserVersion'):
+        if field in report:
+            if not isinstance(report[field],str) or not report[field].strip(): fail(f'Browser report {field} must be a nonempty string')
+            metadata[field]=report[field]
+    return raw,metadata
+
 def cmd_validate(args):
-    p=project(args.project);result=validate_config(read(p/'planning.json'));plan_hash(p)
-    if args.build: result['build']=verify_build(current_build(p))
-    write(p/'validation.json',{'passed':True,'result':result,'browserAcceptance':'unverified until actual Safari and Chrome manual walkthroughs are recorded'})
-    print(json.dumps({'passed':True,**result},indent=2))
+    p=project(args.project);report=structural_validation(p,current_build(p) if args.build else None)
+    write(p/'validation.json',report)
+    print(json.dumps(report,indent=2))
 
 class BuildHandler(http.server.SimpleHTTPRequestHandler):
     extensions_map={**http.server.SimpleHTTPRequestHandler.extensions_map,'.js':'text/javascript','.mjs':'text/javascript','.glb':'model/gltf-binary','.json':'application/json'}
@@ -494,19 +578,38 @@ def cmd_play(args):
     finally: server.server_close()
 
 def cmd_package(args):
-    p=project(args.project);dest=current_build(p);verify_build(dest)
+    p=project(args.project);dest=current_build(p)
+    expected={**read(dest/'integrity.json')['files'],'integrity.json':sha(dest/'integrity.json')}
+    report=structural_validation(p,dest)
     output=pathlib.Path(args.output).expanduser().resolve() if args.output else p/f'{dest.name}-playable.zip'
     if output.exists(): fail('Output exists; choose a new ZIP path')
+    if output.is_relative_to(dest): fail('Package output must be outside the immutable build directory')
+    browser_report=None
+    if getattr(args,'browser_report',None):
+        browser_report,report['automatedBrowserEvidence']=supplied_browser_evidence(args.browser_report,report)
     licenses=[local_file(ROOT,name) for name in ('LICENSE','THIRD_PARTY_NOTICES.md')]
     output.parent.mkdir(parents=True,exist_ok=True)
-    with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED) as z:
-        for path in sorted(dest.rglob('*')):
-            if path.is_symlink(): fail('Cannot package symlinks')
-            if path.is_file(): z.write(path,'runtime/'+path.relative_to(dest).as_posix())
-        for license_file in licenses: z.write(license_file,license_file.name)
-        z.writestr('README.txt','Local playable build. Requires Python 3.9+ and a WebGL-capable browser. Run python3 launch.py; open the exact printed URL. Use python3 launch.py --no-open to serve without opening a browser. Source uploads are excluded. Explicit assets in config are included: review ownership before sharing. See LICENSE and THIRD_PARTY_NOTICES.md for distribution terms.\n')
-        launcher=ROOT/'scripts'/'package_launcher.py';z.write(launcher,'launch.py')
-    inspect_zip(output);print(f'Packaged {output}. Private uploads excluded; explicitly selected assets included.')
+    handle,staging=tempfile.mkstemp(prefix='.playable-',suffix='.zip.tmp',dir=output.parent)
+    os.close(handle);staging=pathlib.Path(staging)
+    try:
+        with zipfile.ZipFile(staging,'w',zipfile.ZIP_DEFLATED) as z:
+            for path in sorted(dest.rglob('*')):
+                if path.is_symlink(): fail('Cannot package symlinks')
+                if path.is_file(): z.write(path,'runtime/'+path.relative_to(dest).as_posix())
+            for license_file in licenses: z.write(license_file,license_file.name)
+            z.writestr('validation.json',json.dumps(report,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
+            if browser_report is not None: z.writestr('browser-report.json',browser_report)
+            z.writestr('README.txt','Local playable build. Requires Python 3.9+ and a WebGL-capable browser. Run python3 launch.py; open the exact printed URL. Use python3 launch.py --no-open to serve without opening a browser. Source uploads are excluded. Explicit assets in config are included: review ownership before sharing. validation.json contains fresh structural evidence and the declared target browsers for this exact build. Optional browser-report.json is supplied automated evidence; manual acceptance for declared target browsers remains unverified. See LICENSE and THIRD_PARTY_NOTICES.md for distribution terms.\n')
+            launcher=ROOT/'scripts'/'package_launcher.py';z.write(launcher,'launch.py')
+        entries=inspect_zip(staging)['files']
+        packaged={entry['path'][len('runtime/'):]:entry['sha256'] for entry in entries if entry['path'].startswith('runtime/')}
+        if packaged!=expected: fail('Build changed while packaging; package integrity verification failed')
+        if current_build(p)!=dest: fail('Current build changed while packaging')
+        # Publish complete bytes atomically without replacing a concurrently created file.
+        os.link(staging,output)
+    finally:
+        staging.unlink(missing_ok=True)
+    print(f'Packaged {output}. Private uploads excluded; explicitly selected assets included.')
 
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest='command',required=True)
@@ -519,7 +622,9 @@ def main(argv=None):
         if name=='approve':s.add_argument('--accept',action='store_true')
         if name=='validate':s.add_argument('--build',action='store_true')
         if name=='play':s.add_argument('--no-open',action='store_true');s.add_argument('--port',type=int,default=0);s.add_argument('--browser',choices=['safari','chrome'])
-        if name=='package':s.add_argument('--output')
+        if name=='package':
+            s.add_argument('--output')
+            s.add_argument('--browser-report',help='Include supplied automated browser evidence for this exact build')
     args=parser.parse_args(argv)
     try: args.func(args);return 0
     except (ValueError,KeyError,TypeError,OSError,zipfile.BadZipFile,json.JSONDecodeError) as error:

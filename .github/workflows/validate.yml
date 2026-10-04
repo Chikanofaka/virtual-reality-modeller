@@ -17,15 +17,9 @@ jobs:
         with:
           node-version: '22'
           package-manager-cache: false
-      - name: Contract and CLI regressions
-        run: python3 -m unittest discover -s tests -p 'test_*.py'
-      - name: Input, navigation and scene regressions
-        run: node --test tests/runtime*.mjs
-      - name: Build the preserved Pearl example
-        run: python3 scripts/quickstart.py --build-only
       - name: Install optional browser test tooling
-        run: npm install --ignore-scripts
+        run: npm ci --ignore-scripts
       - name: Install test browser
         run: npx playwright install --with-deps chromium
-      - name: Real browser smoke
-        run: python3 scripts/run_browser_smoke.py
+      - name: Complete harness and extracted-delivery verification
+        run: python3 scripts/verify_harness.py --browser --output test-results/full-harness

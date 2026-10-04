@@ -37,7 +37,17 @@ export function createPlannedScene(THREE,config) {
     box(room.id+'Floor',w,.022,d,x,(room.floorY||0)+.013,z,material(room.color||'#d7d1c4'));
     if(!room.open){wallRun(room,'x',z1,x1,x2);wallRun(room,'x',z2,x1,x2);wallRun(room,'z',x1,z1,z2);wallRun(room,'z',x2,z1,z2);}
   }
-  for(const item of imported?[]:(config.furniture||[])) {
+  for(const item of config.furniture||[]) {
+    // Imported geometry supplies the visible furniture. Keep approved interaction
+    // coordinates as anchors so scene replacement does not erase the game.
+    if(imported) {
+      if(item.interaction) {
+        const anchor=new THREE.Object3D();anchor.name='InteractionAnchor_'+item.id;
+        anchor.position.fromArray(item.position);anchor.visible=false;scene.add(anchor);
+        interactables.push({id:item.id,obj:anchor,label:item.interaction.label||item.id,type:'generic',message:item.interaction.message||item.id});
+      }
+      continue;
+    }
     const [x,y,z]=item.position,[w,h,d]=item.size,rot=item.rotation||0,mat=material(item.color||'#8b5b36');
     let object;
     if(['desk','table'].includes(item.type)) {
@@ -50,7 +60,7 @@ export function createPlannedScene(THREE,config) {
       object=box(item.id,w,h,.08,x,y+h/2,z,mat,rot);
       for(let i=0;i<4;i++)box(item.id+'Shelf',w,.05,d,x,y+.05+i*(h-.1)/3,z,mat,rot);
     } else object=box(item.id,w,h,d,x,y+h/2,z,mat,rot);
-    if(item.interaction)interactables.push({obj:object,label:item.interaction.label||item.id,type:'generic',message:item.interaction.message||item.id});
+    if(item.interaction)interactables.push({id:item.id,obj:object,label:item.interaction.label||item.id,type:'generic',message:item.interaction.message||item.id});
   }
   for(const room of config.rooms||[]) {
     const [x1,z1,x2,z2]=room.bounds;

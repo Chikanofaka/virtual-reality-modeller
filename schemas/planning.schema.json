@@ -532,9 +532,8 @@
               "edge"
             ]
           },
-          "contains": {
-            "const": "safari"
-          }
+          "minItems": 1,
+          "uniqueItems": true
         },
         "playerRadius": {
           "type": "number",
@@ -580,6 +579,48 @@
       "required": [
         "mode"
       ]
+    },
+    "gameplay": {
+      "type": "object",
+      "description": "Optional ordered interaction objectives for procedural and imported scenes. targetId refers to furniture with an interaction.",
+      "required": [
+        "objectives",
+        "completionMessage"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "objectives": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "label",
+              "targetId"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "targetId": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "completionMessage": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   }
 }

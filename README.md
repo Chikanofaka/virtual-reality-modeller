@@ -66,6 +66,9 @@ python3 scripts/harness.py package projects/my-space --output dist/my-space-play
 
 The playable ZIP has a standalone `launch.py`. Extract it and run `python3 launch.py`.
 Raw uploads stay private; only explicitly selected assets enter the playable package.
+Each package includes fresh `validation.json` for its exact build. To retain an
+automated browser report, pass `package --browser-report PATH`; mismatched or failed
+reports are rejected, and supplied automation remains separate from human acceptance.
 Changed plans, answers or source bytes invalidate the approval. Builds are immutable;
 rebuilding requires an actual change. The CLI's `play` and `package` commands use
 the current build for the currently locked plan.
@@ -83,6 +86,23 @@ Navigator and Pilot badges. It asks two questions per round and reports structur
 gaps. A badge is progress feedback, not proof that a measurement is correct.
 See [onboarding](docs/onboarding.md), [user journey](docs/user-journey.md),
 [prompt patterns](docs/prompt-patterns.md) and [schemas](schemas/).
+
+## Create a custom discovery game
+
+Procedural and imported-GLB plans can declare `gameplay.objectives` as an ordered
+list of `{id, label, targetId}` entries, plus a `completionMessage`. Each target ID
+references furniture with an `interaction`. E advances only the current objective;
+R resets the game. Imported scenes retain these interaction anchors without adding
+duplicate primitive furniture. Planning rejects targets with no reachable place
+from which the runtime can select them. Interactions use horizontal proximity;
+line of sight and vertical occlusion are not modeled.
+
+Follow the [fresh-user trial](docs/external-user-trial.md) for a complete synthetic
+studio example, including requirements, delegation, intake, approval, movement,
+ordered objectives, replay and independently extracted delivery. The test fixture
+is not approval or reconstruction of a real user's photos. Choose the desktop
+browsers appropriate to your project; Safari is the Pearl baseline target, not a
+mandatory target for every new plan.
 
 ## What's included
 
@@ -136,8 +156,30 @@ python3 -m unittest discover -s tests -p 'test_*.py'
 node --test tests/runtime*.mjs
 ```
 
+Run the complete local workflow, including new-user onboarding, private-upload
+exclusion, packaging and standalone extraction checks:
+
+```sh
+python3 scripts/verify_harness.py
+```
+
+With Playwright installed, require real browser checks of both original and
+extracted builds:
+
+```sh
+python3 scripts/verify_harness.py --browser
+```
+
+Each invocation keeps its logs, exact source/build hashes, reports, screenshots and
+playable ZIPs in a new `test-results/full-harness-*` directory. Requested browser
+checks fail the run if unavailable. Omit `--browser` only for structural/CLI testing;
+that result explicitly leaves browser behavior unverified. Use `--node PATH` when
+Node is installed outside PATH, and `BROWSER_EXECUTABLE` for local Chrome.
+The optional [Blender companion](blender/README.md) has its own compatible build and
+geometry audit; it is not the browser scene's visual equivalent.
+
 Node **20+** is needed only for JavaScript tests. The optional browser smoke test
-uses Playwright (`npm install --no-save playwright`; install its Chromium browser
+uses Playwright (`npm ci --ignore-scripts`; install its Chromium browser
 or set `BROWSER_EXECUTABLE` to local Chrome):
 
 ```sh

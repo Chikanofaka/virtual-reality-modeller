@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import * as THREE from '../runtime/vendor/three.module.js';
 import {createPearlScene} from '../runtime/scene-pearl.js';
+import {createPlannedScene} from '../runtime/scene-planned.js';
 // Geometry-only checks: a no-op Canvas2D surface lets Three create label textures.
 // This does not claim a real GPU/browser rendering result.
 const ctx=new Proxy({},{get:()=>()=>{}});
@@ -25,4 +26,28 @@ test('Pearl floor has upward triangle winding and original plan Z orientation',(
   assert.ok(minZ< -10);assert.ok(maxZ>7.7&&maxZ<7.9);
   for(let i=0;i<idx.count;i+=3){const a=new THREE.Vector3().fromBufferAttribute(p,idx.getX(i)),b=new THREE.Vector3().fromBufferAttribute(p,idx.getX(i+1)),c=new THREE.Vector3().fromBufferAttribute(p,idx.getX(i+2));assert.ok(b.sub(a).cross(c.sub(a)).y>=-1e-8);}
   for(const polygon of plan.navigation.polygons)assert.ok(visual.scene.getObjectByName('NavigationFloor_'+polygon.id),'Supporting floor covers '+polygon.id);
+});
+test('procedural game exposes stable furniture IDs for its objectives',()=>{
+  const config=JSON.parse(readFileSync(new URL('../templates/measured-studio.json',import.meta.url)));
+  config.furniture[0].interaction={label:'Inspect desk',message:'Desk found'};
+  const planned=createPlannedScene(THREE,config);
+  assert.equal(planned.interactables.length,1);
+  const item=planned.interactables[0];assert.equal(item.id,'work-desk');
+  assert.ok(item.obj.isMesh);assert.equal(item.label,'Inspect desk');assert.equal(item.message,'Desk found');
+  assert.equal(item.obj.position.x,config.furniture[0].position[0]);
+});
+test('imported scenes preserve interaction anchors without duplicate primitive furniture',()=>{
+  const config=JSON.parse(readFileSync(new URL('../templates/measured-studio.json',import.meta.url)));
+  config.scene.mode='imported-glb';
+  for(const item of config.furniture)item.interaction={label:'Inspect '+item.id,message:'Found '+item.id};
+  const imported=createPlannedScene(THREE,config);
+  assert.equal(imported.interactables.length,2);assert.equal(imported.zones.length,1);
+  for(const item of imported.interactables){
+    const furniture=config.furniture.find(f=>f.id===item.id);
+    assert.ok(item.obj.isObject3D);assert.equal(item.obj.isMesh,undefined);assert.equal(item.obj.visible,false);
+    assert.deepEqual(item.obj.position.toArray(),furniture.position);
+    assert.equal(imported.scene.getObjectByName(item.id),undefined);
+  }
+  const meshes=[];imported.scene.traverse(object=>{if(object.isMesh)meshes.push(object);});
+  assert.equal(meshes.length,config.navigation.polygons.length,'Only navigation floor is generated before model import');
 });

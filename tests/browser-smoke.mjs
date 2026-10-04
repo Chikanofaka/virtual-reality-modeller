@@ -28,6 +28,47 @@ const snapshot=()=>page.evaluate(()=>window.__VSMVP.snapshot());
 const distance=(a,b)=>Math.hypot(a.position.x-b.position.x,a.position.z-b.position.z);
 const output=process.env.SMOKE_OUTPUT||'test-results/browser';
 const results=[];
+// Heading is set explicitly; translation is real keyboard input processed by the
+// runtime's normal frame loop and collision checks. No position teleport is used.
+async function walkTo(point) {
+  const before=await snapshot(),distance=Math.hypot(before.position.x-point[0],before.position.z-point[1]);
+  if(distance<.1)return;
+  await page.evaluate(target=>{
+    const current=window.__VSMVP.snapshot().position;
+    window.__VSMVP.test.setYaw(Math.atan2(-(target[0]-current.x),-(target[1]-current.z)));
+  },point);
+  await page.keyboard.down('w');
+  try {
+    await page.waitForFunction(target=>{
+      const current=window.__VSMVP.snapshot().position;
+      return Math.hypot(current.x-target[0],current.z-target[1])<.16;
+    },point,{timeout:30000});
+  }finally{await page.keyboard.up('w');}
+  const after=await snapshot();
+  assert.ok(after.simulationTicks>before.simulationTicks,'Walking must run the movement simulation');
+  assert.ok(Math.hypot(after.position.x-point[0],after.position.z-point[1])<.4,'Keyboard travel must reach the route waypoint');
+}
+async function playCustomRoutes(config) {
+  let earlyInteractions=0,advanced=0,waypoints=0;
+  for(const route of config.navigation.routes)for(const point of route.points) {
+    await walkTo(point);waypoints++;
+    const frame=(await snapshot()).frames;
+    await page.waitForFunction(previous=>window.__VSMVP.snapshot().frames>=previous+6,frame);
+    const before=await snapshot(),targetId=before.nearestId;
+    if(!targetId)continue;
+    const expected=before.gameplay.currentObjective?.targetId===targetId;
+    const future=config.gameplay.objectives.slice(before.gameplay.index+1).some(objective=>objective.targetId===targetId);
+    await page.keyboard.press('e');
+    const after=await snapshot();
+    assert.equal(after.gameplay.index,before.gameplay.index+Number(expected),'Interaction must only advance the current objective');
+    if(expected)advanced++;else if(future)earlyInteractions++;
+  }
+  const final=await snapshot();
+  assert.equal(final.gameplay.complete,true,'Approved route waypoints must support completing the custom game');
+  assert.deepEqual(final.gameplay.completedObjectiveIds,config.gameplay.objectives.map(objective=>objective.id));
+  assert.ok((await page.locator('#objective').textContent()).includes(config.gameplay.completionMessage||'All objectives complete — explore freely.'));
+  return {advanced,earlyInteractions,waypoints};
+}
 try {
   await page.goto(url.href,{waitUntil:'networkidle'});
   await page.waitForFunction(()=>window.__VSMVP?.ready,{timeout:60000});
@@ -78,6 +119,23 @@ try {
     await page.waitForFunction(()=>document.querySelector('#objective').textContent.includes('tour complete'));
     results.push({check:'reception → wine → Pearl console interaction progression',passed:true});
   }
+  if(config.gameplay) {
+    await page.keyboard.press('r');
+    assert.equal((await snapshot()).gameplay.index,0);
+    assert.equal((await snapshot()).interactableCount,config.furniture.filter(item=>item.interaction).length);
+    const first=await playCustomRoutes(config);
+    if(config.project.id==='external-user-game')assert.ok(first.earlyInteractions>0,'External-user fixture must exercise an out-of-order interaction');
+    results.push({check:'custom game completed by keyboard movement along approved routes',passed:true,...first});
+    await page.keyboard.press('r');
+    const reset=await snapshot();
+    assert.equal(reset.gameplay.index,0);assert.equal(reset.gameplay.complete,false);
+    assert.deepEqual(reset.gameplay.completedObjectiveIds,[]);
+    assert.equal(reset.gameplay.currentObjective.id,config.gameplay.objectives[0].id);
+    assert.ok((await page.locator('#objective').textContent()).includes(config.gameplay.objectives[0].label));
+    const replay=await playCustomRoutes(config);
+    results.push({check:'reset restores first objective and the complete game can be replayed',passed:true,...replay});
+    if(config.scene.mode==='imported-glb')results.push({check:'imported model retains all planned interaction targets and ordered gameplay',passed:true});
+  }
   const final=await snapshot();assert.equal(final.frames,final.renderCount);assert.deepEqual(final.errors,[]);
   const modelAssets=(config.assets||[]).filter(a=>a.type==='model');
   if(modelAssets.length){assert.equal(final.importedModels,modelAssets.length);assert.ok(final.importedMeshes>0);results.push({check:'hash-verified local GLB imported before Enter',models:final.importedModels,meshes:final.importedMeshes});}
@@ -89,6 +147,8 @@ try {
   const response=await page.request.get(stale.href);assert.equal(response.status(),409);
   const indexResponse=await page.request.get(url.href);assert.match(indexResponse.headers()['cache-control'],/no-store/);
   results.push({check:'stale URL rejected; no-store; no external requests; single render owner',passed:true});
-  const report={passed:true,browser:browserName,browserVersion:browser.version(),buildId:final.buildId,checks:results,final,errors,externalRequests,limitations:['Automated key delivery, not a physical hardware keyboard.','Headless rendering is not macOS window-compositor certification.']};
+  const metadata=await page.evaluate(()=>window.__VSMVP.build);
+  assert.equal(final.planHash,metadata.planHash);assert.equal(final.runtimeHash,metadata.runtimeHash);
+  const report={passed:true,browser:browserName,browserVersion:browser.version(),buildId:final.buildId,planHash:metadata.planHash,runtimeHash:metadata.runtimeHash,checks:results,final,errors,externalRequests,limitations:['Automated key delivery, not a physical hardware keyboard.','Headless rendering is not macOS window-compositor certification.']};
   await writeFile(output+'/report.json',JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));
 }finally{await browser.close();}

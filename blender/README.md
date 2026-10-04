@@ -4,8 +4,23 @@ The browser scene is the authoritative preserved V7 experience. The original ZIP
 Blender builder is included as `BUILD_PEARL_OFFICE_UPSTREAM.py`, byte-for-byte.
 It is an older, simpler offline companion: its overlapping rectangular floor slabs,
 furniture and layout are not identical to the browser scene. Do not export it and
-claim full V7 visual parity. Running it in a new Blender process writes to the repo's
-`output/` directory; it resets that process's scene.
+claim full V7 visual parity. The archived script uses the older `BLENDER_EEVEE_NEXT`
+engine name and can print warnings while leaving render/export outputs absent.
+Run the maintained adapter in a fresh Blender process instead:
+
+```sh
+blender --background --factory-startup --python-exit-code 1 \
+  --python blender/build_pearl.py -- --output output/pearl-companion
+```
+
+The adapter selects an available Eevee engine, applies two exact in-memory
+substitutions for engine and output path, and leaves the archive untouched. The
+output directory must be empty. It verifies the preview, `.blend`, and `.glb`
+outputs and writes `audit.json` plus a hash-bearing `build-report.json`; the
+`--python-exit-code 1` option makes a failed build fail the shell command. It resets
+only the new process's scene. A successful run proves this companion builds on
+the reported Blender version; it does not establish browser parity or approve
+the historical layout. Use a new output directory for each comparison run.
 
 Use `audit_scene.py` on a separately authored `.blend` master to report evaluated
 world-space bounds, triangle count, floor normals and nonmanifold edges:
