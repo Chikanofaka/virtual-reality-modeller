@@ -1,0 +1,67 @@
+{
+  "passed": true,
+  "scope": "Public Midtown build: original browser acceptance and independent extraction of the exact bundled release ZIP.",
+  "build": {
+    "buildId": "b967be9b18d3b798",
+    "planHash": "fb4fc3fedc93fefa03443e4f8c2e55ea8990cae09d74df3797adc8d5571281ab",
+    "runtimeHash": "97f61f2f86e52ef2316f11ff13309e6ef98319bcdc2e548b608cc54025e9dc14",
+    "version": "0.1.0",
+    "createdAt": "2026-10-06T02:59:26Z"
+  },
+  "originalCommissionBuildId": "fba11bc23842a21a",
+  "archive": {
+    "path": "../midtown-playable.zip",
+    "sha256": "a5ba6fe42e28146403a82832c09011271ba44b72207afe0e1e495e7089b75764",
+    "bytes": 1309015
+  },
+  "model": {
+    "path": "../assets/apartment.glb",
+    "sha256": "afd8b7967788a979b799e1ce6e35d1fc925f4155ebeff3ffc104bbc98c28af1c"
+  },
+  "automatedBrowserReports": {
+    "public-original-browser.json": {
+      "sha256": "92c2a3a3622d194ace98cb9223a0e9f58097b19c656cc580e2d7bff9cdcacd5a",
+      "passed": true,
+      "checkGroups": 8,
+      "browser": "chromium",
+      "browserVersion": "154.0.8037.98"
+    },
+    "public-extracted-browser.json": {
+      "sha256": "8d0c7bd2584286cc45eb5250c582d85677620e0caec2f5351b6f4dd785285e5c",
+      "passed": true,
+      "checkGroups": 8,
+      "browser": "chromium",
+      "browserVersion": "154.0.8037.98"
+    }
+  },
+  "launcherChecks": {
+    "passed": true,
+    "identityMatched": true,
+    "noStore": true,
+    "staleUrlRejected": true
+  },
+  "releaseStartedAt": "2026-10-06T03:54:10.325949+00:00",
+  "releaseCompletedAt": "2026-10-06T03:56:03.519052+00:00",
+  "releaseCommandDurationsSeconds": {
+    "public-release-package": 5.234,
+    "midtown-release-standalone-server": 107.834,
+    "midtown-release-extracted-browser": 107.707
+  },
+  "timingNote": "Server and child browser intervals overlap. These are release verification intervals, excluded from the historical first-delivery resource ledger.",
+  "privateSourceReportDigests": {
+    "originalPublicVerification": "57ed1c48e49efed784d1b503f8c648353789d3c39e089f84bf60c1790a07571c",
+    "finalReleaseVerification": "1c29aa1115b77eefa6ee48a4dedde3342e68a74c5beaa684429af91bcfa17be0"
+  },
+  "limitations": [
+    "Automated keyboard events with test-controlled yaw; human physical-keyboard acceptance unverified.",
+    "Windows, Safari, mobile and VR unverified.",
+    "Geometry and routes retain accepted design estimates, not measured dimensions.",
+    "Navigation predicates cover selected furniture and exterior boundaries; the physical wall-stop test is one sampled structural wall."
+  ],
+  "archiveInspection": {
+    "crcPassed": true,
+    "rootLicenseAndNoticesMatch": true,
+    "privateUploadDirectoriesAbsent": true,
+    "entryCount": 28
+  }
+}

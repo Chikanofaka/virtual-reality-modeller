@@ -1,0 +1,271 @@
+{
+  "schemaVersion": 1,
+  "case": "Midtown two-bedroom two-bathroom apartment",
+  "buildId": "fba11bc23842a21a",
+  "recordedOn": "2026-10-06",
+  "status": "Observed historical case, not a prediction, price quote, or complete billing statement",
+  "usage": {
+    "source": "Local Codex JSONL token_usage_record per-response telemetry, read-only audit; raw sessions remain private",
+    "scopeStart": "User supplied apartment floor plan/photos and requested an actual runnable project",
+    "scopeEnd": "First completed V1 game/source delivery; before subsequent checksum recheck, greeting, launch repair and public documentation work",
+    "included": "Project intake, layout, harness interaction features required by this case, local modelling, test development, retries, packaging and delivery review",
+    "excluded": "Earlier general repository audit and example work; later checksum recheck, launcher repair, and README/showcase work",
+    "recordedModels": [
+      "gpt-6-astra"
+    ],
+    "rootUserTurnCount": 8,
+    "uniqueRecordedResponseCount": 179,
+    "duplicateRecordsRemoved": 0,
+    "selectedRecordSetSha256": "c3ed1659b84ffe33c03af43e0d3b90e35c8d320cdeb73711677b7cfb1ba8ac35",
+    "recordedTotals": {
+      "input_tokens": 17986289,
+      "cached_input_tokens": 16928000,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 149715,
+      "reasoning_output_tokens": 39722,
+      "total_tokens": 18136004
+    },
+    "uncachedInputTokens": 1058289,
+    "cachedShareOfInputPercent": 94.1161,
+    "exclusiveChildTotals": {
+      "input_tokens": 5431641,
+      "cached_input_tokens": 4966144,
+      "cache_write_input_tokens": 0,
+      "output_tokens": 51055,
+      "reasoning_output_tokens": 10582,
+      "total_tokens": 5482696
+    },
+    "agents": [
+      {
+        "agent": "root",
+        "recordedResponseCount": 100,
+        "usage": {
+          "input_tokens": 12554648,
+          "cached_input_tokens": 11961856,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 98660,
+          "reasoning_output_tokens": 29140,
+          "total_tokens": 12653308
+        }
+      },
+      {
+        "agent": "interaction_contract",
+        "recordedResponseCount": 13,
+        "usage": {
+          "input_tokens": 795312,
+          "cached_input_tokens": 768640,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 7564,
+          "reasoning_output_tokens": 1573,
+          "total_tokens": 802876
+        }
+      },
+      {
+        "agent": "apartment_contract",
+        "recordedResponseCount": 7,
+        "usage": {
+          "input_tokens": 423099,
+          "cached_input_tokens": 355456,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3200,
+          "reasoning_output_tokens": 645,
+          "total_tokens": 426299
+        }
+      },
+      {
+        "agent": "apartment_layout_review",
+        "recordedResponseCount": 3,
+        "usage": {
+          "input_tokens": 132158,
+          "cached_input_tokens": 127872,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 4481,
+          "reasoning_output_tokens": 3099,
+          "total_tokens": 136639
+        }
+      },
+      {
+        "agent": "apartment_navigation",
+        "recordedResponseCount": 0,
+        "usage": null,
+        "coverage": "No own token_usage_record entries; quota-blocked attempts. Missing usage is unknown, not proven zero."
+      },
+      {
+        "agent": "interaction_effects",
+        "recordedResponseCount": 9,
+        "usage": {
+          "input_tokens": 446620,
+          "cached_input_tokens": 434560,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 5749,
+          "reasoning_output_tokens": 859,
+          "total_tokens": 452369
+        }
+      },
+      {
+        "agent": "delivery_review",
+        "recordedResponseCount": 31,
+        "usage": {
+          "input_tokens": 2773120,
+          "cached_input_tokens": 2488064,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 14925,
+          "reasoning_output_tokens": 3349,
+          "total_tokens": 2788045
+        }
+      },
+      {
+        "agent": "apartment_model",
+        "recordedResponseCount": 0,
+        "usage": null,
+        "coverage": "No own token_usage_record entries; quota-blocked attempts. Missing usage is unknown, not proven zero."
+      },
+      {
+        "agent": "apartment_intake",
+        "recordedResponseCount": 9,
+        "usage": {
+          "input_tokens": 519332,
+          "cached_input_tokens": 490112,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 11676,
+          "reasoning_output_tokens": 414,
+          "total_tokens": 531008
+        }
+      },
+      {
+        "agent": "apartment_acceptance",
+        "recordedResponseCount": 0,
+        "usage": null,
+        "coverage": "No own token_usage_record entries; quota-blocked attempts. Missing usage is unknown, not proven zero."
+      },
+      {
+        "agent": "interaction_geometry",
+        "recordedResponseCount": 7,
+        "usage": {
+          "input_tokens": 342000,
+          "cached_input_tokens": 301440,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 3460,
+          "reasoning_output_tokens": 643,
+          "total_tokens": 345460
+        }
+      }
+    ],
+    "interpretation": [
+      "Input tokens include repeated conversation/context sent with each response; this is not unique prompt length or final artifact size.",
+      "Cached input is a subset of input. Reasoning output is a subset of output. Do not add either subset again.",
+      "Sum each own-thread response usage once, deduplicate by response ID, and attribute by selected project root-turn IDs. Parent cumulative event counters are not added to child totals.",
+      "This is the recorded response ledger for one first-run case, which also added harness features. It is not a clean repeat-build benchmark.",
+      "Three quota-blocked child attempts have no usage records. Their usage is unknown, not asserted as zero. Any unrecorded service-side billing or compaction is not reconstructed.",
+      "All selected recorded model contexts identify gpt-6-astra. No verified invoice, token rate, subscription-credit conversion or currency cost was captured."
+    ],
+    "actualCurrencyCost": null,
+    "subsequentLauncherRepair": {
+      "includedInMainTotals": false,
+      "uniqueRecordedResponseCount": 10,
+      "recordedTotals": {
+        "input_tokens": 1405837,
+        "cached_input_tokens": 1395072,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2889,
+        "reasoning_output_tokens": 163,
+        "total_tokens": 1408726
+      },
+      "scope": "Repair Finder .DS_Store false integrity failure and verify local launch"
+    }
+  },
+  "time": {
+    "projectEffectiveExecutionSeconds": null,
+    "activeModelInferenceSeconds": null,
+    "cpuSeconds": null,
+    "reason": "No complete active-execution/inference/CPU timer was recorded. Chat task duration spans include prolonged interruptions; calendar duration and summed tool polling waits would misstate backend working time.",
+    "measuredScope": "Only recorded apartment verification command runs and orchestration windows below. They do not include the whole design/build process.",
+    "successfulVerificationElapsedSeconds": 220.453852,
+    "successfulOriginalAndExtractedBrowserSeconds": 210.577,
+    "failedBrowserAttemptSeconds": 117.191,
+    "allThreeVerificationWindowsSeconds": 348.699636,
+    "overlapRule": "The 104.319-second standalone-server record contains the 104.239-second extracted browser run. Do not add both. Unit tests may overlap orchestration and are not added.",
+    "runs": [
+      {
+        "source": "test-results/apartment-v1-20261005-01/report.json",
+        "sourceSha256": "9703cb583c271e69ac427e8627cc9f88c4cbc09c5a3a33482ea2b68863c93c80",
+        "passed": false,
+        "orchestrationElapsedSeconds": 68.756397,
+        "commands": [
+          {
+            "label": "apartment-validate",
+            "durationSeconds": 3.42,
+            "passed": true
+          },
+          {
+            "label": "midtown-apartment-browser",
+            "durationSeconds": 63.381,
+            "passed": false
+          }
+        ]
+      },
+      {
+        "source": "test-results/apartment-v1-20261005-02/report.json",
+        "sourceSha256": "4574c4dcb5ec99c71cdd411d0c3531a71bf502e5677ed604dc53cb3ce9c46ecf",
+        "passed": false,
+        "orchestrationElapsedSeconds": 59.489387,
+        "commands": [
+          {
+            "label": "apartment-validate",
+            "durationSeconds": 3.559,
+            "passed": true
+          },
+          {
+            "label": "midtown-apartment-browser",
+            "durationSeconds": 53.81,
+            "passed": false
+          }
+        ]
+      },
+      {
+        "source": "test-results/apartment-v1-20261006-03/report.json",
+        "sourceSha256": "b61d57b9207677b7a17f31c2a4f0114af5699ad3ed5d40bd6e3f77fe7952735e",
+        "passed": true,
+        "orchestrationElapsedSeconds": 220.453852,
+        "commands": [
+          {
+            "label": "apartment-validate",
+            "durationSeconds": 3.512,
+            "passed": true
+          },
+          {
+            "label": "midtown-apartment-browser",
+            "durationSeconds": 106.338,
+            "passed": true
+          },
+          {
+            "label": "midtown-apartment-package",
+            "durationSeconds": 3.87,
+            "passed": true
+          },
+          {
+            "label": "midtown-apartment-standalone-server",
+            "durationSeconds": 104.319,
+            "passed": true
+          },
+          {
+            "label": "midtown-apartment-extracted-browser",
+            "durationSeconds": 104.239,
+            "passed": true
+          }
+        ]
+      }
+    ]
+  },
+  "assetResources": {
+    "modelSource": "projects/photo-game-intake/assets/build-01/model-audit.json",
+    "locallyAuthoredFurnitureIds": 43,
+    "meshObjects": 167,
+    "triangles": 89740,
+    "glbBytes": 4319484,
+    "blendBytes": 955910,
+    "externalPaidAssetGenerationInvoked": false,
+    "photoOriginalBytesAvailableToBuild": false,
+    "notes": "Floor plan and six photos were visual references in conversation. Derived geometry/materials are local; no photo pixel textures or paid cloud model generation."
+  }
+}

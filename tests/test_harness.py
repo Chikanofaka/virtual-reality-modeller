@@ -113,6 +113,26 @@ class WorkflowTests(unittest.TestCase):
             self.assertIn(url,printed.getvalue());server.serve_forever.assert_called_once();server.server_close.assert_called_once()
             if opens:browser.assert_called_once_with(url)
             else:browser.assert_not_called()
+    def test_launcher_finder_metadata_does_not_hide_real_changes(self):
+        self.build();output=self.base/'finder.zip';self.call('package',self.p,'--output',output)
+        extracted=self.base/'finder'
+        with zipfile.ZipFile(output) as z:z.extractall(extracted)
+        launcher=extracted/'launch.py';runtime=extracted/'runtime'
+        (runtime/'.DS_Store').write_bytes(b'Finder metadata')
+        (runtime/'vendor'/'.DS_Store').write_bytes(b'nested Finder metadata')
+        def launch():
+            with mock.patch.object(sys,'argv',[str(launcher),'--no-open']),mock.patch('http.server.ThreadingHTTPServer') as server,contextlib.redirect_stdout(io.StringIO()):
+                runpy.run_path(str(launcher),run_name='__main__')
+                server.return_value.serve_forever.assert_called_once()
+        launch()
+        extra=runtime/'extra.js';extra.write_text('unexpected')
+        with self.assertRaisesRegex(SystemExit,'Unexpected: extra.js'):launch()
+        extra.unlink();index=runtime/'index.html';original=index.read_bytes();index.write_bytes(b'changed')
+        with self.assertRaisesRegex(SystemExit,'Changed: index.html'):launch()
+        index.unlink()
+        with self.assertRaisesRegex(SystemExit,'Missing: index.html'):launch()
+        index.write_bytes(original);(runtime/'.DS_Store').unlink();(runtime/'.DS_Store').symlink_to(index)
+        with self.assertRaisesRegex(SystemExit,'symlinks'):launch()
     def test_selected_glb_uses_url_safe_build_name_and_keeps_integrity(self):
         fixture=ModelAssetTests();fixture.setUp()
         try:

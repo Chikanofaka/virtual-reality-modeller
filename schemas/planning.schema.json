@@ -419,6 +419,39 @@
               "message": {
                 "type": "string",
                 "minLength": 1
+              },
+              "effects": {
+                "type": "array",
+                "minItems": 1,
+                "description": "Applied only when this target advances its gameplay objective; reset restores original material values. objectName must be unique across every effect and target, and this furniture must be referenced by an objective (semantic validation by scripts/harness.py).",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "objectName",
+                    "emissive",
+                    "intensity"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "objectName": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
+                    },
+                    "emissive": {
+                      "type": "string",
+                      "pattern": "^#[0-9a-fA-F]{6}$",
+                      "minLength": 7,
+                      "maxLength": 7
+                    },
+                    "intensity": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 20
+                    }
+                  }
+                },
+                "uniqueItems": true
               }
             }
           }
@@ -549,6 +582,14 @@
           "type": "number",
           "minimum": 0.2,
           "maximum": 6
+        },
+        "interactionOcclusion": {
+          "enum": [
+            "none",
+            "structural-segments"
+          ],
+          "default": "none",
+          "description": "Optional horizontal line of sight against navigation.segments at half wall thickness; ignores furniture blockers and player radius. Default retains proximity-only behavior."
         }
       },
       "required": [
@@ -622,5 +663,44 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "furniture": {
+            "contains": {
+              "required": [
+                "interaction"
+              ],
+              "properties": {
+                "interaction": {
+                  "required": [
+                    "effects"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "gameplay"
+        ],
+        "properties": {
+          "scene": {
+            "properties": {
+              "mode": {
+                "enum": [
+                  "procedural",
+                  "imported-glb"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

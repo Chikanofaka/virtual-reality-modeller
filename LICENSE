@@ -20,7 +20,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Scope: this license covers new harness code and documentation. Three.js is
+Scope: this license covers new harness code and documentation, and the locally
+authored Midtown demonstration geometry, Blender source and output images under
+examples/midtown-apartment. It does not license the original private reference
+photographs or floor-plan image, which are not distributed. Three.js is
 separately MIT licensed; see runtime/vendor/THREE-LICENSE.txt. User-supplied
 historical Pearl Office source and images are identified in THIRD_PARTY_NOTICES.md;
 this notice does not invent or supersede rights in those supplied materials.

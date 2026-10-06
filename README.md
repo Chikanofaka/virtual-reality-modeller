@@ -1,235 +1,188 @@
 # Virtual Space MVP Harness
 
-Turn floor-plan evidence into a reviewed planning pack, then build, test and package
-a first-person 3D space. The included **Pearl Office** example preserves the detailed
-procedural scene from the supplied Safari WASD V7 package. Its navigation, input,
-rendering and build identity now have separate responsibilities and regression tests.
+**Bring a floor plan to life with an AI Copilot—and leave with a game you can
+unpack, walk through and play again.**
 
-**Local-first · Safari-priority · WASD + drag look · no API key · no build service**
+Describe your space, share the reference material you have, and review a concrete
+layout. The agent handles planning data, furniture, navigation, interactions,
+diagnosis and packaging. You receive a playable desktop experience, editable
+sources, a furnished plan and evidence tied to the delivered build.
 
-This is an engineering harness and reusable agent skill, not automatic reconstruction
-of an arbitrary photograph. New projects need measured dimensions and a reviewed
-layout. The generic procedural adapter creates a spatial scaffold; matching a custom
-high-detail visual target still requires authored scene/assets and visual review.
-Approved, self-contained GLB models can be added or used as the primary scene;
-see [detailed assets](docs/assets.md).
+**Local game runtime · Codex / Claude Code workflow · no harness API key ·
+Python + browser to play**
 
-## Play the preserved Pearl scene
+[Start here: 14-step beginner guide](docs/getting-started.md) ·
+[Play the flagship](#play-the-flagship) ·
+[Actual time and usage](#what-did-this-project-consume) ·
+[Technical reference](docs/harness-reference.md)
 
-Install Python **3.10+**. Open a terminal in this repository, then run:
+## Flagship: a furnished Midtown two-bedroom apartment
 
-```sh
-python3 scripts/quickstart.py --browser safari
-```
+![Actual browser screenshot of the furnished Midtown living room](examples/midtown-apartment/images/living-browser.png)
 
-On macOS, `RUN_SAFARI.command` and `RUN_CHROME.command` provide the same workflow.
-If Finder refuses to open a downloaded command file, run it explicitly:
+*Actual browser screenshot, not a concept image. The public replay retains this
+scene and gameplay; its build identity and verification are in the case study.*
 
-```sh
-bash RUN_SAFARI.command
-```
+One unscaled floor plan, six house-tour photo observations and a short brief became
+a furnished two-bedroom, two-bathroom apartment. The owner accepted approximate
+dimensions and a three-stop arrival tour: **television → bedside lamp → balcony**.
 
-The launcher builds the bundled approved example, verifies it, chooses an available
-loopback port, and opens the exact URL. Keep the terminal open; stop with Ctrl+C.
-No npm install, CDN, account, Blender, or paid generation is needed to play Pearl.
-Do not use `file://` or an old bookmarked localhost URL. Read the build badge before
-reporting a fault. The launcher never terminates an unrelated process.
-
-| Control | Action |
+| Need, paraphrased | Delivered result |
 |---|---|
-| W / A / S / D | Walk; diagonal speed is normalized |
-| Hold mouse and drag | Look; no pointer lock required |
-| Arrow keys | Turn/look without a mouse |
-| Shift | Sprint |
-| E | Interact nearby |
-| M | Toggle minimap |
-| R | Reset to the approved entrance |
-| Q | Change rendering quality |
-| On-screen W/A/S/D | Diagnose keyboard delivery using the same movement layer |
+| Put a TV and sofa in the living room, beds in the bedrooms | 43 authored furniture groups across bedrooms, living/dining, kitchen, baths, laundry and balcony |
+| Let me explore the whole apartment | Eight visitable areas, deliberate wall/furniture collision and connected routes |
+| Give it a little interaction | A welcome screen, a lamp material change, ordered completion and reset/replay |
+| Make it something I can keep | Standalone playable ZIP, Blender master, model generator, plan, reports and screenshots |
+| Prove the ZIP works | Original and separately extracted packages exercised in Chrome, including walking and full replay |
 
-## Build your own space
+![Furnished floor-plan render of the complete apartment](examples/midtown-apartment/images/furnished-floorplan.png)
 
-```sh
-python3 scripts/harness.py init projects/my-space
-python3 scripts/harness.py ingest projects/my-space /path/to/floor-plan.png /path/to/photos.zip
-python3 scripts/harness.py interrogate projects/my-space
-python3 scripts/harness.py interrogate projects/my-space --answers /path/to/answers.json
-# Repeat questions as needed; fill a measured planning.json using templates/.
-python3 scripts/harness.py plan projects/my-space --input /path/to/planning.json
-# Review the exact plan and planning-review.json before approving it.
-python3 scripts/harness.py approve projects/my-space --accept
-python3 scripts/harness.py build projects/my-space
-python3 scripts/harness.py validate projects/my-space --build
-python3 scripts/harness.py play projects/my-space --browser safari
-python3 scripts/harness.py package projects/my-space --output dist/my-space-playable.zip
-```
+*Top-down Blender render of the authored model. Dimensions are accepted design
+estimates; this is an interactive prototype, not a measured architectural survey.*
 
-The playable ZIP has a standalone `launch.py`. Extract it and run `python3 launch.py`.
-Raw uploads stay private; only explicitly selected assets enter the playable package.
-Each package includes fresh `validation.json` for its exact build. To retain an
-automated browser report, pass `package --browser-report PATH`; mismatched or failed
-reports are rejected, and supplied automation remains separate from human acceptance.
-Changed plans, answers or source bytes invalidate the approval. Builds are immutable;
-rebuilding requires an actual change. The CLI's `play` and `package` commands use
-the current build for the currently locked plan.
+[Explore the flagship, evidence and editable assets →](examples/midtown-apartment/README.md)
 
-For rollback, retain a previously verified playable ZIP. Extract it into a separate
-folder and run its own `python3 launch.py`. That launcher verifies the package,
-chooses a fresh port and opens the URL for that exact build identity. Check the badge
-before comparing versions. Project build directories are retained as history, but
-the CLI has no old-build selector. To resume development on an older plan, restore
-it and its inputs into a separate project workspace, review and approve it again,
-then build using the current runtime.
+Two earlier examples show the progression:
 
-The onboarding journey awards Surveyor, Pathfinder, Architect, Set designer,
-Navigator and Pilot badges. It asks two questions per round and reports structural
-gaps. A badge is progress feedback, not proof that a measurement is correct.
-See [onboarding](docs/onboarding.md), [user journey](docs/user-journey.md),
-[prompt patterns](docs/prompt-patterns.md) and [schemas](schemas/).
+| Example | What it demonstrates | Start |
+|---|---|---|
+| **Midtown apartment — flagship** | A real commission taken from visual references through furnished, interactive delivery | [Case study](examples/midtown-apartment/README.md) / replay below |
+| **Pearl Office — preserved baseline** | The detailed historical office scene, desktop controls, explicit navigation and build identity | `python3 scripts/quickstart.py --browser chrome` / [reference](docs/harness-reference.md) |
+| **Discovery studio — synthetic trial** | A small, inspectable new-user workflow: ordered desk/chair tasks, completion and reset | [Walkthrough and commands](docs/external-user-trial.md) |
 
-## Create a custom discovery game
+The studio is explicitly synthetic. Pearl has its own historical source provenance;
+see [third-party notices](THIRD_PARTY_NOTICES.md). Neither example supplies approval
+or measurements for a new user's room.
 
-Procedural and imported-GLB plans can declare `gameplay.objectives` as an ordered
-list of `{id, label, targetId}` entries, plus a `completionMessage`. Each target ID
-references furniture with an `interaction`. E advances only the current objective;
-R resets the game. Imported scenes retain these interaction anchors without adding
-duplicate primitive furniture. Planning rejects targets with no reachable place
-from which the runtime can select them. Interactions use horizontal proximity;
-line of sight and vertical occlusion are not modeled.
+## Play the flagship
 
-Follow the [fresh-user trial](docs/external-user-trial.md) for a complete synthetic
-studio example, including requirements, delegation, intake, approval, movement,
-ordered objectives, replay and independently extracted delivery. The test fixture
-is not approval or reconstruction of a real user's photos. Choose the desktop
-browsers appropriate to your project; Safari is the Pearl baseline target, not a
-mandatory target for every new plan.
+1. Download this **whole repository** using GitHub's **Code → Download ZIP**, then
+   extract it. Or clone your fork.
+2. Install Python **3.10+** and a WebGL-capable desktop browser. Chrome is the
+   tested browser for this apartment.
+3. Open Terminal on macOS or PowerShell on Windows **inside the extracted repository
+   folder**. You should see `README.md` and `scripts/harness.py`.
+4. Run the command for your system:
 
-## What's included
-
-```text
-runtime/                 Detailed Pearl scene, generic adapter, input, nav, renderer
-  vendor/                Original Three.js r180 modules and MIT license
-scripts/                 CLI, launch and packaging helpers
-schemas/                 Planning/build contracts
-templates/               Intake and planning examples
-prompts/                 Agent prompt patterns and review stages
-skills/                  Portable skill entry point
-plugin.json              Agent Plugins 1.0 skills-only package manifest
-instructions.md          Agent operating contract
-examples/pearl-office/   Planning pack, selected original V7 sources, six plan images
-blender/                 Original companion builder and evaluated-geometry audit
-tests/                   CLI, navigation/input and browser smoke tests
-docs/                    Architecture, risk register, journey, version diffs/evidence
-```
-
-Use this entire repository as a local skills-only plugin package. The canonical
-skill is [skills/virtual-space-mvp-harness/SKILL.md](skills/virtual-space-mvp-harness/SKILL.md).
-Installation is host-specific; this source package has not been uploaded, installed
-into an account or submitted to a plugin directory. No fictional MCP endpoint is
-required. A coding agent can also read [instructions.md](instructions.md) directly.
-
-## What the evolution taught us
-
-Eleven original ZIPs were inventoried and hashed, including six plan images and ten
-game packages. Archive names before V3 describe branches rather than a clean numbered
-V1→V7 chain. [Version evolution](docs/version-evolution.md) separates code evidence,
-user observations and historical assistant hypotheses. Only five recent conversation
-turns were available; earlier prompts are not reconstructed as quotations.
-
-- A visually clear corridor can be closed by overlapping furniture colliders.
-  Define navigation explicitly and verify connected routes with player clearance.
-- Faster collision checks cannot repair disconnected topology. Sliding/substeps
-  address edge motion; neither replaces a usable doorway.
-- Pointer-lock changes, event-driven rendering and forced presentation calls are
-  not universal browser fixes. Buffer input and keep a single frame owner.
-- Test key delivery, normalized action, movement and visible presentation separately.
-  Safari code/key/legacy fallback, canvas focus and state clearing are all retained.
-- A familiar port can serve an old build. Verify build identity and actual port;
-  use immutable assets and no-store responses instead of killing whatever owns a port.
-- V7 still contained an undefined console interactable and a reflected base-floor
-  footprint. Both are fixed in the maintained scene; the original remains available.
-
-## Verification and support
+**macOS**
 
 ```sh
-python3 -m unittest discover -s tests -p 'test_*.py'
-node --test tests/runtime*.mjs
+python3 scripts/replay_midtown.py --no-open
 ```
 
-Run the complete local workflow, including new-user onboarding, private-upload
-exclusion, packaging and standalone extraction checks:
+**Windows PowerShell**
 
-```sh
-python3 scripts/verify_harness.py
+```powershell
+py -3 scripts/replay_midtown.py --no-open
 ```
 
-With Playwright installed, require real browser checks of both original and
-extracted builds:
+5. Copy the entire printed localhost URL into Chrome, keep the terminal open, and
+   click **Enter**. Use **WASD** to walk, **mouse drag or arrows** to look, **E** to
+   interact and **R** to replay. Stop the server with **Ctrl+C**.
 
-```sh
-python3 scripts/verify_harness.py --browser
-```
+This checks and extracts the [bundled playable ZIP](examples/midtown-apartment/midtown-playable.zip).
+It does not call an AI model, generate assets, install npm packages or use Blender.
+If you download that playable ZIP separately, extract it and run `python3 launch.py`
+on macOS or `py -3 launch.py` on Windows from the folder containing `launch.py`.
+The [full guide](docs/getting-started.md) explains paths, installation and common errors.
 
-Each invocation keeps its logs, exact source/build hashes, reports, screenshots and
-playable ZIPs in a new `test-results/full-harness-*` directory. Requested browser
-checks fail the run if unavailable. Omit `--browser` only for structural/CLI testing;
-that result explicitly leaves browser behavior unverified. Use `--node PATH` when
-Node is installed outside PATH, and `BROWSER_EXECUTABLE` for local Chrome.
-The optional [Blender companion](blender/README.md) has its own compatible build and
-geometry audit; it is not the browser scene's visual equivalent.
+**Compatibility:** macOS Chrome was actually exercised. Windows commands use the
+portable Python launcher but Windows acceptance remains unverified. The model is
+single-floor; mobile, VR headsets and multi-user play need additional work.
 
-Node **20+** is needed only for JavaScript tests. The optional browser smoke test
-uses Playwright (`npm ci --ignore-scripts`; install its Chromium browser
-or set `BROWSER_EXECUTABLE` to local Chrome):
+## Create your own space: the 14 steps
 
-```sh
-node tests/browser-smoke.mjs 'http://127.0.0.1:PORT/?build=BUILD_ID'
-```
+The [complete beginner manual](docs/getting-started.md) explains every step, with
+copyable prompts, macOS/Windows commands and expected results. No JSON writing is
+required from the person commissioning a space.
 
-See [browser validation](docs/browser-validation.md),
-[original release validation](docs/validation-report.md),
-[local audit](docs/local-audit-2026-10-04.md), and
-[onboarding follow-up](docs/onboarding-review-2026-10-05.md) for the exact builds and checks tested.
+1. **Get the right folder.** Download/extract the complete repository, or fork and
+   clone it. A playable ZIP is for playing one finished result.
+2. **Check prerequisites.** Python and a browser for playback; a coding-agent
+   account for creation. Blender and Node are only needed for relevant authoring/tests.
+3. **Find the repository root.** Verify `scripts/harness.py` exists before running
+   commands. Use your actual folder path, including spaces or OneDrive locations.
+4. **Run the flagship once.** Learn what the current scene quality and controls feel like.
+5. **Try the game loop.** Visit the TV, lamp and balcony; reset and replay.
+6. **Open the repo in your agent.** In Codex, select the local folder. In Claude
+   Code, start `claude` from that folder. This folder access is the harness connection;
+   there is no harness MCP endpoint to configure.
+7. **Paste the starting brief.** Use the [ready-to-copy prompt](docs/getting-started.md#7-give-the-agent-the-starting-brief).
+   Ask the agent to read the four entry documents and inspect existing changes.
+8. **Share your available evidence.** Floor plan, photos, entrance and any reliable
+   measurement. Say when something is unknown.
+9. **Define a small first experience.** Choose rooms, visual expectations, player
+   actions and target browser. Set a checkpoint before major scope/cost increases.
+10. **Review and accept a specific layout.** The agent presents furniture, estimated
+    dimensions, doorways, routes, gameplay and acceptance criteria for your decision.
+11. **Delegate the local build.** The agent models, implements, runs, diagnoses and
+    repairs within the authorization you gave.
+12. **Require actual evidence.** Check the exact build's walking, collisions,
+    interactions, completion and replay—not merely a screenshot of a start screen.
+13. **Unpack the delivered game.** Run its `launch.py` from the correct directory.
+    Keep the terminal open and use its exact URL.
+14. **Keep the source and resource record.** Save the editable project, build ID,
+    reports, limitations and measured usage so another session can continue it.
 
-| Platform | Support scope |
+Provider setup: [official Codex quickstart](https://learn.chatgpt.com/docs/quickstart),
+[Codex CLI](https://developers.openai.com/codex/cli),
+[Claude Code quickstart](https://code.claude.com/docs/en/quickstart).
+Account access and installation details come from those providers. The Claude Code
+route is documented; this case was developed using Codex. The game runs locally,
+while agent prompts/images may be processed by your chosen provider.
+
+## What did this project consume?
+
+**Real recorded GPT-6 Astra usage, not a hypothetical estimate:**
+
+| Metric | Midtown reference case |
 |---|---|
-| macOS Safari | Primary manual target; drag-look and keyboard fallback; WebGL required |
-| macOS Chrome | Secondary target; same scene, controls and diagnostics |
-| Other desktop OS/browser | Python CLI is portable; one-click `.command` launchers are macOS-specific |
-| Mobile/headsets | Touch pad is diagnostic; no mobile UX or WebXR certification |
+| Intake → first completed delivery | **18,136,004 recorded tokens across 179 responses** |
+| Input breakdown | 1,058,289 uncached + 16,928,000 cached input |
+| Output | 149,715 tokens, including reasoning already counted within output |
+| Later Finder launch repair | 1,408,726 additional recorded tokens; initial delivery plus repair: **19,544,730** |
+| Final original + extracted-package verification | **3m 40s** elapsed; this is verification time, **not apartment creation time** |
+| All three recorded verification attempts | **5m 49s** across run windows; interruption gaps excluded |
+| Complete active backend project time / actual bill | **Not captured**; no invented hours or currency total |
+| Asset footprint | 4.32 MB GLB, 0.96 MB editable Blender file; no paid external asset generator invoked |
 
-Known limits: one floor and a 2D navigation union; no stairs or physics simulation.
-Pearl intentionally keeps the V7 permissive treatment of furniture/room partitions:
-only declared barriers collide. The original plan images have scale/label ambiguities;
-the example uses the V7 authored coordinates, not a certified building survey. Custom
-GLB imports require embedded textures/buffers and explicit placement; Draco, meshopt
-and KTX2 compression need decoders that are not included in this release.
-The original Blender companion differs from the browser scene and is not a fidelity
-replacement. No test suite can certify every browser/GPU compositor combination.
+About 94% of the initial run's input was cached. Input includes repeated context
+across requests; this is not 18 million unique words. The first run also added
+harness features and repaired tests, so it is not a clean repeat-project budget.
+Missing telemetry is disclosed rather than counted as zero. Playing the finished
+example requires no model tokens.
 
-## Publish to GitHub
+[Read the scope, actual ledger, timing exclusions and dated price reference →](docs/resource-budget.md)
 
-Review [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) first: new harness code is MIT,
-Three.js is MIT, and the owner needs to state redistribution rights for the supplied
-historical Pearl sources/images. The original ZIPs contain no license declaration.
-Review content before choosing public visibility. No remote publication is performed
-by this repository's launch/build/package commands.
+We optimize for an accepted result with evidence: agree scope early, reuse the
+runtime, inspect relevant files, bound delegated tasks and avoid repeating
+unchanged work. We have not run a matched comparison with competing harnesses and
+do not claim an unmeasured speed or cost advantage.
 
-After extracting, inspect `git status`. If Git metadata was not included, initialize
-and commit with your own configured author identity:
+## For agents and contributors
 
-```sh
-git init -b main
-git add .
-git commit -m "Initial Virtual Space MVP Harness"
-```
+Read [instructions.md](instructions.md),
+[the harness skill](skills/virtual-space-mvp-harness/SKILL.md) and
+[the orchestrator prompt](prompts/00-orchestrator.md). Then inspect the relevant
+implementation. The CLI sequence is:
 
-Create an empty GitHub repository, then add its real URL and push when you are ready:
+`init → ingest → interrogate → plan → approve → build → validate → play → package`
 
-```sh
-git remote add origin https://github.com/YOUR_ACCOUNT/virtual-space-mvp-harness.git
-git push -u origin main
-```
+The [technical reference](docs/harness-reference.md) contains full commands,
+contracts, dependency setup, tests and preserved history. Run the whole harness
+with `python3 scripts/verify_harness.py --browser` when the optional browser tooling
+is installed; each run writes actual evidence under `test-results/`.
+The [local handoff checks](docs/evidence/public-handoff-checks.json) summarize the
+current regression tests, replay entry command and documentation review.
 
-For changes, read [CONTRIBUTING.md](CONTRIBUTING.md). Keep the evidence trail and
-test the actual build being delivered.
+New public projects should include a flagship, beginner onboarding and an honest
+resource record. Follow [the reusable handoff protocol](docs/public-project-handoff.md)
+and [resource template](templates/resource-usage.example.json), including projects
+started from a Ready queue. Board status alone is not publication authorization.
+
+Known boundaries: authored modelling rather than automatic photo reconstruction;
+single-floor 2D navigation; horizontal nearby interactions with optional declared
+wall occlusion; no built-in physics, save system, multiplayer or WebXR. Original
+reference-photo files and raw private conversation/usage logs are not part of the
+Midtown showcase. New-user plans need their own review. Publishing and paid
+generation follow the user's authorization.

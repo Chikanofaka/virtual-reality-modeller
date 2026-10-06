@@ -10,8 +10,15 @@ manifest=json.loads((root/'integrity.json').read_text())['files']
 actual={}
 for p in root.rglob('*'):
     if p.is_symlink():sys.exit('Refusing build containing symlinks')
+    # Finder creates these when users browse an extracted folder. Ignore only
+    # unmanifested Finder metadata; manifested files retain checksum protection.
+    if p.name=='.DS_Store' and p.relative_to(root).as_posix() not in manifest:continue
     if p.is_file() and p!=root/'integrity.json':actual[p.relative_to(root).as_posix()]=hashlib.sha256(p.read_bytes()).hexdigest()
-if actual!=manifest:sys.exit('Build integrity failed: package contents changed')
+if actual!=manifest:
+    missing=sorted(manifest.keys()-actual.keys())
+    added=sorted(actual.keys()-manifest.keys())
+    changed=sorted(k for k in manifest.keys()&actual.keys() if manifest[k]!=actual[k])
+    sys.exit('Build integrity failed: package contents changed\n'+ '\n'.join(f'{label}: {", ".join(names)}' for label,names in [('Missing',missing),('Unexpected',added),('Changed',changed)] if names))
 class Handler(http.server.SimpleHTTPRequestHandler):
     extensions_map={**http.server.SimpleHTTPRequestHandler.extensions_map,'.js':'text/javascript','.mjs':'text/javascript','.glb':'model/gltf-binary','.json':'application/json'}
     def end_headers(self):

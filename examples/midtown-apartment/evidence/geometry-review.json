@@ -1,0 +1,1405 @@
+{
+  "passed": true,
+  "recordedAt": "2026-10-05T08:25:50.804798+00:00",
+  "auditScriptSha256": "1d62f64094bba6282c7965841265f59d58e37119b25c57fe789d6730d9c6f206",
+  "asset": "../assets/apartment.glb",
+  "glbSha256": "afd8b7967788a979b799e1ce6e35d1fc925f4155ebeff3ffc104bbc98c28af1c",
+  "layout": "historical layout; see publicationNote",
+  "layoutSha256": "06f0dea4c066796b2be9f73478ee6001f9fc1606f14845132aa44ac7fa9482ab",
+  "triangles": 89740,
+  "meshNodes": 167,
+  "extensionsUsed": [],
+  "uriResources": [],
+  "modelAuditChecks": {
+    "glbHashMatchesExportAudit": true,
+    "layoutHashMatchesExportAudit": true,
+    "triangleCountMatchesExportAudit": true,
+    "meshNodeCountMatchesExportAudit": true,
+    "interactiveMeshNamesAreUnique": true
+  },
+  "doorCrossingRays": [
+    {
+      "opening": "entry",
+      "mode": "closed static entrance; spawn inside",
+      "rays": [
+        {
+          "start": [
+            7.409999999999999,
+            0.3,
+            9.4
+          ],
+          "end": [
+            7.409999999999999,
+            0.3,
+            9.799999999999999
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": -0.44,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            7.85,
+            0.3,
+            9.4
+          ],
+          "end": [
+            7.85,
+            0.3,
+            9.799999999999999
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            8.29,
+            0.3,
+            9.4
+          ],
+          "end": [
+            8.29,
+            0.3,
+            9.799999999999999
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0.44,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            7.409999999999999,
+            1.0,
+            9.4
+          ],
+          "end": [
+            7.409999999999999,
+            1.0,
+            9.799999999999999
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": -0.44,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            7.85,
+            1.0,
+            9.4
+          ],
+          "end": [
+            7.85,
+            1.0,
+            9.799999999999999
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            8.29,
+            1.0,
+            9.4
+          ],
+          "end": [
+            8.29,
+            1.0,
+            9.799999999999999
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0.44,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            7.409999999999999,
+            1.65,
+            9.4
+          ],
+          "end": [
+            7.409999999999999,
+            1.65,
+            9.799999999999999
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": -0.44,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            7.85,
+            1.65,
+            9.4
+          ],
+          "end": [
+            7.85,
+            1.65,
+            9.799999999999999
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            8.29,
+            1.65,
+            9.4
+          ],
+          "end": [
+            8.29,
+            1.65,
+            9.799999999999999
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0.44,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            7.409999999999999,
+            2.0,
+            9.4
+          ],
+          "end": [
+            7.409999999999999,
+            2.0,
+            9.799999999999999
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": -0.44,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            7.85,
+            2.0,
+            9.4
+          ],
+          "end": [
+            7.85,
+            2.0,
+            9.799999999999999
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        },
+        {
+          "start": [
+            8.29,
+            2.0,
+            9.4
+          ],
+          "end": [
+            8.29,
+            2.0,
+            9.799999999999999
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0.44,
+          "expectedClear": false,
+          "intersections": [
+            {
+              "mesh": "Closed entrance door",
+              "triangleIntersections": 2,
+              "segmentFractions": [
+                0.400000383,
+                0.55000038
+              ]
+            }
+          ],
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "opening": "primary-door",
+      "mode": "open",
+      "rays": [
+        {
+          "start": [
+            2.635,
+            0.3,
+            6.2
+          ],
+          "end": [
+            2.635,
+            0.3,
+            6.6000000000000005
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": -0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            3.05,
+            0.3,
+            6.2
+          ],
+          "end": [
+            3.05,
+            0.3,
+            6.6000000000000005
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            3.465,
+            0.3,
+            6.2
+          ],
+          "end": [
+            3.465,
+            0.3,
+            6.6000000000000005
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.635,
+            1.0,
+            6.2
+          ],
+          "end": [
+            2.635,
+            1.0,
+            6.6000000000000005
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": -0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            3.05,
+            1.0,
+            6.2
+          ],
+          "end": [
+            3.05,
+            1.0,
+            6.6000000000000005
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            3.465,
+            1.0,
+            6.2
+          ],
+          "end": [
+            3.465,
+            1.0,
+            6.6000000000000005
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.635,
+            1.65,
+            6.2
+          ],
+          "end": [
+            2.635,
+            1.65,
+            6.6000000000000005
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": -0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            3.05,
+            1.65,
+            6.2
+          ],
+          "end": [
+            3.05,
+            1.65,
+            6.6000000000000005
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            3.465,
+            1.65,
+            6.2
+          ],
+          "end": [
+            3.465,
+            1.65,
+            6.6000000000000005
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.635,
+            2.0,
+            6.2
+          ],
+          "end": [
+            2.635,
+            2.0,
+            6.6000000000000005
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": -0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            3.05,
+            2.0,
+            6.2
+          ],
+          "end": [
+            3.05,
+            2.0,
+            6.6000000000000005
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            3.465,
+            2.0,
+            6.2
+          ],
+          "end": [
+            3.465,
+            2.0,
+            6.6000000000000005
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "opening": "bedroom-door",
+      "mode": "open",
+      "rays": [
+        {
+          "start": [
+            5.835,
+            0.3,
+            4.8999999999999995
+          ],
+          "end": [
+            5.835,
+            0.3,
+            5.3
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": -0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            6.25,
+            0.3,
+            4.8999999999999995
+          ],
+          "end": [
+            6.25,
+            0.3,
+            5.3
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            6.665,
+            0.3,
+            4.8999999999999995
+          ],
+          "end": [
+            6.665,
+            0.3,
+            5.3
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.835,
+            1.0,
+            4.8999999999999995
+          ],
+          "end": [
+            5.835,
+            1.0,
+            5.3
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": -0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            6.25,
+            1.0,
+            4.8999999999999995
+          ],
+          "end": [
+            6.25,
+            1.0,
+            5.3
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            6.665,
+            1.0,
+            4.8999999999999995
+          ],
+          "end": [
+            6.665,
+            1.0,
+            5.3
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.835,
+            1.65,
+            4.8999999999999995
+          ],
+          "end": [
+            5.835,
+            1.65,
+            5.3
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": -0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            6.25,
+            1.65,
+            4.8999999999999995
+          ],
+          "end": [
+            6.25,
+            1.65,
+            5.3
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            6.665,
+            1.65,
+            4.8999999999999995
+          ],
+          "end": [
+            6.665,
+            1.65,
+            5.3
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.835,
+            2.0,
+            4.8999999999999995
+          ],
+          "end": [
+            5.835,
+            2.0,
+            5.3
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": -0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            6.25,
+            2.0,
+            4.8999999999999995
+          ],
+          "end": [
+            6.25,
+            2.0,
+            5.3
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            6.665,
+            2.0,
+            4.8999999999999995
+          ],
+          "end": [
+            6.665,
+            2.0,
+            5.3
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0.415,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "opening": "primary-bath-door",
+      "mode": "open",
+      "rays": [
+        {
+          "start": [
+            1.785,
+            0.3,
+            7.25
+          ],
+          "end": [
+            1.785,
+            0.3,
+            7.65
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": -0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.15,
+            0.3,
+            7.25
+          ],
+          "end": [
+            2.15,
+            0.3,
+            7.65
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.5149999999999997,
+            0.3,
+            7.25
+          ],
+          "end": [
+            2.5149999999999997,
+            0.3,
+            7.65
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            1.785,
+            1.0,
+            7.25
+          ],
+          "end": [
+            1.785,
+            1.0,
+            7.65
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": -0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.15,
+            1.0,
+            7.25
+          ],
+          "end": [
+            2.15,
+            1.0,
+            7.65
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.5149999999999997,
+            1.0,
+            7.25
+          ],
+          "end": [
+            2.5149999999999997,
+            1.0,
+            7.65
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            1.785,
+            1.65,
+            7.25
+          ],
+          "end": [
+            1.785,
+            1.65,
+            7.65
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": -0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.15,
+            1.65,
+            7.25
+          ],
+          "end": [
+            2.15,
+            1.65,
+            7.65
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.5149999999999997,
+            1.65,
+            7.25
+          ],
+          "end": [
+            2.5149999999999997,
+            1.65,
+            7.65
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            1.785,
+            2.0,
+            7.25
+          ],
+          "end": [
+            1.785,
+            2.0,
+            7.65
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": -0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.15,
+            2.0,
+            7.25
+          ],
+          "end": [
+            2.15,
+            2.0,
+            7.65
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            2.5149999999999997,
+            2.0,
+            7.25
+          ],
+          "end": [
+            2.5149999999999997,
+            2.0,
+            7.65
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "opening": "bath-door",
+      "mode": "open",
+      "rays": [
+        {
+          "start": [
+            5.135,
+            0.3,
+            7.25
+          ],
+          "end": [
+            5.135,
+            0.3,
+            7.65
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": -0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.5,
+            0.3,
+            7.25
+          ],
+          "end": [
+            5.5,
+            0.3,
+            7.65
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.865,
+            0.3,
+            7.25
+          ],
+          "end": [
+            5.865,
+            0.3,
+            7.65
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.135,
+            1.0,
+            7.25
+          ],
+          "end": [
+            5.135,
+            1.0,
+            7.65
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": -0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.5,
+            1.0,
+            7.25
+          ],
+          "end": [
+            5.5,
+            1.0,
+            7.65
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.865,
+            1.0,
+            7.25
+          ],
+          "end": [
+            5.865,
+            1.0,
+            7.65
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.135,
+            1.65,
+            7.25
+          ],
+          "end": [
+            5.135,
+            1.65,
+            7.65
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": -0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.5,
+            1.65,
+            7.25
+          ],
+          "end": [
+            5.5,
+            1.65,
+            7.65
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.865,
+            1.65,
+            7.25
+          ],
+          "end": [
+            5.865,
+            1.65,
+            7.65
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.135,
+            2.0,
+            7.25
+          ],
+          "end": [
+            5.135,
+            2.0,
+            7.65
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": -0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.5,
+            2.0,
+            7.25
+          ],
+          "end": [
+            5.5,
+            2.0,
+            7.65
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            5.865,
+            2.0,
+            7.25
+          ],
+          "end": [
+            5.865,
+            2.0,
+            7.65
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0.365,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "opening": "balcony-door",
+      "mode": "open sliding",
+      "rays": [
+        {
+          "start": [
+            10.41,
+            0.3,
+            -0.2
+          ],
+          "end": [
+            10.41,
+            0.3,
+            0.2
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": -0.49000000000000005,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            10.9,
+            0.3,
+            -0.2
+          ],
+          "end": [
+            10.9,
+            0.3,
+            0.2
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            11.39,
+            0.3,
+            -0.2
+          ],
+          "end": [
+            11.39,
+            0.3,
+            0.2
+          ],
+          "heightMeters": 0.3,
+          "apertureOffsetMeters": 0.49000000000000005,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            10.41,
+            1.0,
+            -0.2
+          ],
+          "end": [
+            10.41,
+            1.0,
+            0.2
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": -0.49000000000000005,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            10.9,
+            1.0,
+            -0.2
+          ],
+          "end": [
+            10.9,
+            1.0,
+            0.2
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            11.39,
+            1.0,
+            -0.2
+          ],
+          "end": [
+            11.39,
+            1.0,
+            0.2
+          ],
+          "heightMeters": 1.0,
+          "apertureOffsetMeters": 0.49000000000000005,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            10.41,
+            1.65,
+            -0.2
+          ],
+          "end": [
+            10.41,
+            1.65,
+            0.2
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": -0.49000000000000005,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            10.9,
+            1.65,
+            -0.2
+          ],
+          "end": [
+            10.9,
+            1.65,
+            0.2
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            11.39,
+            1.65,
+            -0.2
+          ],
+          "end": [
+            11.39,
+            1.65,
+            0.2
+          ],
+          "heightMeters": 1.65,
+          "apertureOffsetMeters": 0.49000000000000005,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            10.41,
+            2.0,
+            -0.2
+          ],
+          "end": [
+            10.41,
+            2.0,
+            0.2
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": -0.49000000000000005,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            10.9,
+            2.0,
+            -0.2
+          ],
+          "end": [
+            10.9,
+            2.0,
+            0.2
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        },
+        {
+          "start": [
+            11.39,
+            2.0,
+            -0.2
+          ],
+          "end": [
+            11.39,
+            2.0,
+            0.2
+          ],
+          "heightMeters": 2.0,
+          "apertureOffsetMeters": 0.49000000000000005,
+          "expectedClear": true,
+          "intersections": [],
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "totalRayCount": 72,
+  "method": "Decode embedded GLB accessors, apply scene-node transforms, then perform double-sided Moller-Trumbore segment/triangle intersections; 4 heights x 3 lateral positions per opening.",
+  "limitations": [
+    "Sampled aperture geometry only; not an exhaustive collision or mesh-quality proof.",
+    "No browser, physical keyboard, visual presentation or performance check is performed by this script.",
+    "Dimensions remain owner-accepted design estimates, not measured reconstruction."
+  ],
+  "publicationNote": "Geometric results from the original commissioned GLB. Private approval snapshot checks omitted. Public layout contains the same geometry with revised demonstration metadata; original layoutSha256 below identifies the historical audit input.",
+  "publicLayoutSha256": "a804d3e5eaaadd382cbbaa9cbfe31e4bfd08c1b997e10925149c9ef288a08c53"
+}

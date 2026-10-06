@@ -138,6 +138,27 @@ def distance_segment(x,z,a,b):
     t=max(0,min(1,((x-a[0])*dx+(z-a[1])*dz)/denom)) if denom else 0
     return math.hypot(x-a[0]-t*dx,z-a[1]-t*dz)
 
+def distance_between_segments(a,b,c,d):
+    """Exact 2D segment distance, including crossings and degenerate segments."""
+    rx,rz=b[0]-a[0],b[1]-a[1];sx,sz=d[0]-c[0],d[1]-c[1]
+    qx,qz=c[0]-a[0],c[1]-a[1];denom=rx*sz-rz*sx
+    if denom:
+        t=(qx*sz-qz*sx)/denom;u=(qx*rz-qz*rx)/denom
+        if 0<=t<=1 and 0<=u<=1: return 0.0
+    # Also handles parallel/collinear segments and either zero-length segment.
+    return min(distance_segment(*a,c,d),distance_segment(*b,c,d),
+               distance_segment(*c,a,b),distance_segment(*d,a,b))
+
+def interaction_visible(config,from2,to2):
+    """Horizontal sight line against structural wall segments only.
+
+    AABB furniture blockers and player-radius clearance do not obstruct an
+    interaction. Missing mode retains the original proximity-only behavior.
+    """
+    if config['runtime'].get('interactionOcclusion','none')!='structural-segments': return True
+    return all(distance_between_segments(from2,to2,seg['a'],seg['b'])>seg['thickness']/2
+               for seg in config['navigation'].get('segments',[]))
+
 def walkable(config,x,z):
     nav=config['navigation']; radius=config['runtime']['playerRadius']
     # Sample the disk against the UNION, so shared polygon seams remain traversable.
@@ -203,6 +224,7 @@ def _validate_config(c, connectivity=True):
     for key,low,high in [('playerRadius',.1,1),('eyeHeight',.5,2.5),('speed',.2,6)]:
         if not finite(rt.get(key)) or not low<=rt[key]<=high: fail(f'runtime.{key} must be between {low} and {high}')
     if rt['eyeHeight']>=shell['height']: fail('eyeHeight must be below ceiling')
+    if rt.get('interactionOcclusion','none') not in ('none','structural-segments'): fail('runtime.interactionOcclusion must be none or structural-segments')
     browsers=rt.get('browsers')
     if not isinstance(browsers,list) or not browsers or not all(isinstance(b,str) and b in {'safari','chrome','firefox','edge'} for b in browsers) or len(set(browsers))!=len(browsers): fail('Target browsers must be a nonempty list of unique supported names')
     rooms=c.get('rooms')
@@ -245,7 +267,7 @@ def _validate_config(c, connectivity=True):
         if not finite(door.get('height')) or not rt['eyeHeight']<door['height']<=shell['height']: fail('Door height must clear player eye height within ceiling')
         if door.get('axis') not in ('x','z'): fail('door.axis is x or z')
         if not door.get('roomIds') or not set(door['roomIds'])<=ids: fail('Door roomIds must refer to existing rooms')
-    furniture_ids=set()
+    furniture_ids=set();effect_objects=set()
     for item in c.get('furniture',[]):
         if not isinstance(item.get('id'),str) or not item['id'] or item['id'] in furniture_ids: fail('Furniture must have unique string ids')
         furniture_ids.add(item['id'])
@@ -257,6 +279,17 @@ def _validate_config(c, connectivity=True):
         if 'interaction' in item:
             interaction=item['interaction']
             if not isinstance(interaction,dict) or not all(isinstance(interaction.get(key),str) and interaction[key].strip() for key in ('label','message')): fail('Furniture interaction requires non-empty label and message strings')
+            if 'effects' in interaction:
+                if c['scene'].get('mode') not in ('procedural','imported-glb') or 'gameplay' not in c: fail('Interaction effects require gameplay in a procedural or imported-glb scene')
+                effects=interaction['effects']
+                if not isinstance(effects,list) or not effects: fail('Interaction effects must be a non-empty array')
+                for effect in effects:
+                    if not isinstance(effect,dict) or set(effect)!={'objectName','emissive','intensity'}: fail('Each interaction effect requires objectName, emissive and intensity only')
+                    if not isinstance(effect['objectName'],str) or not effect['objectName'].strip(): fail('Interaction effect objectName must be a non-empty string')
+                    if effect['objectName'] in effect_objects: fail('Interaction effect objectName must be unique across all targets')
+                    effect_objects.add(effect['objectName'])
+                    if not isinstance(effect['emissive'],str) or not re.fullmatch('#[0-9a-fA-F]{6}',effect['emissive']): fail('Interaction effect emissive must be a hex color')
+                    if not finite(effect['intensity']) or not 0<=effect['intensity']<=20: fail('Interaction effect intensity must be finite and between 0 and 20')
     materials=c.get('materials',{})
     for name in ('floor','wall'):
         value=materials.get(name)
@@ -277,6 +310,8 @@ def _validate_config(c, connectivity=True):
             if objective['id'] in objective_ids: fail('gameplay objective ids must be unique')
             objective_ids.add(objective['id'])
             if objective['targetId'] not in interactive_ids: fail('gameplay targetId must refer to furniture with an interaction')
+        objective_targets={objective['targetId'] for objective in objectives}
+        if any('effects' in item.get('interaction',{}) and item['id'] not in objective_targets for item in c['furniture']): fail('Interaction effects must belong to a gameplay objective target')
     if scene.get('mode')=='imported-glb' and not any(a.get('id')==scene.get('assetId') and a.get('type')=='model' for a in c['assets']): fail('imported-glb scene.assetId must reference a selected model asset')
     asset_ids=set()
     for asset in c.get('assets',[]):
@@ -341,7 +376,7 @@ def _validate_config(c, connectivity=True):
             closest=None;distance=2.15
             for item in interactive:
                 d=math.hypot(x-item['position'][0],z-item['position'][2])
-                if d<distance: closest=item['id'];distance=d
+                if d<distance and interaction_visible(c,[x,z],[item['position'][0],item['position'][2]]): closest=item['id'];distance=d
             remaining.discard(closest)
             if not remaining: break
         if remaining: fail('Gameplay targets have no reachable nearest-interaction approach: '+', '.join(sorted(remaining)))
@@ -425,7 +460,7 @@ def cmd_approve(args):
     if not args.accept: fail('Explicit approval is required: review planning.json then approve --accept')
     validate_config(read(p/'planning.json'));h=plan_hash(p)
     if not (p/'planning-review.json').exists() or read(p/'planning-review.json').get('planHash')!=h: fail('Run plan after all edits before approving')
-    write(p/'approval.json',{'planHash':h,'approvedAt':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'acceptance':'Explicit CLI approval of measured planning pack'})
+    write(p/'approval.json',{'planHash':h,'approvedAt':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'acceptance':'Explicit CLI approval of reviewed planning pack'})
     print(f'Planning locked: {h}')
 
 def approved(p):

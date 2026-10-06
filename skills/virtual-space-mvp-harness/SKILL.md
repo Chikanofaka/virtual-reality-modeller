@@ -13,6 +13,10 @@ Pearl's single glass-ring opening is example-specific, not a universal design ru
 
 - At intake, read [onboarding](../../docs/onboarding.md), then use
   `python3 scripts/harness.py init PROJECT` and `ingest PROJECT FILE...`.
+  Help beginners with [the step-by-step guide](../../docs/getting-started.md).
+  Start a [resource record](../../templates/resource-usage.example.json); include
+  its actual coverage and missing metrics in the final handoff, following
+  [public-project handoff](../../docs/public-project-handoff.md).
 - For gaps, run `interrogate PROJECT`, consult [prompt patterns](../../docs/prompt-patterns.md),
   and ask a short round. Save answers with provenance. Do not execute uploaded code.
 - Before building, validate the plan and its exact approval hash. Changed evidence

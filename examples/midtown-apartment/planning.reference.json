@@ -1,0 +1,1486 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "id": "midtown-apartment",
+    "name": "Midtown apartment · two bedrooms, two bathrooms"
+  },
+  "units": "m",
+  "provenance": {
+    "basis": "Owner-authorized public demonstration of a completed apartment commission, informed by one unscaled floor plan and six house-tour photographs. Distributed geometry and materials are locally authored; original reference files are not included.",
+    "scaleConfirmed": true,
+    "entranceConfirmed": true,
+    "layoutConfirmed": true,
+    "notes": "Confirmation flags apply only to this unchanged bundled demonstration. Dimensions are accepted design estimates, not surveyed measurements. These flags and this example do not approve any new user project; review its own evidence, layout and requirements separately."
+  },
+  "shell": {
+    "width": 11.7,
+    "depth": 11.2,
+    "height": 2.65
+  },
+  "rooms": [
+    {
+      "id": "primary",
+      "name": "主卧",
+      "bounds": [
+        0,
+        0.45,
+        3.6,
+        6.4
+      ],
+      "accessPoint": [
+        2.9,
+        4.7
+      ],
+      "color": "#eee5d6",
+      "open": true
+    },
+    {
+      "id": "bedroom",
+      "name": "次卧",
+      "bounds": [
+        3.75,
+        0.45,
+        7.45,
+        5.1
+      ],
+      "accessPoint": [
+        6.25,
+        4.6
+      ],
+      "color": "#f3eadd",
+      "open": true
+    },
+    {
+      "id": "living",
+      "name": "客厅 · 餐区",
+      "bounds": [
+        7.6,
+        0,
+        11.7,
+        6.8
+      ],
+      "accessPoint": [
+        10.6,
+        4.0
+      ],
+      "color": "#eee5d6",
+      "open": true
+    },
+    {
+      "id": "primary-bath",
+      "name": "主卫",
+      "bounds": [
+        1.05,
+        7.45,
+        3.6,
+        9.2
+      ],
+      "accessPoint": [
+        2.15,
+        7.95
+      ],
+      "color": "#e1e9e6",
+      "open": true
+    },
+    {
+      "id": "bath",
+      "name": "公卫",
+      "bounds": [
+        3.8,
+        7.45,
+        6.15,
+        9.2
+      ],
+      "accessPoint": [
+        5.5,
+        7.95
+      ],
+      "color": "#e1e9e6",
+      "open": true
+    },
+    {
+      "id": "foyer",
+      "name": "玄关 / 过道",
+      "bounds": [
+        6.2,
+        6.0,
+        8.75,
+        9.6
+      ],
+      "accessPoint": [
+        7.9,
+        8.8
+      ],
+      "color": "#eee5d6",
+      "open": true
+    },
+    {
+      "id": "kitchen",
+      "name": "厨房",
+      "bounds": [
+        8.75,
+        6.8,
+        11.7,
+        9.6
+      ],
+      "accessPoint": [
+        10.85,
+        8.0
+      ],
+      "color": "#e7e9e6",
+      "open": true
+    },
+    {
+      "id": "balcony",
+      "name": "阳台",
+      "bounds": [
+        7.4,
+        -1.6,
+        11.7,
+        0
+      ],
+      "accessPoint": [
+        10.85,
+        -0.65
+      ],
+      "color": "#e5ebe5",
+      "open": true
+    }
+  ],
+  "doors": [
+    {
+      "id": "entry",
+      "center": [
+        7.85,
+        9.6
+      ],
+      "width": 1.0,
+      "height": 2.15,
+      "axis": "x",
+      "roomIds": [
+        "foyer"
+      ]
+    },
+    {
+      "id": "primary-door",
+      "center": [
+        3.05,
+        6.4
+      ],
+      "width": 0.95,
+      "height": 2.1,
+      "axis": "x",
+      "roomIds": [
+        "primary",
+        "foyer"
+      ]
+    },
+    {
+      "id": "bedroom-door",
+      "center": [
+        6.25,
+        5.1
+      ],
+      "width": 0.95,
+      "height": 2.1,
+      "axis": "x",
+      "roomIds": [
+        "bedroom",
+        "foyer"
+      ]
+    },
+    {
+      "id": "primary-bath-door",
+      "center": [
+        2.15,
+        7.45
+      ],
+      "width": 0.85,
+      "height": 2.1,
+      "axis": "x",
+      "roomIds": [
+        "primary-bath",
+        "foyer"
+      ]
+    },
+    {
+      "id": "bath-door",
+      "center": [
+        5.5,
+        7.45
+      ],
+      "width": 0.85,
+      "height": 2.1,
+      "axis": "x",
+      "roomIds": [
+        "bath",
+        "foyer"
+      ]
+    },
+    {
+      "id": "balcony-door",
+      "center": [
+        10.9,
+        0
+      ],
+      "width": 1.1,
+      "height": 2.25,
+      "axis": "x",
+      "roomIds": [
+        "living",
+        "balcony"
+      ]
+    }
+  ],
+  "entrance": {
+    "position": [
+      7.85,
+      1.65,
+      8.9
+    ],
+    "yaw": 0
+  },
+  "navigation": {
+    "polygons": [
+      {
+        "id": "interior",
+        "vertices": [
+          [
+            0.75,
+            0
+          ],
+          [
+            11.7,
+            0
+          ],
+          [
+            11.7,
+            9.6
+          ],
+          [
+            6.3,
+            9.6
+          ],
+          [
+            6.3,
+            9.2
+          ],
+          [
+            1.05,
+            9.2
+          ],
+          [
+            1.05,
+            6.65
+          ],
+          [
+            0.65,
+            6.65
+          ],
+          [
+            0.65,
+            5.1
+          ],
+          [
+            0,
+            5.1
+          ],
+          [
+            0,
+            0.8
+          ],
+          [
+            0.75,
+            0.8
+          ]
+        ]
+      },
+      {
+        "id": "balcony",
+        "vertices": [
+          [
+            7.4,
+            0
+          ],
+          [
+            7.4,
+            -0.9
+          ],
+          [
+            8.1,
+            -1.6
+          ],
+          [
+            11.05,
+            -1.6
+          ],
+          [
+            11.7,
+            -0.95
+          ],
+          [
+            11.7,
+            0
+          ]
+        ]
+      }
+    ],
+    "blockers": [
+      {
+        "id": "primary-bed",
+        "bounds": [
+          0.17500000000000004,
+          2.1,
+          2.2249999999999996,
+          3.9
+        ]
+      },
+      {
+        "id": "primary-nightstand-n",
+        "bounds": [
+          0.29000000000000004,
+          1.43,
+          0.81,
+          1.93
+        ]
+      },
+      {
+        "id": "primary-nightstand-s",
+        "bounds": [
+          0.29000000000000004,
+          4.05,
+          0.81,
+          4.55
+        ]
+      },
+      {
+        "id": "primary-dresser",
+        "bounds": [
+          3.03,
+          0.9750000000000001,
+          3.53,
+          2.125
+        ]
+      },
+      {
+        "id": "primary-wardrobe",
+        "bounds": [
+          1.05,
+          5.175,
+          1.6500000000000001,
+          6.425
+        ]
+      },
+      {
+        "id": "primary-ptac",
+        "bounds": [
+          1.525,
+          0.07,
+          2.775,
+          0.43
+        ]
+      },
+      {
+        "id": "secondary-bed",
+        "bounds": [
+          5.105,
+          2.05,
+          7.154999999999999,
+          3.55
+        ]
+      },
+      {
+        "id": "secondary-nightstand",
+        "bounds": [
+          6.609999999999999,
+          3.69,
+          7.09,
+          4.15
+        ]
+      },
+      {
+        "id": "secondary-desk",
+        "bounds": [
+          3.8049999999999997,
+          2.9,
+          4.455,
+          4.1
+        ]
+      },
+      {
+        "id": "secondary-chair",
+        "bounds": [
+          4.06,
+          3.25,
+          4.54,
+          3.75
+        ]
+      },
+      {
+        "id": "secondary-wardrobe",
+        "bounds": [
+          3.7500000000000004,
+          5.2,
+          5.550000000000001,
+          5.8
+        ]
+      },
+      {
+        "id": "secondary-ptac",
+        "bounds": [
+          4.6499999999999995,
+          0.07,
+          5.95,
+          0.43
+        ]
+      },
+      {
+        "id": "sofa",
+        "bounds": [
+          7.66,
+          1.4999999999999998,
+          8.64,
+          4.1
+        ]
+      },
+      {
+        "id": "coffee-table",
+        "bounds": [
+          9.175,
+          2.25,
+          9.825,
+          3.3499999999999996
+        ]
+      },
+      {
+        "id": "tv-console",
+        "bounds": [
+          11.11,
+          1.9,
+          11.61,
+          3.6999999999999997
+        ]
+      },
+      {
+        "id": "living-side-table",
+        "bounds": [
+          7.9,
+          4.15,
+          8.4,
+          4.65
+        ]
+      },
+      {
+        "id": "living-plant",
+        "bounds": [
+          7.71,
+          0.56,
+          8.19,
+          1.04
+        ]
+      },
+      {
+        "id": "living-ptac",
+        "bounds": [
+          8.125,
+          0.07,
+          9.675,
+          0.43
+        ]
+      },
+      {
+        "id": "dining-table",
+        "bounds": [
+          9.025,
+          4.675,
+          10.275,
+          5.425
+        ]
+      },
+      {
+        "id": "dining-chair-n",
+        "bounds": [
+          9.42,
+          4.155,
+          9.88,
+          4.6049999999999995
+        ]
+      },
+      {
+        "id": "dining-chair-s",
+        "bounds": [
+          9.42,
+          5.525,
+          9.88,
+          5.975
+        ]
+      },
+      {
+        "id": "dining-chair-w",
+        "bounds": [
+          8.495000000000001,
+          4.819999999999999,
+          8.945,
+          5.28
+        ]
+      },
+      {
+        "id": "dining-chair-e",
+        "bounds": [
+          10.355,
+          4.819999999999999,
+          10.805,
+          5.28
+        ]
+      },
+      {
+        "id": "kitchen-peninsula",
+        "bounds": [
+          8.75,
+          6.81,
+          10.55,
+          7.45
+        ]
+      },
+      {
+        "id": "range",
+        "bounds": [
+          10.825,
+          6.81,
+          11.575,
+          7.45
+        ]
+      },
+      {
+        "id": "fridge",
+        "bounds": [
+          8.79,
+          8.69,
+          9.61,
+          9.549999999999999
+        ]
+      },
+      {
+        "id": "dishwasher",
+        "bounds": [
+          9.68,
+          8.93,
+          10.379999999999999,
+          9.55
+        ]
+      },
+      {
+        "id": "sink",
+        "bounds": [
+          10.379999999999999,
+          8.93,
+          11.66,
+          9.55
+        ]
+      },
+      {
+        "id": "washer-dryer",
+        "bounds": [
+          6.32,
+          8.785,
+          7.08,
+          9.535
+        ]
+      },
+      {
+        "id": "entry-closet",
+        "bounds": [
+          6.32,
+          7.484999999999999,
+          7.08,
+          8.735
+        ]
+      },
+      {
+        "id": "hall-closet",
+        "bounds": [
+          1.06,
+          6.720000000000001,
+          1.6400000000000001,
+          7.34
+        ]
+      },
+      {
+        "id": "primary-bath-tub",
+        "bounds": [
+          2.83,
+          7.584999999999999,
+          3.5300000000000002,
+          9.135
+        ]
+      },
+      {
+        "id": "primary-bath-vanity",
+        "bounds": [
+          1.905,
+          8.69,
+          2.555,
+          9.17
+        ]
+      },
+      {
+        "id": "primary-bath-toilet",
+        "bounds": [
+          1.21,
+          8.4,
+          1.71,
+          9.1
+        ]
+      },
+      {
+        "id": "bath-tub",
+        "bounds": [
+          3.85,
+          7.584999999999999,
+          4.55,
+          9.135
+        ]
+      },
+      {
+        "id": "bath-vanity",
+        "bounds": [
+          4.665,
+          8.69,
+          5.315,
+          9.17
+        ]
+      },
+      {
+        "id": "bath-toilet",
+        "bounds": [
+          5.49,
+          8.4,
+          5.99,
+          9.1
+        ]
+      },
+      {
+        "id": "balcony-table",
+        "bounds": [
+          8.56,
+          -0.94,
+          9.040000000000001,
+          -0.45999999999999996
+        ]
+      },
+      {
+        "id": "balcony-chair-w",
+        "bounds": [
+          7.77,
+          -0.9,
+          8.27,
+          -0.4
+        ]
+      },
+      {
+        "id": "balcony-chair-e",
+        "bounds": [
+          9.31,
+          -0.9,
+          9.81,
+          -0.4
+        ]
+      },
+      {
+        "id": "balcony-plant",
+        "bounds": [
+          10.600000000000001,
+          -1.42,
+          11.0,
+          -1.02
+        ]
+      },
+      {
+        "id": "inaccessible-equipment-gap",
+        "bounds": [
+          2.95,
+          0,
+          3.6,
+          0.85
+        ]
+      }
+    ],
+    "segments": [
+      {
+        "id": "top-wall0",
+        "a": [
+          0.75,
+          0
+        ],
+        "b": [
+          10.35,
+          0
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "top-wall1",
+        "a": [
+          11.45,
+          0
+        ],
+        "b": [
+          11.7,
+          0
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "primary-east2",
+        "a": [
+          3.6,
+          0
+        ],
+        "b": [
+          3.6,
+          6.4
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "primary-south3",
+        "a": [
+          1.65,
+          6.4
+        ],
+        "b": [
+          2.575,
+          6.4
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "primary-south4",
+        "a": [
+          3.525,
+          6.4
+        ],
+        "b": [
+          3.6,
+          6.4
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "bedroom-east5",
+        "a": [
+          7.45,
+          0
+        ],
+        "b": [
+          7.45,
+          6.0
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "bedroom-south6",
+        "a": [
+          3.6,
+          5.1
+        ],
+        "b": [
+          5.775,
+          5.1
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "bedroom-south7",
+        "a": [
+          6.725,
+          5.1
+        ],
+        "b": [
+          7.45,
+          5.1
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "living-return8",
+        "a": [
+          6.85,
+          6.0
+        ],
+        "b": [
+          7.6,
+          6.0
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "primary-bath-north9",
+        "a": [
+          1.05,
+          7.45
+        ],
+        "b": [
+          1.7249999999999999,
+          7.45
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "primary-bath-north10",
+        "a": [
+          2.5749999999999997,
+          7.45
+        ],
+        "b": [
+          3.6,
+          7.45
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "primary-bath-west11",
+        "a": [
+          1.05,
+          7.45
+        ],
+        "b": [
+          1.05,
+          9.2
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "primary-bath-east12",
+        "a": [
+          3.6,
+          7.45
+        ],
+        "b": [
+          3.6,
+          9.2
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "bath-north13",
+        "a": [
+          3.8,
+          7.45
+        ],
+        "b": [
+          5.075,
+          7.45
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "bath-north14",
+        "a": [
+          5.925,
+          7.45
+        ],
+        "b": [
+          6.15,
+          7.45
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "bath-west15",
+        "a": [
+          3.8,
+          7.45
+        ],
+        "b": [
+          3.8,
+          9.2
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "bath-east16",
+        "a": [
+          6.15,
+          7.45
+        ],
+        "b": [
+          6.15,
+          9.2
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer1",
+        "a": [
+          11.7,
+          0
+        ],
+        "b": [
+          11.7,
+          9.6
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer2",
+        "a": [
+          11.7,
+          9.6
+        ],
+        "b": [
+          6.3,
+          9.6
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer3",
+        "a": [
+          6.3,
+          9.6
+        ],
+        "b": [
+          6.3,
+          9.2
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer4",
+        "a": [
+          6.3,
+          9.2
+        ],
+        "b": [
+          1.05,
+          9.2
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer5",
+        "a": [
+          1.05,
+          9.2
+        ],
+        "b": [
+          1.05,
+          6.65
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer6",
+        "a": [
+          1.05,
+          6.65
+        ],
+        "b": [
+          0.65,
+          6.65
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer7",
+        "a": [
+          0.65,
+          6.65
+        ],
+        "b": [
+          0.65,
+          5.1
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer8",
+        "a": [
+          0.65,
+          5.1
+        ],
+        "b": [
+          0,
+          5.1
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer9",
+        "a": [
+          0,
+          5.1
+        ],
+        "b": [
+          0,
+          0.8
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer10",
+        "a": [
+          0,
+          0.8
+        ],
+        "b": [
+          0.75,
+          0.8
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "outer11",
+        "a": [
+          0.75,
+          0.8
+        ],
+        "b": [
+          0.75,
+          0
+        ],
+        "thickness": 0.12
+      },
+      {
+        "id": "railing0",
+        "a": [
+          7.4,
+          0
+        ],
+        "b": [
+          7.4,
+          -0.9
+        ],
+        "thickness": 0.06
+      },
+      {
+        "id": "railing1",
+        "a": [
+          7.4,
+          -0.9
+        ],
+        "b": [
+          8.1,
+          -1.6
+        ],
+        "thickness": 0.06
+      },
+      {
+        "id": "railing2",
+        "a": [
+          8.1,
+          -1.6
+        ],
+        "b": [
+          11.05,
+          -1.6
+        ],
+        "thickness": 0.06
+      },
+      {
+        "id": "railing3",
+        "a": [
+          11.05,
+          -1.6
+        ],
+        "b": [
+          11.7,
+          -0.95
+        ],
+        "thickness": 0.06
+      },
+      {
+        "id": "railing4",
+        "a": [
+          11.7,
+          -0.95
+        ],
+        "b": [
+          11.7,
+          0
+        ],
+        "thickness": 0.06
+      }
+    ],
+    "spawn": [
+      7.85,
+      1.65,
+      8.9
+    ],
+    "routes": [
+      {
+        "id": "01-television",
+        "points": [
+          [
+            7.85,
+            8.9
+          ],
+          [
+            7.85,
+            6.35
+          ],
+          [
+            11.2,
+            6.35
+          ],
+          [
+            11.2,
+            4.0
+          ],
+          [
+            10.6,
+            4.0
+          ],
+          [
+            10.6,
+            2.8
+          ]
+        ]
+      },
+      {
+        "id": "02-bedroom",
+        "points": [
+          [
+            10.6,
+            2.8
+          ],
+          [
+            10.6,
+            4.0
+          ],
+          [
+            11.2,
+            4.0
+          ],
+          [
+            11.2,
+            6.35
+          ],
+          [
+            7.85,
+            6.35
+          ],
+          [
+            7.85,
+            7.15
+          ],
+          [
+            3.05,
+            7.15
+          ],
+          [
+            3.05,
+            6.5
+          ],
+          [
+            2.9,
+            5.25
+          ],
+          [
+            2.9,
+            4.7
+          ],
+          [
+            1.25,
+            4.7
+          ]
+        ]
+      },
+      {
+        "id": "03-balcony",
+        "points": [
+          [
+            1.25,
+            4.7
+          ],
+          [
+            2.9,
+            4.7
+          ],
+          [
+            2.9,
+            5.25
+          ],
+          [
+            3.05,
+            6.5
+          ],
+          [
+            3.05,
+            7.15
+          ],
+          [
+            7.85,
+            7.15
+          ],
+          [
+            7.85,
+            6.35
+          ],
+          [
+            11.2,
+            6.35
+          ],
+          [
+            11.2,
+            4.0
+          ],
+          [
+            10.6,
+            4.0
+          ],
+          [
+            10.6,
+            2.8
+          ],
+          [
+            10.6,
+            1.0
+          ],
+          [
+            10.9,
+            0.5
+          ],
+          [
+            10.9,
+            -0.65
+          ]
+        ]
+      },
+      {
+        "id": "bedroom-visit",
+        "points": [
+          [
+            7.85,
+            7.15
+          ],
+          [
+            6.25,
+            7.15
+          ],
+          [
+            6.25,
+            5.6
+          ],
+          [
+            6.25,
+            4.6
+          ]
+        ]
+      },
+      {
+        "id": "primary-bath-visit",
+        "points": [
+          [
+            7.85,
+            7.15
+          ],
+          [
+            2.15,
+            7.15
+          ],
+          [
+            2.15,
+            7.95
+          ]
+        ]
+      },
+      {
+        "id": "bath-visit",
+        "points": [
+          [
+            7.85,
+            7.15
+          ],
+          [
+            5.5,
+            7.15
+          ],
+          [
+            5.5,
+            7.95
+          ]
+        ]
+      },
+      {
+        "id": "kitchen-visit",
+        "points": [
+          [
+            7.85,
+            8.9
+          ],
+          [
+            8.1,
+            8.1
+          ],
+          [
+            10.85,
+            8.1
+          ]
+        ]
+      }
+    ],
+    "collisionPolicy": "explicit-blockers"
+  },
+  "furniture": [
+    {
+      "id": "welcome-tv",
+      "type": "box",
+      "position": [
+        11.36,
+        1.0,
+        2.8
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1
+      ],
+      "interaction": {
+        "label": "打开电视",
+        "message": "欢迎回家，请前往主卧。",
+        "effects": [
+          {
+            "objectName": "TVScreen",
+            "emissive": "#286cff",
+            "intensity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "bedroom-lamp",
+      "type": "box",
+      "position": [
+        0.55,
+        0.7,
+        4.3
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1
+      ],
+      "interaction": {
+        "label": "点亮床头灯",
+        "message": "卧室已准备好，请前往阳台。",
+        "effects": [
+          {
+            "objectName": "BedsideBulb",
+            "emissive": "#ffbb55",
+            "intensity": 2
+          }
+        ]
+      }
+    },
+    {
+      "id": "balcony-view",
+      "type": "box",
+      "position": [
+        10.9,
+        1.1,
+        -0.95
+      ],
+      "size": [
+        0.1,
+        0.1,
+        0.1
+      ],
+      "interaction": {
+        "label": "阳台观景",
+        "message": "入住导览完成，按 R 可以重玩。"
+      }
+    }
+  ],
+  "materials": {
+    "floor": "#d8c7a6",
+    "wall": "#e5e6e1"
+  },
+  "assets": [
+    {
+      "id": "apartment-master",
+      "type": "model",
+      "path": "assets/apartment.glb",
+      "sha256": "afd8b7967788a979b799e1ce6e35d1fc925f4155ebeff3ffc104bbc98c28af1c",
+      "placement": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      }
+    }
+  ],
+  "runtime": {
+    "browsers": [
+      "chrome"
+    ],
+    "playerRadius": 0.22,
+    "eyeHeight": 1.65,
+    "speed": 2.1,
+    "interactionOcclusion": "structural-segments"
+  },
+  "scene": {
+    "mode": "imported-glb",
+    "assetId": "apartment-master",
+    "details": "Locally authored furnished apartment. Editable Blender master and generator are in model/. TVScreen and BedsideBulb receive emissive effects; city context is abstract."
+  },
+  "gameplay": {
+    "objectives": [
+      {
+        "id": "welcome-tv",
+        "label": "打开电视",
+        "targetId": "welcome-tv"
+      },
+      {
+        "id": "bedroom-lamp",
+        "label": "点亮床头灯",
+        "targetId": "bedroom-lamp"
+      },
+      {
+        "id": "balcony-view",
+        "label": "阳台观景",
+        "targetId": "balcony-view"
+      }
+    ],
+    "completionMessage": "入住导览完成！按 R 重新开始。"
+  },
+  "designReview": {
+    "revision": "midtown-public-reference-v1",
+    "status": "unchanged-geometry-public-demonstration",
+    "scope": "Owner-authorized showcase of the completed commission; no private approval record is distributed or inherited by future user projects.",
+    "originalCommissionBuild": "fba11bc23842a21a",
+    "implementationLayout": "model/layout-build.json",
+    "implementationLayoutSha256": "a804d3e5eaaadd382cbbaa9cbfe31e4bfd08c1b997e10925149c9ef288a08c53",
+    "implementationAdjustments": [
+      {
+        "item": "secondary-chair",
+        "from": [
+          4.9,
+          3.5
+        ],
+        "to": [
+          4.3,
+          3.5
+        ],
+        "reason": "Tuck chair under the desk, leaving the bed-side route open. Seat below desk top; chair back on east side remains outside desk edge."
+      },
+      {
+        "item": "inaccessible-equipment-gap",
+        "reason": "Exclude a non-accessible pocket between radiator and dresser from player standing space; visible furnishing unchanged."
+      }
+    ],
+    "validationScope": "Original commission received automated desktop Chrome traversal, ordered interactions, reset and independently extracted replay checks. See evidence/ for exact identities; public replay packaging has its own identity."
+  }
+}

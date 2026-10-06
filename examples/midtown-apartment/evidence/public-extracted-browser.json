@@ -1,0 +1,162 @@
+{
+  "passed": true,
+  "browser": "chromium",
+  "browserVersion": "154.0.8037.98",
+  "buildId": "b967be9b18d3b798",
+  "planHash": "fb4fc3fedc93fefa03443e4f8c2e55ea8990cae09d74df3797adc8d5571281ab",
+  "runtimeHash": "97f61f2f86e52ef2316f11ff13309e6ef98319bcdc2e548b608cc54025e9dc14",
+  "checks": [
+    {
+      "check": "WASD input moves player through normal simulation",
+      "passed": true
+    },
+    {
+      "check": "early balcony visit cannot skip objectives or light fixtures",
+      "passed": true
+    },
+    {
+      "check": "all planned room access points reached by actual keyboard walking",
+      "passed": true,
+      "visited": [
+        "primary",
+        "bedroom",
+        "living",
+        "primary-bath",
+        "bath",
+        "foyer",
+        "kitchen",
+        "balcony"
+      ]
+    },
+    {
+      "check": "keyboard movement stops at primary-bedroom structural wall",
+      "passed": true,
+      "position": {
+        "x": 3.3100906111882815,
+        "y": 1.65,
+        "z": 4.672660160771926
+      }
+    },
+    {
+      "check": "bed, sofa, wardrobe and balcony exterior reject standing positions",
+      "passed": true
+    },
+    {
+      "check": "balcony target within range is unavailable across the solid facade",
+      "passed": true
+    },
+    {
+      "check": "TV, bedroom lamp, balcony ordered completion; visible effects; duplicate input stable",
+      "passed": true
+    },
+    {
+      "check": "R restores player, tasks and original emissive materials; all three goals replayed",
+      "passed": true
+    }
+  ],
+  "final": {
+    "ready": true,
+    "started": true,
+    "buildId": "b967be9b18d3b798",
+    "planHash": "fb4fc3fedc93fefa03443e4f8c2e55ea8990cae09d74df3797adc8d5571281ab",
+    "runtimeHash": "97f61f2f86e52ef2316f11ff13309e6ef98319bcdc2e548b608cc54025e9dc14",
+    "version": "0.1.0",
+    "actualPort": "53558",
+    "position": {
+      "x": 10.899503535655814,
+      "y": 1.65,
+      "z": -0.6306532823708564
+    },
+    "yaw": -0.001554623601304839,
+    "pitch": -0.2570947499999894,
+    "input": {
+      "physical": [],
+      "virtual": [],
+      "held": []
+    },
+    "frames": 6301,
+    "renderCount": 6301,
+    "simulationTicks": 5603,
+    "meshCount": 246,
+    "interactableCount": 3,
+    "importedModels": 1,
+    "importedMeshes": 244,
+    "nearest": "阳台观景",
+    "nearestId": "balcony-view",
+    "gameplay": {
+      "enabled": true,
+      "index": 3,
+      "total": 3,
+      "complete": true,
+      "currentObjective": null,
+      "completedObjectiveIds": [
+        "welcome-tv",
+        "bedroom-lamp",
+        "balcony-view"
+      ]
+    },
+    "interactionEffects": {
+      "enabled": true,
+      "targets": [
+        {
+          "targetId": "welcome-tv",
+          "active": true,
+          "effects": [
+            {
+              "objectName": "TVScreen",
+              "planned": {
+                "emissive": "#286cff",
+                "intensity": 2
+              },
+              "materials": [
+                {
+                  "initial": {
+                    "emissive": "#000000",
+                    "intensity": 1
+                  },
+                  "current": {
+                    "emissive": "#286cff",
+                    "intensity": 2
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "targetId": "bedroom-lamp",
+          "active": true,
+          "effects": [
+            {
+              "objectName": "BedsideBulb",
+              "planned": {
+                "emissive": "#ffbb55",
+                "intensity": 2
+              },
+              "materials": [
+                {
+                  "initial": {
+                    "emissive": "#000000",
+                    "intensity": 1
+                  },
+                  "current": {
+                    "emissive": "#ffbb55",
+                    "intensity": 2
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "errors": []
+  },
+  "errors": [],
+  "externalRequests": [],
+  "walkingDistanceMeters": 193.1571599999999,
+  "limitations": [
+    "Automated keyboard events, not physical hardware or Safari acceptance.",
+    "Estimated architectural dimensions; no measurement or photo-level fidelity certification."
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "collection-template-not-measured-results",
+  "projectId": null,
+  "buildId": null,
+  "scope": null,
+  "measurementStartedAt": null,
+  "measurementEndedAt": null,
+  "models": [],
+  "usage": {
+    "status": "not-collected",
+    "uniqueRequestCount": null,
+    "inputTokens": null,
+    "cachedInputTokens": null,
+    "cacheWriteTokens": null,
+    "outputTokens": null,
+    "reasoningTokens": null,
+    "cachedInputIsSubsetOfInput": null,
+    "reasoningIsSubsetOfOutput": null,
+    "includesExclusiveChildRequests": null,
+    "deduplicationMethod": null,
+    "coverageLimitations": [],
+    "sourceExportSha256": null
+  },
+  "time": {
+    "completeActiveBackendSeconds": null,
+    "activeModelSeconds": null,
+    "commandElapsedUnionSeconds": null,
+    "cpuSeconds": null,
+    "excludedWaitSeconds": null,
+    "scopeComplete": false,
+    "intervals": [],
+    "method": null
+  },
+  "cost": {
+    "actualBilledAmount": null,
+    "currency": null,
+    "pricingReferenceUrl": null,
+    "pricingReferenceDate": null,
+    "generationServiceCharges": null,
+    "limitations": []
+  },
+  "artifacts": [],
+  "retries": [],
+  "excludedWork": [],
+  "evidence": []
+}

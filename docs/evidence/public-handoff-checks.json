@@ -1,0 +1,57 @@
+{
+  "checkedOn": "2026-10-06",
+  "scope": "Local public-documentation and replay handoff; no GitHub push or publishing performed.",
+  "python": {
+    "command": "python3 -m unittest discover -s tests -p 'test_*.py'",
+    "passed": 63,
+    "failed": 0,
+    "durationSeconds": 13.314
+  },
+  "javascript": {
+    "command": "node --test tests/runtime*.mjs",
+    "passed": 35,
+    "failed": 0
+  },
+  "replayEntry": {
+    "passed": true,
+    "command": "python3 scripts/replay_midtown.py --no-open",
+    "buildId": "b967be9b18d3b798",
+    "identityMatched": true,
+    "http200": true,
+    "cacheNoStore": true,
+    "archiveSha256": "a5ba6fe42e28146403a82832c09011271ba44b72207afe0e1e495e7089b75764",
+    "scope": "README entry command, verified ZIP extraction and localhost HTTP identity; full gameplay acceptance recorded separately.",
+    "exitCodeAfterCtrlC": 0
+  },
+  "markdownPreview": {
+    "passed": true,
+    "previewCount": 4,
+    "viewportWidths": [
+      390,
+      1440
+    ],
+    "note": "Local Markdown HTML approximation, not a hosted GitHub page. Screenshots inspected; no broken images or page overflow."
+  },
+  "localDocumentLinks": {
+    "passed": true,
+    "checked": 75,
+    "note": "Reviewed onboarding, README, reference, resource and agent entry documents; referenced public verification report now exists."
+  },
+  "flagshipPrivateMarkerScan": {
+    "passed": true,
+    "scope": "Known account/path/session markers in flagship assets and expanded ZIP members; no raw conversation or original photo files included. Not an exhaustive personal-data classifier."
+  },
+  "usageLedger": {
+    "independentRawTelemetryRecheck": "matched",
+    "initialResponses": 179,
+    "initialTotalTokens": 18136004,
+    "supportResponses": 10,
+    "supportTotalTokens": 1408726,
+    "combinedTotalTokens": 19544730
+  },
+  "gameplayVerification": "../../examples/midtown-apartment/evidence/public-verification.json",
+  "limitations": [
+    "Windows and Claude Code routes are documented, not tested as part of this macOS Codex case.",
+    "Complete project active backend time and actual invoice remain unavailable."
+  ]
+}

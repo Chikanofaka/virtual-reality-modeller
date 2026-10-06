@@ -28,6 +28,16 @@ const snapshot=()=>page.evaluate(()=>window.__VSMVP.snapshot());
 const distance=(a,b)=>Math.hypot(a.position.x-b.position.x,a.position.z-b.position.z);
 const output=process.env.SMOKE_OUTPUT||'test-results/browser';
 const results=[];
+function assertEffectsReset(state) {
+  for(const target of state.interactionEffects.targets) {
+    assert.equal(target.active,false);
+    for(const effect of target.effects)for(const material of effect.materials)assert.deepEqual(material.current,material.initial);
+  }
+}
+async function awaitRenderedFrames(count=3) {
+  const frame=(await snapshot()).frames;
+  await page.waitForFunction(previous=>window.__VSMVP.snapshot().frames>=previous.frame+previous.count,{frame,count});
+}
 // Heading is set explicitly; translation is real keyboard input processed by the
 // runtime's normal frame loop and collision checks. No position teleport is used.
 async function walkTo(point) {
@@ -49,7 +59,7 @@ async function walkTo(point) {
   assert.ok(Math.hypot(after.position.x-point[0],after.position.z-point[1])<.4,'Keyboard travel must reach the route waypoint');
 }
 async function playCustomRoutes(config) {
-  let earlyInteractions=0,advanced=0,waypoints=0;
+  let earlyInteractions=0,advanced=0,waypoints=0,visualChanges=0;
   for(const route of config.navigation.routes)for(const point of route.points) {
     await walkTo(point);waypoints++;
     const frame=(await snapshot()).frames;
@@ -58,16 +68,44 @@ async function playCustomRoutes(config) {
     if(!targetId)continue;
     const expected=before.gameplay.currentObjective?.targetId===targetId;
     const future=config.gameplay.objectives.slice(before.gameplay.index+1).some(objective=>objective.targetId===targetId);
+    const effects=before.interactionEffects.targets.find(target=>target.targetId===targetId);
+    let priorPixels=null;
+    if(expected&&effects&&config.project.id==='interaction-effects-fixture') {
+      const target=config.furniture.find(item=>item.id===targetId).position;
+      await page.evaluate(([x,,z])=>{
+        const current=window.__VSMVP.snapshot().position;
+        window.__VSMVP.test.setYaw(Math.atan2(-(x-current.x),-(z-current.z)));
+      },target);
+      await page.keyboard.down('ArrowDown');
+      try {await page.waitForFunction(()=>window.__VSMVP.snapshot().pitch<-.35);}
+      finally {await page.keyboard.up('ArrowDown');}
+      await awaitRenderedFrames();
+      priorPixels=await page.locator('#gameCanvas').screenshot();
+    }
     await page.keyboard.press('e');
     const after=await snapshot();
     assert.equal(after.gameplay.index,before.gameplay.index+Number(expected),'Interaction must only advance the current objective');
+    if(expected&&effects) {
+      const changed=after.interactionEffects.targets.find(target=>target.targetId===targetId);
+      assert.equal(changed.active,true);
+      for(const effect of changed.effects)for(const material of effect.materials)assert.deepEqual(material.current,{emissive:effect.planned.emissive.toLowerCase(),intensity:effect.planned.intensity});
+      if(priorPixels){
+        await awaitRenderedFrames();
+        const afterPixels=await page.locator('#gameCanvas').screenshot();
+        assert.notEqual(createHash('sha256').update(priorPixels).digest('hex'),createHash('sha256').update(afterPixels).digest('hex'),'Material activation must produce a different rendered frame from the same viewpoint');
+        visualChanges++;
+      }
+    }else assert.deepEqual(after.interactionEffects,before.interactionEffects,'Wrong-order and repeated interactions must not alter visual state');
+    for(const other of before.interactionEffects.targets.filter(target=>target.targetId!==targetId)) {
+      assert.deepEqual(after.interactionEffects.targets.find(target=>target.targetId===other.targetId),other,'A material change must not leak into other targets sharing the imported material');
+    }
     if(expected)advanced++;else if(future)earlyInteractions++;
   }
   const final=await snapshot();
   assert.equal(final.gameplay.complete,true,'Approved route waypoints must support completing the custom game');
   assert.deepEqual(final.gameplay.completedObjectiveIds,config.gameplay.objectives.map(objective=>objective.id));
   assert.ok((await page.locator('#objective').textContent()).includes(config.gameplay.completionMessage||'All objectives complete — explore freely.'));
-  return {advanced,earlyInteractions,waypoints};
+  return {advanced,earlyInteractions,waypoints,visualChanges};
 }
 try {
   await page.goto(url.href,{waitUntil:'networkidle'});
@@ -121,18 +159,32 @@ try {
   }
   if(config.gameplay) {
     await page.keyboard.press('r');
+    assertEffectsReset(await snapshot());
+    if(config.project.id==='interaction-effects-fixture') {
+      await walkTo([0,-1.6]);
+      await awaitRenderedFrames(6);
+      assert.equal((await snapshot()).nearestId,null,'A nearby target across the declared wall must not be offered');
+      await page.keyboard.press('e');
+      assert.equal((await snapshot()).gameplay.index,0,'E across the wall must not advance');
+      assertEffectsReset(await snapshot());
+      results.push({check:'keyboard approach within interaction range behind wall cannot trigger target or change materials',passed:true});
+      await page.keyboard.press('r');
+    }
     assert.equal((await snapshot()).gameplay.index,0);
     assert.equal((await snapshot()).interactableCount,config.furniture.filter(item=>item.interaction).length);
     const first=await playCustomRoutes(config);
-    if(config.project.id==='external-user-game')assert.ok(first.earlyInteractions>0,'External-user fixture must exercise an out-of-order interaction');
+    if(['external-user-game','interaction-effects-fixture'].includes(config.project.id))assert.ok(first.earlyInteractions>0,'Synthetic discovery fixture must exercise an out-of-order interaction');
+    if(config.project.id==='interaction-effects-fixture')assert.equal(first.visualChanges,2,'Both imported targets must visibly change after their correct objective');
     results.push({check:'custom game completed by keyboard movement along approved routes',passed:true,...first});
     await page.keyboard.press('r');
     const reset=await snapshot();
     assert.equal(reset.gameplay.index,0);assert.equal(reset.gameplay.complete,false);
     assert.deepEqual(reset.gameplay.completedObjectiveIds,[]);
+    assertEffectsReset(reset);
     assert.equal(reset.gameplay.currentObjective.id,config.gameplay.objectives[0].id);
     assert.ok((await page.locator('#objective').textContent()).includes(config.gameplay.objectives[0].label));
     const replay=await playCustomRoutes(config);
+    if(config.project.id==='interaction-effects-fixture')assert.equal(replay.visualChanges,2,'Reset must restore both material changes so both can be replayed visibly');
     results.push({check:'reset restores first objective and the complete game can be replayed',passed:true,...replay});
     if(config.scene.mode==='imported-glb')results.push({check:'imported model retains all planned interaction targets and ordered gameplay',passed:true});
   }

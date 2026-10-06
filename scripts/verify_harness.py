@@ -381,6 +381,25 @@ class Verification:
         self.cli('synthetic-validate', 'validate', synthetic, '--build')
         self.deliver(pearl, 'pearl', marker)
         self.deliver(synthetic, 'external-user', marker)
+        # A separate authored fixture verifies imported material changes and wall
+        # occlusion without approving or modifying any real-user planning pack.
+        effects = projects / 'interaction-effects'
+        self.cli('effects-init', 'init', effects)
+        self.run('effects-fixture-inputs', [sys.executable, ROOT / 'tests/make_interaction_fixture.py', effects])
+        effect_plan = effects / 'fixture-plan.json'
+        self.cli('effects-ingest', 'ingest', effects, effect_plan, effects / 'interaction-fixture.glb', sentinel)
+        self.cli('effects-answers', 'interrogate', effects, '--answers', answers)
+        self.cli('effects-plan', 'plan', effects, '--input', effect_plan)
+        self.report['interactionFixtureAuthorization'] = {
+            'scope': 'Only generated synthetic geometry; no real apartment acceptance',
+            'generatorSha256': sha256(ROOT / 'tests/make_interaction_fixture.py'),
+            'fixtureSha256': sha256(effect_plan),
+            'reviewedPlanHash': read_json(effects / 'planning-review.json')['planHash'],
+        }
+        self.cli('effects-fixture-approval', 'approve', effects, '--accept')
+        self.cli('effects-build', 'build', effects)
+        self.cli('effects-validate', 'validate', effects, '--build')
+        self.deliver(effects, 'interaction-effects', marker)
         final_files = source_files()
         initial_files = self.report['source']['files']
         changed = sorted(name for name in set(final_files) | set(initial_files)

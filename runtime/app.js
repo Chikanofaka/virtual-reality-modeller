@@ -6,6 +6,8 @@ import {attachInput} from './input.js';
 import {verifyBuildIdentity} from './build-identity.js';
 import {loadModels} from './assets.js';
 import {createGameplay} from './gameplay.js';
+import {selectNearestInteraction} from './interaction-geometry.js';
+import {createInteractionEffects} from './interaction-effects.js';
 
 const $=id=>document.getElementById(id);
 const diagnostics={ready:false,started:false,frames:0,renderCount:0,simulationTicks:0,errors:[],build:null,actualPort:location.port};
@@ -31,6 +33,8 @@ async function boot() {
   const {scene,sun,interactables,zones,dynamicGlow}=visual;
   const gameplay=createGameplay(config.gameplay);
   const imported=await loadModels(config,scene,message=>{$('startDescription').textContent=message;});
+  // Bind only after imported mesh names exist; broken visual targets block entry.
+  const interactionEffects=createInteractionEffects(scene,config.furniture||[]);
   diagnostics.importedModels=imported.models;diagnostics.importedMeshes=imported.meshes;
   const navigation=createNavigation(config.navigation?.polygons?.length?config:pearlNavigationConfig());
   for(const item of interactables) if(!item.obj?.position)throw new Error(`Invalid interactable: ${item.label}. Scene adapter must return positioned objects.`);
@@ -57,11 +61,10 @@ async function boot() {
   function objective(text){$('objective').textContent='Objective: '+text;}
   function updateObjective(){objective(gameplay.enabled?(gameplay.snapshot().currentObjective?.label||gameplay.completionMessage):pearl?'check in at Reception (E)':'explore your planned space');}
   function findNearest(){
-    let best=null,distance=2.15;
-    for(const item of interactables){const d=Math.hypot(camera.position.x-item.obj.position.x,camera.position.z-item.obj.position.z);if(d<distance){distance=d;best=item;}}
-    return best;
+    const candidates=interactables.map(item=>({id:item.id,position:item.obj.position.toArray(),entry:item}));
+    return selectNearestInteraction(config,[camera.position.x,camera.position.z],candidates)?.entry||null;
   }
-  function reset(){camera.position.set(spawn[0],eyeHeight,spawn[2]);yaw=initialYaw;pitch=0;stage=0;gameplay.reset();nearest=null;waypoint=null;input?.reset('reset to entrance');updateObjective();}
+  function reset(){camera.position.set(spawn[0],eyeHeight,spawn[2]);yaw=initialYaw;pitch=0;stage=0;gameplay.reset();interactionEffects.reset();nearest=null;waypoint=null;input?.reset('reset to entrance');updateObjective();}
   function interact() {
     // Actions use the current location, even between throttled HUD updates.
     nearest=findNearest();
@@ -71,11 +74,17 @@ async function boot() {
       if(!nearest.ownsMaterial){nearest.obj.material=nearest.obj.material.clone();nearest.ownsMaterial=true;}
       nearest.obj.material.emissiveIntensity=nearest.obj.material.emissiveIntensity>4?2.3:5.5;
     }
-    toast(nearest.message||nearest.label);
     if(gameplay.enabled){
-      if(gameplay.interact(nearest.id)){updateObjective();if(gameplay.snapshot().complete)toast(gameplay.completionMessage);}
+      if(gameplay.interact(nearest.id)){
+        interactionEffects.activate(nearest.id);updateObjective();
+        toast(gameplay.snapshot().complete?gameplay.completionMessage:(nearest.message||nearest.label));
+      }else{
+        const state=gameplay.snapshot();
+        toast(state.complete?'Tour complete. Press R to replay.':'Next: '+state.currentObjective.label);
+      }
       return;
     }
+    toast(nearest.message||nearest.label);
     if(stage===0&&nearest.type==='reception'){stage=1;objective('follow the circulation loop to the Wine Room');}
     else if(stage===1&&nearest.type==='wine'){stage=2;objective('enter the Pearl Office through its southeast opening');}
     else if(stage===2&&nearest.type==='pearl'){stage=3;objective('tour complete — explore freely');toast('Pearl Office console online. Tour complete.');}
@@ -128,7 +137,7 @@ async function boot() {
     if(waypoint){const distance=Math.hypot(camera.position.x-waypoint.x,camera.position.z-waypoint.z);$('mapLabel').textContent=`Destination ${distance.toFixed(1)} m · click to change`;if(distance<.7){waypoint=null;toast('Destination reached');}}
     paintMap();
   }
-  diagnostics.snapshot=()=>({ready:diagnostics.ready,started,buildId:build.buildId,planHash:build.planHash,runtimeHash:build.runtimeHash,version:build.version,actualPort:location.port,position:{x:camera.position.x,y:camera.position.y,z:camera.position.z},yaw,pitch,input:input.snapshot(),frames:diagnostics.frames,renderCount:diagnostics.renderCount,simulationTicks:diagnostics.simulationTicks,meshCount:sceneMeshCount,interactableCount:interactables.length,importedModels:imported.models,importedMeshes:imported.meshes,nearest:nearest?.label||null,nearestId:nearest?.id||null,gameplay:gameplay.snapshot(),errors:[...diagnostics.errors]});
+  diagnostics.snapshot=()=>({ready:diagnostics.ready,started,buildId:build.buildId,planHash:build.planHash,runtimeHash:build.runtimeHash,version:build.version,actualPort:location.port,position:{x:camera.position.x,y:camera.position.y,z:camera.position.z},yaw,pitch,input:input.snapshot(),frames:diagnostics.frames,renderCount:diagnostics.renderCount,simulationTicks:diagnostics.simulationTicks,meshCount:sceneMeshCount,interactableCount:interactables.length,importedModels:imported.models,importedMeshes:imported.meshes,nearest:nearest?.label||null,nearestId:nearest?.id||null,gameplay:gameplay.snapshot(),interactionEffects:interactionEffects.snapshot(),errors:[...diagnostics.errors]});
   // Explicit test mode is only for local automated navigation/interaction smoke checks.
   if(new URLSearchParams(location.search).get('test')==='1')diagnostics.test={setPosition(x,z){if(!navigation.canMove(x,z))throw new Error('Test position is not walkable');camera.position.set(x,eyeHeight,z);},setYaw(value){if(!Number.isFinite(value))throw new Error('Test yaw must be finite');yaw=value;},canMove:navigation.canMove};
   addEventListener('resize',()=>resizePending=true);

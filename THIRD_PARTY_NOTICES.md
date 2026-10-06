@@ -2,6 +2,14 @@
 
 The new harness code and documentation use the root MIT license.
 
+The Midtown apartment showcase contains locally authored geometry, procedural
+materials, a Blender source/generator and output images under the root MIT license.
+One unscaled plan and six private photo observations informed the commission;
+the original image files and private approval/conversation records are not included.
+Dimensions are accepted estimates and the city backdrop is abstract. A public
+reference plan does not confer approval on a new user's design. Historical runtime
+evidence and the sanitized public replay are identified separately in the case study.
+
 Three.js 0.180.0 is vendored unchanged from the official `mrdoob/three.js` r180
 tag. Its MIT license is in `runtime/vendor/THREE-LICENSE.txt`. Vendoring preserves
 the original V7 dependency version and removes the CDN startup requirement.
