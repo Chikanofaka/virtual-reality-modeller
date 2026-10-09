@@ -49,11 +49,18 @@ try {
   await page.keyboard.press('r');
   const canvas=page.locator('#gameCanvas');
   const rect=await canvas.boundingBox();
-  const beforeImage=await canvas.screenshot();before=await snapshot();
+  // Capture the visible canvas without locator.screenshot's RAF stability wait.
+  // Software WebGL on CI can stall that wait while the scene keeps rendering.
+  const captureCanvas=async options=>{
+    const clip=await canvas.boundingBox();
+    assert.ok(clip&&clip.width>0&&clip.height>0,'Rendered canvas must be visible');
+    return page.screenshot({...options,clip});
+  };
+  const beforeImage=await captureCanvas();before=await snapshot();
   await page.mouse.move(rect.x+rect.width*.52,rect.y+rect.height*.6);await page.mouse.down();
   await page.mouse.move(rect.x+rect.width*.74,rect.y+rect.height*.52,{steps:12});await page.mouse.up();
-  await page.waitForFunction(y=>Math.abs(window.__VSMVP.snapshot().yaw-y)>.1,before.yaw);
-  const afterImage=await canvas.screenshot();
+  await page.waitForFunction(start=>{const s=window.__VSMVP.snapshot();return Math.abs(s.yaw-start.yaw)>.1&&s.frames>start.frames;},{yaw:before.yaw,frames:before.frames});
+  const afterImage=await captureCanvas();
   assert.notEqual(createHash('sha256').update(beforeImage).digest('hex'),createHash('sha256').update(afterImage).digest('hex'));
   results.push({check:'drag-look + distinct rendered canvas',passed:true});
   await page.keyboard.press('r');before=await snapshot();
@@ -83,7 +90,7 @@ try {
   if(modelAssets.length){assert.equal(final.importedModels,modelAssets.length);assert.ok(final.importedMeshes>0);results.push({check:'hash-verified local GLB imported before Enter',models:final.importedModels,meshes:final.importedMeshes});}
   assert.deepEqual(errors,[]);assert.deepEqual(externalRequests,[]);
   await mkdir(output,{recursive:true});
-  await canvas.screenshot({path:output+'/scene.png'});
+  await captureCanvas({path:output+'/scene.png'});
   await page.screenshot({path:output+'/tour.png'});
   const stale=new URL(url);stale.searchParams.set('build','intentionally-stale');
   const response=await page.request.get(stale.href);assert.equal(response.status(),409);
